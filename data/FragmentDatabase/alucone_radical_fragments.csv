@@ -1,0 +1,85 @@
+Fragment,Formula,Exact_Mass,Category,Formation_Mechanism,Expected_Isotopes,Notes
+# FUNDAMENTAL ALUCONE BUILDING BLOCKS
+Al+,Al+,26.9815,Aluminum_core,TMA dissociation,None,Base aluminum cation
+AlH+,AlH+,27.9893,Al_hydride,Al+ + H radical,None,Hydrogen addition to Al+
+AlH2+,AlH2+,28.9972,Al_hydride,AlH+ + H radical,None,Further hydrogen addition
+AlO+,AlO+,42.9764,Al_oxide,Al+ + O radical from diol,None,Basic Al-O bond
+AlOH+,AlOH+,43.9843,Al_hydroxide,AlO+ + H radical,None,Hydroxylated aluminum
+AlO2+,AlO2+,58.9714,Al_dioxide,AlO+ + O radical,None,Fully oxidized aluminum
+
+# ALKYNE TRIPLE BOND FRAGMENTS (from 2-butyne-1,4-diol)
+C2H+,C2H+,25.0073,Alkyne_core,Triple bond cleavage,13C: 26.0107,Basic alkyne unit
+C2H2+,C2H2+,26.0151,Alkyne,Acetylene from butyne,13C: 27.0185,Simplest alkyne
+C3H+,C3H+,37.0073,Alkyne_extended,C2H+ + C radical,13C: 38.0107,Three-carbon chain
+C3H3+,C3H3+,39.0229,Alkyne_saturated,C3H+ + 2H radicals,13C: 40.0263,Propyne-like
+C4H+,C4H+,49.0073,Alkyne_chain,Four-carbon alkyne,13C: 50.0107,Butyne fragment
+C4H3+,C4H3+,51.0229,Alkyne_unsaturated,C4H+ + 2H radicals,13C: 52.0263,Butenyne-like
+
+# RADICAL OXYGEN ADDITION TO ALKYNES
+C2HO+,C2HO+,41.0022,Alkyne_oxide,C2H+ + O radical,13C: 42.0056,Oxo-acetylene
+C3HO+,C3HO+,53.0022,Alkyne_oxide,C3H+ + O radical,13C: 54.0056,Oxo-propyne
+C4HO+,C4HO+,65.0022,Alkyne_oxide,C4H+ + O radical,13C: 66.0056,Oxo-butyne
+C2H3O+,C2H3O+,43.0178,Alkyne_oxidized,C2HO+ + 2H radicals,13C: 44.0212,Acetyl cation
+C3H3O+,C3H3O+,55.0178,Alkyne_oxidized,C3HO+ + 2H radicals,13C: 56.0212,Propionyl-like
+C4H3O+,C4H3O+,67.0178,Alkyne_oxidized,C4HO+ + 2H radicals,13C: 68.0212,Butyryl-like
+
+# ALUMINUM-ALKYNE HYBRID FRAGMENTS
+AlC2+,AlC2+,50.9888,Al_alkyne,Al+ + C2 from butyne,None,Al-acetylide
+AlC2H+,AlC2H+,51.9966,Al_alkyne,AlC2+ + H radical,None,Hydrogenated Al-acetylide
+AlC3+,AlC3+,62.9888,Al_alkyne,Al+ + C3 from butyne,None,Al-propargyl
+AlC3H+,AlC3H+,63.9966,Al_alkyne,AlC3+ + H radical,None,Hydrogenated Al-propargyl
+AlC4+,AlC4+,74.9888,Al_alkyne,Al+ + C4 from butyne,None,Al-butynyl
+AlC4H+,AlC4H+,75.9966,Al_alkyne,AlC4+ + H radical,None,Hydrogenated Al-butynyl
+
+# ALUMINUM-OXYGEN-CARBON HYBRIDS
+AlCO+,AlCO+,54.9764,Al_carbonyl,Al+ + CO from diol,None,Al-carbonyl bond
+AlCOH+,AlCOH+,55.9843,Al_carbonyl,AlCO+ + H radical,None,Al-formyl
+AlC2O+,AlC2O+,66.9764,Al_ketone,Al+ + C2O from diol,None,Al-acetyl
+AlC2OH+,AlC2OH+,67.9843,Al_ketone,AlC2O+ + H radical,None,Al-acetyl hydrate
+AlC3O+,AlC3O+,78.9764,Al_ketone,Al+ + C3O from chain,None,Al-propionyl
+AlC4O+,AlC4O+,90.9764,Al_ketone,Al+ + C4O from chain,None,Al-butyryl
+
+# CROSSLINKED AROMATIC FRAGMENTS (from radical coupling)
+C5H3+,C5H3+,63.0229,Aromatic_precursor,Radical coupling C2H + C3H,13C: 64.0263,Cyclopentenyl radical
+C5H5+,C5H5+,65.0386,Aromatic,C5H3+ + 2H radicals,13C: 66.0420,Cyclopentadienyl cation
+C6H3+,C6H3+,75.0229,Aromatic,C6 ring formation,13C: 76.0263,Dehydrogenated benzene
+C6H5+,C6H5+,77.0386,Aromatic,Phenyl cation,13C: 78.0420,Benzene radical cation
+C7H5+,C7H5+,89.0386,Aromatic_extended,C6H5+ + C radical,13C: 90.0420,Tropyl precursor
+C7H7+,C7H7+,91.0542,Aromatic_stable,Tropylium cation,13C: 92.0576,Highly stable aromatic
+C8H5+,C8H5+,101.0386,Aromatic_extended,C8 aromatic system,13C: 102.0420,Phenylacetylene-like
+C8H7+,C8H7+,103.0542,Aromatic_extended,C8H5+ + 2H radicals,13C: 104.0576,Styrene-like
+C9H7+,C9H7+,115.0542,Aromatic_extended,Indene/phenyl system,13C: 116.0576,Extended aromatic
+
+# DICARBONYL AND POLYCARBONYL FRAGMENTS (thermodynamic products)
+C2O+,C2O+,39.9954,Dicarbonyl,C2 + O radicals,13C: 40.9988,Glyoxal-like
+C3O+,C3O+,51.9954,Dicarbonyl,C3 + O radicals,13C: 52.9988,Malonyl-like
+C3O2+,C3O2+,67.9903,Dicarbonyl,C3O+ + O radical,13C: 68.9937,Malonic anhydride
+C4O2+,C4O2+,79.9903,Dicarbonyl,C4 + 2O radicals,13C: 80.9937,Succinic anhydride
+C5O2+,C5O2+,91.9903,Dicarbonyl,C5 + 2O radicals,13C: 92.9937,Glutaric anhydride
+
+# LARGE MOLECULAR FRAGMENTS (higher masses - multiple possibilities)
+C10H7+,C10H7+,127.0542,Large_aromatic,Naphthyl system,13C: 128.0576,Naphthalene-like
+C10H8+,C10H8+,128.0621,Large_aromatic,Naphthalene cation,13C: 129.0655,Naphthalene radical
+AlC6H5+,AlC6H5+,104.0201,Al_aromatic,Al-phenyl complex,None,Al-benzene hybrid
+AlC7H7+,AlC7H7+,118.0357,Al_aromatic,Al-tropyl complex,None,Al-toluene hybrid
+C11H7+,C11H7+,139.0542,Large_aromatic,Extended aromatic,13C: 140.0576,Methylnaphthalene-like
+C12H8+,C12H8+,152.0621,Large_aromatic,Acenaphthene-like,13C: 153.0655,Polycyclic aromatic
+C13H9+,C13H9+,165.0699,Large_aromatic,Fluorene-like,13C: 166.0733,Large PAH
+
+# NEGATIVE ION COUNTERPARTS
+C2H-,C2H-,25.0073,Alkyne_anion,Electron capture,13C: 26.0107,Acetylide anion
+C3H-,C3H-,37.0073,Alkyne_anion,Electron capture,13C: 38.0107,Propargyl anion
+C4H-,C4H-,49.0073,Alkyne_anion,Electron capture,13C: 50.0107,Butynyl anion
+C2HO-,C2HO-,41.0022,Alkyne_oxide_anion,Electron capture,13C: 42.0056,Ketene anion
+C3HO-,C3HO-,53.0022,Alkyne_oxide_anion,Electron capture,13C: 54.0056,Acrolein anion
+C4HO-,C4HO-,65.0022,Alkyne_oxide_anion,Electron capture,13C: 66.0056,Crotonaldehyde anion
+C3HO2-,C3HO2-,68.9982,Dicarbonyl_anion,Advanced oxidation,13C: 69.9016,Malonic acid anion
+C4HO2-,C4HO2-,80.9982,Dicarbonyl_anion,Advanced oxidation,13C: 81.9016,Succinic acid anion
+C5HO2-,C5HO2-,92.9982,Dicarbonyl_anion,Advanced oxidation,13C: 93.9016,Glutaric acid anion
+C6H-,C6H-,73.0073,Aromatic_anion,Phenyl anion,13C: 74.0107,Benzene anion
+C7H-,C7H-,85.0073,Aromatic_anion,Tropyl anion,13C: 86.0107,Toluene anion
+
+# ALUMINUM-OXYGEN ANIONS
+AlO-,AlO-,42.9764,Al_oxide_anion,Electron capture,None,Aluminum oxide anion
+AlO2-,AlO2-,58.9714,Al_dioxide_anion,Electron capture,None,Aluminum dioxide anion
+AlO3-,AlO3-,74.9663,Al_trioxide_anion,Electron capture,None,Aluminum trioxide anion

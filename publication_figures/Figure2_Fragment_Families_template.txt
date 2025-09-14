@@ -1,0 +1,21 @@
+FIGURE TEMPLATE: Chemical Transformation Families
+============================================================
+
+KEY MESSAGE:
+Six distinct chemical families confirm thermodynamic stabilization
+
+PANELS:
+  A: Aluminum Chemistry (Al⁺↑, AlO⁻↓, AlCH₂⁻↑)
+  B: Aromatic Formation (C₆H⁻ strong increase)
+  C: Carbonyl Cascade (C₄HO⁻, C₃HO⁻, C₂HO⁻, COOH⁻)
+  D: Radical Chemistry (H⁻ decrease, consumption)
+  E: HCl Development (Cl⁻ isotopes decrease)
+  F: Reference Ions (C₄H⁻ stability validation)
+
+COLOR SCHEME:
+  Aluminum: #e74c3c
+  Aromatic: #9b59b6
+  Carbonyl: #f39c12
+  Radical: #27ae60
+  HCl: #34495e
+  Reference: #3498db

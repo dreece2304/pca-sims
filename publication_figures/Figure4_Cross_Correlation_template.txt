@@ -1,0 +1,11 @@
+FIGURE TEMPLATE: Method Validation & Rigor
+============================================================
+
+KEY MESSAGE:
+Cross-correlation validates assignments and mechanisms
+
+PANELS:
+  A: Positive-negative correlations (Al⁺ confirms AlCH₂⁻)
+  B: Fragment assignment success rates (confidence levels)
+  C: Unknown fragment analysis (systematic approach)
+  D: Mass accuracy distribution (analytical quality)

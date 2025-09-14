@@ -1,0 +1,168 @@
+# Enhanced ToF-SIMS PCA Analysis Configuration
+
+# Application Settings
+app:
+  title: "Enhanced ToF-SIMS PCA Analysis Suite"
+  version: "2.0.0"
+  auto_update: true
+  debug_mode: false
+
+# Mass Analysis Settings
+mass_analysis:
+  default_tolerance_ppm: 55
+  min_tolerance_ppm: 10
+  max_tolerance_ppm: 100
+  
+  # Mass defect classification thresholds
+  mass_defect:
+    organic_threshold: 0.01      # Above this = likely organic
+    metal_threshold: -0.01       # Below this = likely metal
+    ambiguous_range: [-0.01, 0.01]  # Near whole number
+
+# Fragment Analysis Settings
+fragment_analysis:
+  confidence_threshold: 70
+  max_candidates_display: 10
+  
+  # Confidence scoring weights
+  confidence_weights:
+    mz_accuracy: 0.25
+    mass_defect: 0.20
+    isotope: 0.15
+    element_constraint: 0.15
+    chemical: 0.10
+    trend: 0.10
+    correlation: 0.05
+
+# Element Constraints
+element_constraints:
+  presets:
+    alucone:
+      elements: ['C', 'H', 'O', 'Al']
+      contaminants: ['Si', 'Cl', 'F']
+      description: "Standard alucone resist system"
+    
+    tincone:
+      elements: ['C', 'H', 'O', 'Sn']
+      contaminants: ['Si', 'Cl', 'F']
+      description: "Tincone resist system"
+    
+    general_organic:
+      elements: ['C', 'H', 'O', 'N']
+      contaminants: ['Si', 'Cl', 'F', 'Na', 'K']
+      description: "General organic system"
+  
+  # Maximum atom counts
+  max_atoms:
+    C: 15
+    H: 30
+    O: 10
+    N: 5
+    Al: 3
+    Sn: 3
+    Si: 3
+    F: 5
+    Cl: 3
+    Br: 2
+    S: 3
+    P: 2
+    Na: 2
+    K: 2
+    Ca: 2
+    Fe: 2
+    Ti: 2
+
+# Isotope Analysis Settings
+isotope_analysis:
+  enabled: true
+  tolerance_ppm: 55
+  
+  # Important isotope patterns
+  patterns:
+    Cl:
+      separation: 1.997050
+      ratio: 0.32
+      confidence_threshold: 75
+    
+    Si:
+      separation_29: 0.999568
+      separation_30: 1.996843
+      ratio_29: 0.047
+      ratio_30: 0.031
+    
+    C:
+      separation: 1.003355
+      ratio: 0.011
+
+# PCA Settings
+pca:
+  default_components: 8
+  max_components: 20
+  
+  # Default preprocessing
+  preprocessing:
+    sqrt_transform: false  # Usually already done by IonTof
+    mean_center: false
+    scale_data: false
+  
+  # Dose mapping for analysis
+  dose_mapping:
+    1: 500      # SQ1 -> 500 μC/cm²
+    2: 2000     # SQ2 -> 2000 μC/cm²
+    3: 5000     # SQ3 -> 5000 μC/cm²
+    4: 10000    # SQ4 -> 10000 μC/cm²
+    5: 15000    # SQ5 -> 15000 μC/cm²
+
+# Visualization Settings
+visualization:
+  default_theme: "plotly_white"
+  color_schemes:
+    classification:
+      organic: "#1f77b4"      # Blue
+      metal: "#2ca02c"        # Green
+      ambiguous: "#ff7f0e"    # Orange
+      high_hydrogen: "#9467bd" # Purple
+      fluorinated: "#d62728"   # Red
+      chlorinated: "#8c564b"   # Brown
+      unknown: "#7f7f7f"      # Gray
+  
+  plot_settings:
+    height: 600
+    marker_size_scale: 1000
+    opacity: 0.7
+
+# Export Settings
+export:
+  default_formats: ['csv', 'xlsx']
+  include_metadata: true
+  
+  # Report generation
+  report:
+    include_plots: true
+    include_statistics: true
+    format: "markdown"
+
+# AI Assistant Settings (for future Qwen integration)
+ai_assistant:
+  enabled: false  # Set to true when implementing
+  model_path: ""  # Path to Qwen model
+  max_tokens: 500
+  temperature: 0.1
+  
+  # System prompts
+  prompts:
+    fragment_analysis: |
+      You are an expert in ToF-SIMS analysis and mass spectrometry.
+      Analyze the following fragment data and provide chemical insights.
+      Consider mass defect patterns, element composition, and chemical plausibility.
+    
+    mechanism_analysis: |
+      You are an expert in electron beam chemistry and material science.
+      Analyze the dose-dependent changes in fragment patterns and propose
+      chemical mechanisms for the observed transformations.
+
+# Logging Settings
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/tof_sims_analysis.log"

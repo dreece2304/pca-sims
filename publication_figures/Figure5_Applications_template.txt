@@ -1,0 +1,10 @@
+FIGURE TEMPLATE: Technological Impact & Market Relevance
+============================================================
+
+KEY MESSAGE:
+Thermodynamic stabilization enables novel applications
+
+PANELS:
+  A: Property evolution with dose (mechanical, electrical, chemical)
+  B: Processing window optimization (dose-property relationships)
+  C: Applications landscape (EUV → ceramics → quantum devices)

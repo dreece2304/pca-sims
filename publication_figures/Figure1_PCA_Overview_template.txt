@@ -1,0 +1,18 @@
+FIGURE TEMPLATE: PCA Overview & Discovery
+============================================================
+
+KEY MESSAGE:
+PCA reveals systematic chemical transformation, not random degradation
+
+PANELS:
+  A: PC1 scores vs dose (progression, error bars, R²)
+  B: Top PC1 loadings (H⁻, Cl⁻, carbonyls highlighted)
+  C: Mechanism schematic (AlO⁻→carbonyls, Al-C formation)
+  D: PCA variance explained (PC1 dominance)
+  E: Pattern reproducibility (P1, P2, P3 validation)
+
+DATA REQUIREMENTS:
+  • PC1 scores by dose and pattern
+  • PC1 loadings ranked by magnitude
+  • Variance explained by each PC
+  • Pattern reproducibility statistics

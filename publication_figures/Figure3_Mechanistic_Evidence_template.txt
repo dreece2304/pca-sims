@@ -1,0 +1,11 @@
+FIGURE TEMPLATE: Quantitative Mechanistic Proof
+============================================================
+
+KEY MESSAGE:
+Quantitative evidence confirms oxygen migration and optimization
+
+PANELS:
+  A: Al⁺ vs AlO⁻ inverse correlation (oxygen migration)
+  B: Carbonyl series progression (thermodynamic driving)
+  C: C₆H⁻/C₄H⁻ crosslinking ratio (aromatic formation)
+  D: H⁻ generation → consumption (radical validation)
