@@ -146,6 +146,71 @@ QT_QPA_PLATFORM=xcb
 
 ---
 
+## 🔄 **Git Workflow & Development Process**
+
+### **Repository Setup**
+- **GitHub Repository**: `git@github.com:dreece2304/pca-sims.git`
+- **Main Branch**: `main` (protected, production-ready code)
+- **Clean Initial Commit**: All core functionality committed and documented
+
+### **Feature Development Workflow**
+```bash
+# 1. Create feature branch from main
+git checkout main
+git pull origin main
+git checkout -b feature/new-analysis-tool
+
+# 2. Develop and test feature
+# ... make changes ...
+git add .
+git commit -m "Add new analysis tool with tests
+
+✅ Features implemented
+🧪 Tests passing
+📚 Documentation updated"
+
+# 3. Push feature branch
+git push -u origin feature/new-analysis-tool
+
+# 4. Create pull request on GitHub
+# 5. Review, test, and merge to main
+```
+
+### **Branch Protection Strategy**
+- **Main branch**: Protected, requires pull requests
+- **Feature branches**: `feature/description` for new functionality
+- **Hotfix branches**: `hotfix/bug-description` for critical fixes
+- **Experimental branches**: `experiment/research-topic` for research
+
+### **Commit Message Convention**
+```
+Brief description of change
+
+✅ What was implemented/fixed
+🧪 Testing status
+📚 Documentation updates
+🔄 Breaking changes (if any)
+
+🚀 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+### **Development Guidelines**
+1. **Always branch from main** for new features
+2. **Keep commits focused** on single features/fixes
+3. **Test before committing** - run PCA analysis to verify
+4. **Clean up test files** after successful implementation
+5. **Update CLAUDE.md** with significant changes
+6. **Use descriptive branch names** that explain the feature
+
+### **Release Process**
+1. **Feature branches** → **main** via pull request
+2. **Tag releases** for major versions: `v1.0.0`, `v1.1.0`
+3. **GitHub Releases** with changelog and analysis examples
+4. **Backup critical data** before major updates
+
+---
+
 ## 📋 **Status: PRODUCTION READY**
 
 ✅ **Core Functionality**: PCA analysis with ToF-SIMS data
