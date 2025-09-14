@@ -16,7 +16,9 @@ from PySide6.QtWidgets import (
     QPushButton, QLabel, QFileDialog, QTextEdit, QProgressBar,
     QCheckBox, QSpinBox, QGroupBox, QGridLayout, QMessageBox,
     QTabWidget, QSplitter, QMenuBar, QMenu, QDialog, QTableWidget,
-    QTableWidgetItem, QHeaderView, QAbstractItemView, QInputDialog
+    QTableWidgetItem, QHeaderView, QAbstractItemView, QInputDialog,
+    QListWidget, QListWidgetItem, QLineEdit, QFormLayout, QComboBox,
+    QScrollArea, QFrame
 )
 from PySide6.QtCore import QThread, Signal, Qt, QSettings
 from PySide6.QtGui import QAction
@@ -26,6 +28,7 @@ import matplotlib
 matplotlib.use('QtAgg')  # Use Qt backend
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
+import matplotlib.pyplot as plt
 import numpy as np
 
 # Add src to path for imports
@@ -405,7 +408,15 @@ class ToFSIMSPCAApp(QMainWindow):
         summary_layout.addWidget(self.summary_text)
         
         self.plot_tabs.addTab(self.summary_widget, "Summary")
-        
+
+        # Fragment Trends tab
+        self.trends_widget = self.create_fragment_trends_tab()
+        self.plot_tabs.addTab(self.trends_widget, "Fragment Trends")
+
+        # Molecular Calculator tab
+        self.calculator_widget = self.create_molecular_calculator_tab()
+        self.plot_tabs.addTab(self.calculator_widget, "MW Calculator")
+
         layout.addWidget(self.plot_tabs)
         parent_layout.addWidget(group)
     
@@ -1316,6 +1327,367 @@ Export: Use export buttons to save data and plots
                         f"Please drop a valid data file (.txt, .tsv, .csv, .xlsx)\n\nFile: {file_path}"
                     )
         event.ignore()
+
+
+    def create_fragment_trends_tab(self):
+        """Create Fragment Trends analysis tab"""
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+
+        # Header
+        header = QLabel("📈 Fragment Intensity Trends")
+        header.setStyleSheet("font-size: 14px; font-weight: bold; margin: 10px;")
+        layout.addWidget(header)
+
+        # Fragment selection area
+        selection_group = QGroupBox("Fragment Selection")
+        selection_layout = QHBoxLayout(selection_group)
+
+        # Fragment list (will be populated from PCA loadings)
+        self.fragment_list = QListWidget()
+        self.fragment_list.setMaximumHeight(150)
+        selection_layout.addWidget(QLabel("Select Fragments:"))
+        selection_layout.addWidget(self.fragment_list)
+
+        # Refresh button to sync with PCA tab
+        refresh_btn = QPushButton("🔄 Sync with PCA")
+        refresh_btn.clicked.connect(self.refresh_fragment_list)
+        selection_layout.addWidget(refresh_btn)
+
+        layout.addWidget(selection_group)
+
+        # Plotting area
+        self.trends_canvas = PCAPlotCanvas(widget, width=10, height=6)
+        self.trends_toolbar = NavigationToolbar(self.trends_canvas, widget)
+
+        layout.addWidget(self.trends_toolbar)
+        layout.addWidget(self.trends_canvas)
+
+        # Plot button
+        plot_trends_btn = QPushButton("📊 Plot Selected Fragments")
+        plot_trends_btn.clicked.connect(self.plot_fragment_trends)
+        layout.addWidget(plot_trends_btn)
+
+        return widget
+
+    def create_molecular_calculator_tab(self):
+        """Create Molecular Weight Calculator tab"""
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+
+        # Header
+        header = QLabel("⚛️ Molecular Weight Calculator & Fragment Assignment")
+        header.setStyleSheet("font-size: 14px; font-weight: bold; margin: 10px;")
+        layout.addWidget(header)
+
+        # Input section
+        input_group = QGroupBox("Fragment Analysis Input")
+        input_layout = QFormLayout(input_group)
+
+        # M/Z input
+        self.mz_input = QLineEdit()
+        self.mz_input.setPlaceholderText("Enter m/z value (e.g., 19.023)")
+        input_layout.addRow("m/z Value:", self.mz_input)
+
+        # Polarity selection
+        self.polarity_combo = QComboBox()
+        self.polarity_combo.addItems(["Negative", "Positive"])
+        input_layout.addRow("Ion Mode:", self.polarity_combo)
+
+        # Element constraints
+        elements_group = QGroupBox("Element Constraints")
+        elements_layout = QGridLayout(elements_group)
+
+        # Expected elements (alucone)
+        self.elements_expected = {}
+        expected_elements = [("C", "Carbon"), ("H", "Hydrogen"), ("O", "Oxygen"), ("Al", "Aluminum")]
+        for i, (symbol, name) in enumerate(expected_elements):
+            checkbox = QCheckBox(f"{symbol} ({name})")
+            checkbox.setChecked(True)
+            self.elements_expected[symbol] = checkbox
+            elements_layout.addWidget(checkbox, 0, i)
+
+        # Contaminants
+        self.elements_contaminants = {}
+        contaminant_elements = [("F", "Fluorine"), ("Cl", "Chlorine"), ("Si", "Silicon"), ("N", "Nitrogen")]
+        for i, (symbol, name) in enumerate(contaminant_elements):
+            checkbox = QCheckBox(f"{symbol} ({name})")
+            checkbox.setChecked(False)  # Unchecked by default
+            self.elements_contaminants[symbol] = checkbox
+            elements_layout.addWidget(checkbox, 1, i)
+
+        input_layout.addRow(elements_group)
+
+        layout.addWidget(input_group)
+
+        # Calculate button
+        calculate_btn = QPushButton("🧮 Calculate Possible Fragments")
+        calculate_btn.clicked.connect(self.calculate_fragments)
+        layout.addWidget(calculate_btn)
+
+        # Results area
+        self.fragment_results = QTextEdit()
+        self.fragment_results.setReadOnly(True)
+        self.fragment_results.setMaximumHeight(200)
+        layout.addWidget(QLabel("Possible Fragment Assignments:"))
+        layout.addWidget(self.fragment_results)
+
+        # Contamination filter section
+        filter_group = QGroupBox("🚫 Contamination Filtering for PCA")
+        filter_layout = QVBoxLayout(filter_group)
+
+        filter_info = QLabel("Exclude contamination peaks from PCA analysis:")
+        filter_layout.addWidget(filter_info)
+
+        # Contamination checkboxes
+        contam_layout = QHBoxLayout()
+        self.filter_F = QCheckBox("Exclude F- (m/z 19)")
+        self.filter_Cl = QCheckBox("Exclude Cl- (m/z 35)")
+        self.filter_Si = QCheckBox("Exclude Si+ (m/z 28)")
+
+        contam_layout.addWidget(self.filter_F)
+        contam_layout.addWidget(self.filter_Cl)
+        contam_layout.addWidget(self.filter_Si)
+        filter_layout.addLayout(contam_layout)
+
+        # Apply filters button
+        apply_filter_btn = QPushButton("🔄 Re-run PCA with Filters")
+        apply_filter_btn.clicked.connect(self.apply_contamination_filters)
+        filter_layout.addWidget(apply_filter_btn)
+
+        layout.addWidget(filter_group)
+
+        return widget
+
+    def refresh_fragment_list(self):
+        """Populate fragment list from current PCA loadings"""
+        if not self.pca_completed:
+            QMessageBox.information(self, "No PCA Data", "Please run PCA analysis first.")
+            return
+
+        try:
+            # Get loadings data
+            loadings_df = self.pca_analyzer.get_loadings_dataframe()
+            top_loadings = loadings_df['PC1'].abs().sort_values(ascending=False).head(20)
+
+            # Clear and populate list
+            self.fragment_list.clear()
+            for mass, abs_loading in top_loadings.items():
+                original_loading = loadings_df.loc[mass, 'PC1']
+                item_text = f"m/z {mass:.3f} (loading: {original_loading:+.3f})"
+                item = QListWidgetItem(item_text)
+                item.setData(Qt.UserRole, mass)  # Store mass value
+                self.fragment_list.addItem(item)
+
+            print(f"✅ Loaded {len(top_loadings)} fragments for trend analysis")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to load fragments: {e}")
+
+    def plot_fragment_trends(self):
+        """Plot intensity trends for selected fragments"""
+        if not self.pca_completed:
+            QMessageBox.information(self, "No PCA Data", "Please run PCA analysis first.")
+            return
+
+        selected_items = self.fragment_list.selectedItems()
+        if not selected_items:
+            QMessageBox.information(self, "No Fragments Selected", "Please select fragments to plot.")
+            return
+
+        try:
+            # Get current sample selection (same as PCA tab)
+            selected_samples, display_names = self.get_selected_samples()
+            if not selected_samples:
+                QMessageBox.information(self, "No Samples Selected", "No samples selected in PCA tab.")
+                return
+
+            # Get raw data for selected samples
+            data_subset = self.original_raw_data[selected_samples]
+
+            # Extract selected fragment masses
+            fragment_masses = []
+            for item in selected_items:
+                mass = item.data(Qt.UserRole)
+                fragment_masses.append(mass)
+
+            # Create trend plot
+            self.trends_canvas.figure.clear()
+            ax = self.trends_canvas.figure.add_subplot(111)
+
+            # Plot each fragment
+            for mass in fragment_masses:
+                if mass in data_subset.index:
+                    intensities = data_subset.loc[mass].values
+
+                    # Group by dose if available
+                    sample_names = selected_samples
+                    doses = []
+                    for sample in sample_names:
+                        pattern, square = self.parse_sample_name(sample)
+                        # Extract dose number from square (e.g., SQ1 -> 1)
+                        dose_num = int(square[2:]) if square.startswith('SQ') and square[2:].isdigit() else 0
+                        doses.append(dose_num)
+
+                    ax.plot(doses, intensities, 'o-', label=f'm/z {mass:.3f}', linewidth=2, markersize=6)
+
+            ax.set_xlabel("Dose Level", fontsize=12)
+            ax.set_ylabel("Intensity", fontsize=12)
+            ax.set_title("Fragment Intensity Trends", fontsize=14, fontweight='bold')
+            ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+            ax.grid(True, alpha=0.3)
+
+            # Use viridis colormap
+            colors = plt.cm.viridis(np.linspace(0, 1, len(fragment_masses)))
+            for line, color in zip(ax.lines, colors):
+                line.set_color(color)
+
+            self.trends_canvas.figure.tight_layout()
+            self.trends_canvas.draw()
+
+            print(f"✅ Plotted trends for {len(fragment_masses)} fragments")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to plot trends: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def calculate_fragments(self):
+        """Calculate possible fragment assignments"""
+        try:
+            mz_text = self.mz_input.text().strip()
+            if not mz_text:
+                QMessageBox.information(self, "Input Required", "Please enter an m/z value.")
+                return
+
+            target_mz = float(mz_text)
+            polarity = self.polarity_combo.currentText()
+
+            # Get selected elements
+            elements = []
+            for symbol, checkbox in self.elements_expected.items():
+                if checkbox.isChecked():
+                    elements.append(symbol)
+            for symbol, checkbox in self.elements_contaminants.items():
+                if checkbox.isChecked():
+                    elements.append(symbol)
+
+            # Simple fragment calculation (this could be expanded)
+            results = self.generate_fragment_possibilities(target_mz, polarity, elements)
+
+            self.fragment_results.clear()
+            self.fragment_results.append(f"Fragment Analysis for m/z {target_mz:.3f} ({polarity} mode)\n")
+            self.fragment_results.append("=" * 50)
+            self.fragment_results.append(results)
+
+        except ValueError:
+            QMessageBox.critical(self, "Invalid Input", "Please enter a valid numeric m/z value.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Fragment calculation failed: {e}")
+
+    def generate_fragment_possibilities(self, target_mz, polarity, elements):
+        """Generate possible fragment assignments"""
+        # Atomic masses
+        atomic_masses = {
+            'C': 12.000, 'H': 1.008, 'O': 15.999, 'Al': 26.982,
+            'F': 18.998, 'Cl': 34.969, 'Si': 27.977, 'N': 14.007
+        }
+
+        results = []
+        tolerance = 0.1  # Mass tolerance
+
+        # Common fragment patterns for alucone
+        common_fragments = [
+            ('H-', [('H', 1)], 'Hydride'),
+            ('O-', [('O', 1)], 'Oxide'),
+            ('OH-', [('O', 1), ('H', 1)], 'Hydroxide'),
+            ('AlO-', [('Al', 1), ('O', 1)], 'Aluminum oxide'),
+            ('AlO2-', [('Al', 1), ('O', 2)], 'Aluminum dioxide'),
+            ('C2H-', [('C', 2), ('H', 1)], 'Acetylide'),
+            ('CHO-', [('C', 1), ('H', 1), ('O', 1)], 'Formyl'),
+            ('C2H3O-', [('C', 2), ('H', 3), ('O', 1)], 'Acetyl'),
+        ]
+
+        # Add contaminant fragments
+        if 'F' in elements:
+            common_fragments.extend([
+                ('F-', [('F', 1)], 'Fluoride (contamination)'),
+                ('CF-', [('C', 1), ('F', 1)], 'Carbon fluoride (contamination)'),
+            ])
+
+        if 'Cl' in elements:
+            common_fragments.extend([
+                ('Cl-', [('Cl', 1)], 'Chloride (contamination)'),
+            ])
+
+        # Check each fragment
+        for formula, composition, description in common_fragments:
+            calculated_mass = sum(atomic_masses[element] * count for element, count in composition)
+
+            # Check if it's within tolerance
+            if abs(calculated_mass - target_mz) <= tolerance:
+                error = calculated_mass - target_mz
+                results.append(f"✅ {formula}: {calculated_mass:.3f} Da (Δ = {error:+.3f}) - {description}")
+
+        if not results:
+            results.append("❌ No matching fragments found within ±0.1 Da tolerance")
+            results.append(f"\nFor reference, common elements in your system:")
+            for element in elements:
+                if element in atomic_masses:
+                    results.append(f"  {element}: {atomic_masses[element]:.3f} Da")
+
+        return "\n".join(results)
+
+    def apply_contamination_filters(self):
+        """Apply contamination filters and re-run PCA"""
+        if self.original_raw_data is None:
+            QMessageBox.information(self, "No Data", "Please load data first.")
+            return
+
+        try:
+            # Get filter settings
+            filters = []
+            if self.filter_F.isChecked():
+                filters.append(19.0)  # F- mass
+            if self.filter_Cl.isChecked():
+                filters.append(35.0)  # Cl- mass
+            if self.filter_Si.isChecked():
+                filters.append(28.0)  # Si+ mass
+
+            if not filters:
+                QMessageBox.information(self, "No Filters", "Please select contamination peaks to filter.")
+                return
+
+            # Filter data
+            filtered_data = self.original_raw_data.copy()
+            masses_to_remove = []
+
+            for filter_mass in filters:
+                # Find closest mass within 0.5 Da
+                closest_masses = []
+                for mass in filtered_data.index:
+                    if abs(mass - filter_mass) <= 0.5:
+                        closest_masses.append(mass)
+                masses_to_remove.extend(closest_masses)
+
+            # Remove contamination peaks
+            if masses_to_remove:
+                filtered_data = filtered_data.drop(masses_to_remove)
+                self.pca_analyzer.raw_data = filtered_data
+
+                QMessageBox.information(self, "Filters Applied",
+                    f"Removed {len(masses_to_remove)} contamination peaks.\nPlease re-run PCA analysis.")
+
+                # Reset PCA completion status
+                self.pca_completed = False
+                self.run_button.setEnabled(True)
+
+                print(f"🚫 Filtered out masses: {[f'{m:.3f}' for m in masses_to_remove]}")
+            else:
+                QMessageBox.information(self, "No Peaks Found", "No contamination peaks found to filter.")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to apply filters: {e}")
 
 
 def main():
