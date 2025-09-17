@@ -26,10 +26,15 @@ class SimpleToFSIMSPCA:
         """
         self.data_file = data_file
         
-        # Raw data containers
+        # Raw data containers (immutable after loading)
         self.raw_data = None
         self.mass_values = None
         self.sample_metadata = None
+
+        # Working data with masks (mutable for analysis)
+        self.working_data = None
+        self.working_metadata = None
+        self.sample_mask = None  # Boolean mask for selected samples
         
         # Preprocessed data containers
         self.preprocessed_data = None
@@ -68,7 +73,12 @@ class SimpleToFSIMSPCA:
             
             # Parse sample names (P#_SQ# format)
             self._parse_sample_metadata()
-            
+
+            # Initialize working data to full dataset
+            self.working_data = self.raw_data.copy()
+            self.working_metadata = self.sample_metadata.copy()
+            self.sample_mask = np.ones(len(self.sample_metadata), dtype=bool)
+
             print(f"   Successfully parsed {len(self.raw_data.columns)} samples")
             print("   ✅ Data loading complete")
             
@@ -135,25 +145,62 @@ class SimpleToFSIMSPCA:
         else:
             print(f"   ⚠️  Unbalanced design detected")
     
+    def select_samples_by_mask(self, sample_mask: np.ndarray) -> None:
+        """
+        Select samples using a boolean mask (preserves original data)
+
+        Args:
+            sample_mask: Boolean array where True = include sample
+        """
+        if len(sample_mask) != len(self.sample_metadata):
+            raise ValueError(f"Mask length ({len(sample_mask)}) doesn't match samples ({len(self.sample_metadata)})")
+
+        self.sample_mask = sample_mask.copy()
+
+        # Create working copies using the mask
+        selected_samples = self.sample_metadata[sample_mask]['sample_name'].tolist()
+        self.working_data = self.raw_data[selected_samples].copy()
+        self.working_metadata = self.sample_metadata[sample_mask].reset_index(drop=True)
+
+        print(f"🎯 Selected {len(selected_samples)} / {len(self.sample_metadata)} samples using mask")
+
+    def select_samples_by_names(self, sample_names: List[str]) -> None:
+        """
+        Select samples by name (preserves original data)
+
+        Args:
+            sample_names: List of sample names to include
+        """
+        # Create mask from sample names
+        mask = self.sample_metadata['sample_name'].isin(sample_names)
+        self.select_samples_by_mask(mask)
+
     def select_doses(self, dose_ids: List[int]) -> None:
         """
-        Select which doses to include in analysis
-        
+        Select which doses to include in analysis (preserves original data)
+
         Args:
             dose_ids: List of dose IDs (e.g., [0, 1, 2, 3, 4, 5])
         """
         print(f"🎯 Selecting doses: {dose_ids}")
-        
-        # Filter samples based on selected doses
-        selected_mask = self.sample_metadata['dose_id'].isin(dose_ids)
-        selected_samples = self.sample_metadata[selected_mask]['sample_name'].tolist()
-        
-        # Update data and metadata
-        self.raw_data = self.raw_data[selected_samples]
-        self.sample_metadata = self.sample_metadata[selected_mask].reset_index(drop=True)
-        
-        print(f"   Selected {len(selected_samples)} samples")
+
+        # Create mask based on selected doses
+        dose_mask = self.sample_metadata['dose_id'].isin(dose_ids)
+        self.select_samples_by_mask(dose_mask)
+
         print(f"   Doses included: {sorted(dose_ids)}")
+
+    def get_active_data(self):
+        """
+        Get the currently active data (either working data or raw data)
+
+        Returns:
+            Tuple of (data, metadata) currently being used for analysis
+        """
+        if self.working_data is not None:
+            return self.working_data, self.working_metadata
+        else:
+            return self.raw_data, self.sample_metadata
     
     def preprocess_data(self,
                        sqrt_transform: bool = True,
@@ -188,8 +235,9 @@ class SimpleToFSIMSPCA:
         print("⚙️ Preprocessing data with mathematical transformations...")
         self.preprocessing_steps = []
 
-        # Always start with raw data
-        data = self.raw_data.copy()
+        # Always start with active data (respects sample selection)
+        active_data, active_metadata = self.get_active_data()
+        data = active_data.copy()
         print(f"   Starting data shape: {data.shape} (masses × samples)")
 
         # Step 0: Cl peak filtering (if requested) - use masking instead of permanent removal
@@ -405,14 +453,17 @@ class SimpleToFSIMSPCA:
         if self.pca_model is None:
             raise ValueError("PCA must be run first")
         
+        # Use working metadata to reflect current sample selection
+        active_data, active_metadata = self.get_active_data()
+
         return {
             'n_samples': self.scores.shape[0],
-            'n_masses': self.loadings.shape[0], 
+            'n_masses': self.loadings.shape[0],
             'n_components': self.scores.shape[1],
             'total_variance_explained': self.explained_variance_ratio.sum(),
             'preprocessing_steps': self.preprocessing_steps,
-            'dose_ids': sorted(self.sample_metadata['dose_id'].unique()),
-            'replicates_per_dose': self.sample_metadata.groupby('dose_id').size().to_dict()
+            'dose_ids': sorted(active_metadata['dose_id'].unique()),
+            'replicates_per_dose': active_metadata.groupby('dose_id').size().to_dict()
         }
     
     def get_scores_dataframe(self) -> pd.DataFrame:
@@ -426,8 +477,9 @@ class SimpleToFSIMSPCA:
         pc_labels = [f'PC{i+1}' for i in range(self.scores.shape[1])]
         scores_df = pd.DataFrame(self.scores, columns=pc_labels)
         
-        # Add sample metadata
-        scores_df = pd.concat([self.sample_metadata.reset_index(drop=True), scores_df], axis=1)
+        # Add active sample metadata (working metadata)
+        active_data, active_metadata = self.get_active_data()
+        scores_df = pd.concat([active_metadata.reset_index(drop=True), scores_df], axis=1)
         
         return scores_df
     

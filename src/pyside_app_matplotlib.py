@@ -1001,7 +1001,7 @@ class ToFSIMSPCAApp(QMainWindow):
             'filter_si_peaks': self.filter_si_checkbox.isChecked()
         }
 
-        # Apply sample selection based on checkboxes
+        # Apply sample selection using proper masking
         selected_samples, display_names = self.get_selected_samples()
 
         if not selected_samples:
@@ -1014,20 +1014,16 @@ class ToFSIMSPCAApp(QMainWindow):
                               "Please select at least 3 samples for meaningful PCA analysis.")
             return
 
-        # Filter data to selected samples before PCA
+        # Apply sample selection using masks (preserves original data)
         try:
-            # Store original data for potential restoration
-            if not hasattr(self, 'original_raw_data'):
-                self.original_raw_data = self.pca_analyzer.raw_data.copy()
+            # Use the new masking system
+            self.pca_analyzer.select_samples_by_names(selected_samples)
 
-            # Filter data to selected samples
-            selected_data = self.original_raw_data[selected_samples]
-
-            # Rename columns to display names
-            column_rename_map = {original: display_names[original] for original in selected_samples}
-            selected_data_renamed = selected_data.rename(columns=column_rename_map)
-
-            self.pca_analyzer.raw_data = selected_data_renamed
+            # Update display names in working metadata
+            for original, display in display_names.items():
+                mask = self.pca_analyzer.working_metadata['sample_name'] == original
+                if mask.any():
+                    self.pca_analyzer.working_metadata.loc[mask, 'display_name'] = display
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to apply sample selection: {e}")
@@ -1590,11 +1586,11 @@ Export: Use export buttons to save data and plots
         """Get list of selected samples based on group selection"""
         if not self.pca_analyzer:
             return [], {}
-        
+
         selected_samples = []
         display_names = {}
-        
-        # Get all sample names
+
+        # Get all sample names from original data (not working data)
         all_sample_names = list(self.pca_analyzer.raw_data.columns)
         
         for sample_name in all_sample_names:
@@ -1626,17 +1622,16 @@ Export: Use export buttons to save data and plots
                               "Please select at least 3 samples for meaningful PCA analysis.")
             return
         
-        # Update analyzer with selected samples and display names
+        # Update analyzer with selected samples using masks
         try:
-            # Use original data for consistent filtering
-            if not hasattr(self, 'original_raw_data'):
-                self.original_raw_data = self.pca_analyzer.raw_data.copy()
-
-            # Filter data to selected samples from original data
-            selected_data = self.original_raw_data[selected_samples]
+            # Use the new masking system to preserve original data
+            self.pca_analyzer.select_samples_by_names(selected_samples)
             
-            # Create a copy of the analyzer with filtered data
-            # Rename columns to display names
+            # Update display names in working metadata
+            for original, display in display_names.items():
+                mask = self.pca_analyzer.working_metadata['sample_name'] == original
+                if mask.any():
+                    self.pca_analyzer.working_metadata.loc[mask, 'display_name'] = display
             column_rename_map = {original: display_names[original] for original in selected_samples}
             selected_data_renamed = selected_data.rename(columns=column_rename_map)
             
@@ -2147,14 +2142,14 @@ Export: Use export buttons to save data and plots
             return
 
         try:
-            # Get current sample selection (same as PCA tab)
-            selected_samples, display_names = self.get_selected_samples()
-            if not selected_samples:
-                QMessageBox.information(self, "No Samples Selected", "No samples selected in PCA tab.")
+            # Use the current working data from PCA analyzer
+            if not self.pca_analyzer or not hasattr(self.pca_analyzer, 'working_data'):
+                QMessageBox.information(self, "No Data Available", "Please run PCA analysis first.")
                 return
 
-            # Get raw data for selected samples
-            data_subset = self.original_raw_data[selected_samples]
+            # Get working data and metadata (respects current sample selection)
+            working_data, working_metadata = self.pca_analyzer.get_active_data()
+            data_subset = working_data.T  # Transpose to get masses as rows, samples as columns
 
             # Extract selected fragment masses
             fragment_masses = []
@@ -2171,14 +2166,9 @@ Export: Use export buttons to save data and plots
                 if mass in data_subset.index:
                     intensities = data_subset.loc[mass].values
 
-                    # Group by dose if available
-                    sample_names = selected_samples
-                    doses = []
-                    for sample in sample_names:
-                        pattern, square = self.parse_sample_name(sample)
-                        # Extract dose number from square (e.g., SQ1 -> 1)
-                        dose_num = int(square[2:]) if square.startswith('SQ') and square[2:].isdigit() else 0
-                        doses.append(dose_num)
+                    # Group by dose from working metadata
+                    sample_names = list(working_data.columns)
+                    doses = working_metadata['dose_id'].tolist() if 'dose_id' in working_metadata.columns else list(range(len(sample_names)))
 
                     ax.plot(doses, intensities, 'o-', label=f'm/z {mass:.3f}', linewidth=2, markersize=6)
 
@@ -2686,20 +2676,20 @@ Export: Use export buttons to save data and plots
             return
 
         try:
-            # Get current sample selection
-            selected_samples, display_names = self.get_selected_samples()
-            if not selected_samples:
-                QMessageBox.information(self, "No Samples Selected", "No samples selected in PCA tab.")
+            # Use the current working data from PCA analyzer
+            if not self.pca_analyzer or not hasattr(self.pca_analyzer, 'working_data'):
+                QMessageBox.information(self, "No Data Available", "Please run PCA analysis first.")
                 return
 
-            # Get raw data for selected samples
-            data_subset = self.original_raw_data[selected_samples]
+            # Get working data and metadata (respects current sample selection)
+            working_data, working_metadata = self.pca_analyzer.get_active_data()
+            data_subset = working_data.T  # Transpose to get masses as rows, samples as columns
 
-            # Extract dose information from sample names
+            # Extract dose information from working metadata
+            sample_names = list(working_data.columns)
             dose_data = {}
-            for sample in selected_samples:
-                dose = self.extract_dose_from_name(display_names[sample])
-                dose_data[sample] = dose
+            for i, sample in enumerate(sample_names):
+                dose_data[sample] = working_metadata.iloc[i]['dose_id'] if 'dose_id' in working_metadata.columns else i
 
             # Create plot
             self.individual_trends_canvas.figure.clear()
@@ -2817,20 +2807,20 @@ Export: Use export buttons to save data and plots
             return
 
         try:
-            # Get current sample selection
-            selected_samples, display_names = self.get_selected_samples()
-            if not selected_samples:
-                QMessageBox.information(self, "No Samples Selected", "No samples selected in PCA tab.")
+            # Use the current working data from PCA analyzer
+            if not self.pca_analyzer or not hasattr(self.pca_analyzer, 'working_data'):
+                QMessageBox.information(self, "No Data Available", "Please run PCA analysis first.")
                 return
 
-            # Get raw data for selected samples
-            data_subset = self.original_raw_data[selected_samples]
+            # Get working data and metadata (respects current sample selection)
+            working_data, working_metadata = self.pca_analyzer.get_active_data()
+            data_subset = working_data.T  # Transpose to get masses as rows, samples as columns
 
-            # Extract dose information
+            # Extract dose information from working metadata
+            sample_names = list(working_data.columns)
             dose_data = {}
-            for sample in selected_samples:
-                dose = self.extract_dose_from_name(display_names[sample])
-                dose_data[sample] = dose
+            for i, sample in enumerate(sample_names):
+                dose_data[sample] = working_metadata.iloc[i]['dose_id'] if 'dose_id' in working_metadata.columns else i
 
             # Create plot
             self.familial_trends_canvas.figure.clear()
