@@ -155,35 +155,113 @@ class SimpleToFSIMSPCA:
         print(f"   Selected {len(selected_samples)} samples")
         print(f"   Doses included: {sorted(dose_ids)}")
     
-    def preprocess_data(self, 
+    def preprocess_data(self,
                        sqrt_transform: bool = True,
-                       mean_center: bool = True, 
-                       pareto_scale: bool = True) -> None:
+                       mean_center: bool = True,
+                       pareto_scale: bool = True,
+                       filter_cl_peaks: bool = False,
+                       filter_si_peaks: bool = False) -> None:
         """
         Preprocess data for PCA with clear mathematical explanations
-        
+
         Args:
             sqrt_transform: Apply √(x) transformation
-            mean_center: Subtract column means  
+            mean_center: Subtract column means
             pareto_scale: Divide by √(std) per mass
-            
+            filter_cl_peaks: Remove Cl- peaks (m/z 34.971 and 36.968) before analysis
+            filter_si_peaks: Remove Si+ peaks (m/z 27.984 and related) before analysis
+
         Mathematical Steps:
+        0. Contamination filtering: Remove contamination peaks from dataset
+           - Cl peaks: m/z 34.971 (³⁵Cl⁻) and 36.968 (³⁷Cl⁻)
+           - Si peaks: m/z 27.984 (²⁸Si⁺) and related silicon fragments
+
         1. √ transform: Stabilizes variance for count data (Poisson-like)
            X_new = √(X_old)
-           
+
         2. Mean centering: Required for covariance-based PCA
            X_centered = X - mean(X) for each mass
-           
+
         3. Pareto scaling: Compromise between no scaling and unit variance
            X_pareto = X_centered / √(std(X)) for each mass
         """
         print("⚙️ Preprocessing data with mathematical transformations...")
         self.preprocessing_steps = []
-        
-        # Start with raw data (samples as columns, masses as rows)
+
+        # Always start with raw data
         data = self.raw_data.copy()
         print(f"   Starting data shape: {data.shape} (masses × samples)")
-        
+
+        # Step 0: Cl peak filtering (if requested) - use masking instead of permanent removal
+        mask_indices = None
+        if filter_cl_peaks:
+            print("   🧹 Step 0: Cl peak filtering")
+            print("      Purpose: Mask contamination peaks during analysis")
+            print("      Targets: m/z 34.971 (³⁵Cl⁻) and 36.968 (³⁷Cl⁻)")
+
+            # Define Cl peak masses with tolerance
+            cl35_mass = 34.971
+            cl37_mass = 36.968
+            tolerance = 0.01  # 10 mDa tolerance
+
+            # Create mask for peaks to exclude
+            mass_indices = data.index
+            cl_mask = np.ones(len(mass_indices), dtype=bool)  # Start with all True (keep all)
+            cl_peaks_found = 0
+
+            for i, mass in enumerate(mass_indices):
+                if (abs(mass - cl35_mass) <= tolerance or
+                    abs(mass - cl37_mass) <= tolerance):
+                    cl_mask[i] = False  # Mark for exclusion
+                    cl_peaks_found += 1
+                    print(f"      Found Cl peak at m/z {mass:.6f} (masked)")
+
+            if cl_peaks_found > 0:
+                # Apply mask to data
+                data = data.iloc[cl_mask]
+                mask_indices = cl_mask
+                print(f"      Masked {cl_peaks_found} Cl peaks")
+                print(f"      New data shape: {data.shape} (masses × samples)")
+                self.preprocessing_steps.append("filter_cl_peaks")
+            else:
+                print("      No Cl peaks found in current dataset")
+
+        # Step 0b: Si peak filtering (if requested) - use masking
+        if filter_si_peaks:
+            print("   🧹 Step 0b: Si peak filtering")
+            print("      Purpose: Mask silicon contamination peaks during analysis")
+            print("      Targets: m/z 27.984 (²⁸Si⁺) and related silicon fragments")
+
+            # Define Si peak masses with tolerance
+            si28_mass = 27.984  # ²⁸Si⁺
+            si29_mass = 28.976  # ²⁹Si⁺
+            si30_mass = 29.974  # ³⁰Si⁺
+            sih_mass = 28.991   # SiH⁺
+            tolerance = 0.01    # 10 mDa tolerance
+
+            # Create mask for peaks to exclude
+            mass_indices = data.index
+            si_mask = np.ones(len(mass_indices), dtype=bool)  # Start with all True (keep all)
+            si_peaks_found = 0
+
+            for i, mass in enumerate(mass_indices):
+                if (abs(mass - si28_mass) <= tolerance or
+                    abs(mass - si29_mass) <= tolerance or
+                    abs(mass - si30_mass) <= tolerance or
+                    abs(mass - sih_mass) <= tolerance):
+                    si_mask[i] = False  # Mark for exclusion
+                    si_peaks_found += 1
+                    print(f"      Found Si peak at m/z {mass:.6f} (masked)")
+
+            if si_peaks_found > 0:
+                # Apply mask to data
+                data = data.iloc[si_mask]
+                print(f"      Masked {si_peaks_found} Si peaks")
+                print(f"      New data shape: {data.shape} (masses × samples)")
+                self.preprocessing_steps.append("filter_si_peaks")
+            else:
+                print("      No Si peaks found in current dataset")
+
         # Step 1: Square root transformation
         if sqrt_transform:
             print("   📊 Step 1: Square root transformation")
@@ -232,8 +310,18 @@ class SimpleToFSIMSPCA:
             print("      ✅ Pareto scaling applied")
         
         self.preprocessed_data = data
+
+        # Store the mask information for consistent mass indexing
+        if mask_indices is not None:
+            self.current_mass_mask = mask_indices
+            self.current_mass_values = self.mass_values[mask_indices]
+        else:
+            self.current_mass_mask = np.ones(len(self.mass_values), dtype=bool)
+            self.current_mass_values = self.mass_values.copy()
+
         print(f"   Final preprocessed data shape: {data.shape}")
         print(f"   Data range: {data.values.min():.6f} to {data.values.max():.6f}")
+        print(f"   Active masses: {len(self.current_mass_values)}/{len(self.mass_values)}")
         print("   ✅ Preprocessing complete")
     
     def run_pca(self, n_components: int = 10) -> None:
@@ -337,18 +425,28 @@ class SimpleToFSIMSPCA:
     
     def get_loadings_dataframe(self) -> pd.DataFrame:
         """
-        Get PCA loadings as DataFrame
+        Get PCA loadings as DataFrame with proper mass indexing for filtered data
         """
         if self.loadings is None:
             raise ValueError("PCA must be run first")
-        
+
         pc_labels = [f'PC{i+1}' for i in range(self.loadings.shape[1])]
+
+        # Use current_mass_values if available (filtered data), otherwise use mass_values
+        mass_index = getattr(self, 'current_mass_values', self.mass_values)
+
+        # Verify shapes match
+        if len(mass_index) != self.loadings.shape[0]:
+            # Fallback: create a simple integer index if sizes don't match
+            print(f"⚠️  Warning: Mass index size ({len(mass_index)}) doesn't match loadings size ({self.loadings.shape[0]})")
+            mass_index = range(self.loadings.shape[0])
+
         loadings_df = pd.DataFrame(
             self.loadings,
             columns=pc_labels,
-            index=self.mass_values
+            index=mass_index
         )
-        
+
         return loadings_df
     
     def filter_loadings_by_importance(self, 

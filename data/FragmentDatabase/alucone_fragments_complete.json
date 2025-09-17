@@ -1,0 +1,1915 @@
+{
+  "metadata": {
+    "name": "Clean Alucone Fragment Database",
+    "description": "Fragment assignments from user-approved lists - O5H9- removed, proper format",
+    "version": "5.0",
+    "created": "2025-09-15",
+    "total_fragments": 178,
+    "negative_fragments": 81,
+    "positive_fragments": 97,
+    "chemical_families": [
+      "Al-based",
+      "Saturated_carbon",
+      "Unsaturated_carbon",
+      "Aromatic_formation",
+      "Organic_oxygen",
+      "Carbonyl",
+      "Hydroxyl",
+      "Contamination",
+      "Unknown"
+    ],
+    "notes": "Clean database with O5H9- removed, multiple assignments per mass properly formatted"
+  },
+  "fragments": [
+    {
+      "mass": 1.0084,
+      "assignments": ["H-"],
+      "formulas": ["H"],
+      "families": ["Unknown"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 12.00072,
+      "assignments": ["C-"],
+      "formulas": ["C"],
+      "families": ["Saturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 13.0087,
+      "assignments": ["CH-"],
+      "formulas": ["CH"],
+      "families": ["Saturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 14.01628,
+      "assignments": ["CH₂-"],
+      "formulas": ["CH₂"],
+      "families": ["Saturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 15.99589,
+      "assignments": ["O-"],
+      "formulas": ["O"],
+      "families": ["Hydroxyl"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 17.00371,
+      "assignments": ["OH-"],
+      "formulas": ["OH"],
+      "families": ["Hydroxyl"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 24.00013,
+      "assignments": ["C₂-"],
+      "formulas": ["C₂"],
+      "families": ["Saturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 25.00863,
+      "assignments": ["C₂H-"],
+      "formulas": ["C₂H"],
+      "families": ["Saturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 27.0248,
+      "assignments": ["C₂H₃-"],
+      "formulas": ["C₂H₃"],
+      "families": ["Saturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 29.00376,
+      "assignments": ["CHO-"],
+      "formulas": ["CHO"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 31.99029,
+      "assignments": ["O₂-"],
+      "formulas": ["O₂"],
+      "families": ["Hydroxyl"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 32.99777,
+      "assignments": ["O₂H-"],
+      "formulas": ["O₂H"],
+      "families": ["Hydroxyl"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 34.97065,
+      "assignments": ["Cl-"],
+      "formulas": ["Cl"],
+      "families": ["Contamination"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 36.00077,
+      "assignments": ["C₃-"],
+      "formulas": ["C₃"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 36.96753,
+      "assignments": ["³⁷Cl-"],
+      "formulas": ["³⁷Cl"],
+      "families": ["Contamination"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 37.00881,
+      "assignments": ["C₃H-"],
+      "formulas": ["C₃H"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 39.99155,
+      "assignments": ["CHAl-"],
+      "formulas": ["CHAl"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 42.00394,
+      "assignments": ["CH₃Al-"],
+      "formulas": ["CH₃Al"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 42.01252,
+      "assignments": ["C₂H₂O-"],
+      "formulas": ["C₂H₂O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 42.97745,
+      "assignments": ["AlO-"],
+      "formulas": ["AlO"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 43.01981,
+      "assignments": ["C₂H₃O-"],
+      "formulas": ["C₂H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 43.98702,
+      "assignments": ["AlOH-"],
+      "formulas": ["AlOH"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 44.99941,
+      "assignments": ["CHO₂-"],
+      "formulas": ["CHO₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 48.00048,
+      "assignments": ["C₄-"],
+      "formulas": ["C₄"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 49.0094,
+      "assignments": ["C₄H-"],
+      "formulas": ["C₄H"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 50.01472,
+      "assignments": ["C₄H₂-"],
+      "formulas": ["C₄H₂"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 50.98303,
+      "assignments": ["C₂Al-"],
+      "formulas": ["C₂Al"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 51.02556,
+      "assignments": ["C₄H₃-"],
+      "formulas": ["C₄H₃"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 51.99572,
+      "assignments": ["C₃O-"],
+      "formulas": ["C₃O"],
+      "families": ["Carbonyl"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 53.00443,
+      "assignments": ["C₃HO-"],
+      "formulas": ["C₃HO"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 54.01106,
+      "assignments": ["C₃H₂O-"],
+      "formulas": ["C₃H₂O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 55.02067,
+      "assignments": ["C₃H₃O-"],
+      "formulas": ["C₃H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 57.03671,
+      "assignments": ["C₃H₅O-"],
+      "formulas": ["C₃H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 58.00753,
+      "assignments": ["C₂H₂O₂-"],
+      "formulas": ["C₂H₂O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 58.97279,
+      "assignments": ["AlO₂-"],
+      "formulas": ["AlO₂"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 59.01578,
+      "assignments": ["C₂H₃O₂-"],
+      "formulas": ["C₂H₃O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 59.98191,
+      "assignments": ["AlO₂H-"],
+      "formulas": ["AlO₂H"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 60.00166,
+      "assignments": ["C₅-"],
+      "formulas": ["C₅"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 60.99026,
+      "assignments": ["AlO₂H₂-"],
+      "formulas": ["AlO₂H₂"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 60.9906,
+      "assignments": ["CHO₃-"],
+      "formulas": ["CHO₃"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 61.01037,
+      "assignments": ["C₅H-"],
+      "formulas": ["C₅H"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 62.0188,
+      "assignments": ["C₅H₂-"],
+      "formulas": ["C₅H₂"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 63.02619,
+      "assignments": ["C₅H₃-"],
+      "formulas": ["C₅H₃"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 63.99579,
+      "assignments": ["C₄O-"],
+      "formulas": ["C₄O"],
+      "families": ["Carbonyl"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 64.03129,
+      "assignments": ["C₅H₄-"],
+      "formulas": ["C₅H₄"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 65.00391,
+      "assignments": ["C₄HO-"],
+      "formulas": ["C₄HO"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 65.04077,
+      "assignments": ["C₅H₅-"],
+      "formulas": ["C₅H₅"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 66.00841,
+      "assignments": ["C₃H₃Al-", "C₄H₂O-"],
+      "formulas": ["C₃H₃Al", "C₄H₂O"],
+      "families": ["Al-based", "Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 66.97721,
+      "assignments": ["C₂OAl-"],
+      "formulas": ["C₂OAl"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 67.0204,
+      "assignments": ["C₄H₃O-"],
+      "formulas": ["C₄H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 68.02251,
+      "assignments": ["C₃H₅Al-", "C₄H₄O-"],
+      "formulas": ["C₃H₅Al", "C₄H₄O"],
+      "families": ["Al-based", "Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 68.99883,
+      "assignments": ["C₃HO₂-"],
+      "formulas": ["C₃HO₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 69.03678,
+      "assignments": ["C₄H₅O-"],
+      "formulas": ["C₄H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 70.00448,
+      "assignments": ["C₂H₃OAl-", "C₃H₂O₂-"],
+      "formulas": ["C₂H₃OAl", "C₃H₂O₂"],
+      "families": ["Al-based", "Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 71.01549,
+      "assignments": ["C₃H₃O₂-"],
+      "formulas": ["C₃H₃O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 72.00041,
+      "assignments": ["C₆-"],
+      "formulas": ["C₆"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 72.99397,
+      "assignments": ["C₂HO₃-"],
+      "formulas": ["C₂HO₃"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 73.00847,
+      "assignments": ["C₆H-"],
+      "formulas": ["C₆H"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 74.01388,
+      "assignments": ["C₆H₂-"],
+      "formulas": ["C₆H₂"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 74.98645,
+      "assignments": ["C₄Al-"],
+      "formulas": ["C₄Al"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "Low",
+      "notes": "User-provided negative ion list - chemically questionable"
+    },
+    {
+      "mass": 75.02461,
+      "assignments": ["C₆H₃-"],
+      "formulas": ["C₆H₃"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 75.97403,
+      "assignments": ["AlO₃H-"],
+      "formulas": ["AlO₃H"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 75.99408,
+      "assignments": ["C₄HAl-", "C₅O-"],
+      "formulas": ["C₄HAl", "C₅O"],
+      "families": ["Al-based", "Carbonyl"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 76.03066,
+      "assignments": ["C₆H₄-"],
+      "formulas": ["C₆H₄"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 76.98238,
+      "assignments": ["AlO₃H₂-"],
+      "formulas": ["AlO₃H₂"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 77.00299,
+      "assignments": ["C₅HO-"],
+      "formulas": ["C₅HO"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 78.01136,
+      "assignments": ["C₅H₂O-"],
+      "formulas": ["C₅H₂O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 78.99862,
+      "assignments": ["C₂H₄OCl-", "AlO₃H₄-"],
+      "formulas": ["C₂H₄OCl", "AlO₃H₄"],
+      "families": ["Contamination", "Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 79.02046,
+      "assignments": ["C₅H₃O-"],
+      "formulas": ["C₅H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 82.00682,
+      "assignments": ["C₄H₂O₂-"],
+      "formulas": ["C₄H₂O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 82.97191,
+      "assignments": ["C₂O₂Al-"],
+      "formulas": ["C₂O₂Al"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 83.01542,
+      "assignments": ["C₄H₃O₂-"],
+      "formulas": ["C₄H₃O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 83.99999,
+      "assignments": ["CH₅O₂Cl-", "C₇-"],
+      "formulas": ["CH₅O₂Cl", "C₇"],
+      "families": ["Contamination", "Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 84.98746,
+      "assignments": ["C₄H₂Cl-", "C₂H₂O₂Al-"],
+      "formulas": ["C₄H₂Cl", "C₂H₂O₂Al"],
+      "families": ["Contamination", "Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 85.00771,
+      "assignments": ["CH₆O₂Cl-", "C₇H-"],
+      "formulas": ["CH₆O₂Cl", "C₇H"],
+      "families": ["Contamination", "Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 86.01665,
+      "assignments": ["C₇H₂-"],
+      "formulas": ["C₇H₂"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 86.9603,
+      "assignments": ["Al₂O₂H-"],
+      "formulas": ["Al₂O₂H"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 87.02425,
+      "assignments": ["C₇H₃-"],
+      "formulas": ["C₇H₃"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 88.03131,
+      "assignments": ["C₇H₄-"],
+      "formulas": ["C₇H₄"],
+      "families": ["Aromatic_formation"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 89.00424,
+      "assignments": ["ClO₃H₆-", "C₆HO-"],
+      "formulas": ["ClO₃H₆", "C₆HO"],
+      "families": ["Contamination", "Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments, O5H9- removed"
+    },
+    {
+      "mass": 90.01008,
+      "assignments": ["C₆H₂O-"],
+      "formulas": ["C₆H₂O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 90.97665,
+      "assignments": ["C₄OAl-"],
+      "formulas": ["C₄OAl"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 91.02053,
+      "assignments": ["C₆H₃O-"],
+      "formulas": ["C₆H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 92.02685,
+      "assignments": ["C₆H₄O-"],
+      "formulas": ["C₆H₄O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 92.99793,
+      "assignments": ["C₅HO₂-"],
+      "formulas": ["C₅HO₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 93.03704,
+      "assignments": ["C₆H₅O-"],
+      "formulas": ["C₆H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 94.99308,
+      "assignments": ["AlO₄H₄-"],
+      "formulas": ["AlO₄H₄"],
+      "families": ["Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 94.99323,
+      "assignments": ["C₂H₄O₂Cl-"],
+      "formulas": ["C₂H₄O₂Cl"],
+      "families": ["Contamination"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 95.01609,
+      "assignments": ["C₅H₃O₂-"],
+      "formulas": ["C₅H₃O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list"
+    },
+    {
+      "mass": 95.99979,
+      "assignments": ["C₂H₅O₂Cl-", "C₈-", "AlO₄H₅-"],
+      "formulas": ["C₂H₅O₂Cl", "C₈", "AlO₄H₅"],
+      "families": ["Contamination", "Aromatic_formation", "Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 97.00888,
+      "assignments": ["C₈H-", "AlO₄H₆-"],
+      "formulas": ["C₈H", "AlO₄H₆"],
+      "families": ["Aromatic_formation", "Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 98.01334,
+      "assignments": ["C₂H₇O₂Cl-", "C₈H₂-", "AlO₄H₇-"],
+      "formulas": ["C₂H₇O₂Cl", "C₈H₂", "AlO₄H₇"],
+      "families": ["Contamination", "Aromatic_formation", "Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 99.02373,
+      "assignments": ["C₂H₈O₂Cl-", "C₈H₃-", "AlO₄H₈-"],
+      "formulas": ["C₂H₈O₂Cl", "C₈H₃", "AlO₄H₈"],
+      "families": ["Contamination", "Aromatic_formation", "Al-based"],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "User-provided negative ion list - multiple assignments"
+    },
+    {
+      "mass": 11.99812,
+      "assignments": ["C+"],
+      "formulas": ["C"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 13.0059,
+      "assignments": ["CH+"],
+      "formulas": ["CH"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 14.014,
+      "assignments": ["CH₂+"],
+      "formulas": ["CH₂"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 15.02271,
+      "assignments": ["CH₃+"],
+      "formulas": ["CH₃"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 19.0179,
+      "assignments": ["H₃O+"],
+      "formulas": ["H₃O"],
+      "families": ["Hydroxyl"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - corrected from OH3+"
+    },
+    {
+      "mass": 26.01406,
+      "assignments": ["C₂H₂+"],
+      "formulas": ["C₂H₂"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 26.98097,
+      "assignments": ["Al+"],
+      "formulas": ["Al"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 27.02276,
+      "assignments": ["C₂H₃+"],
+      "formulas": ["C₂H₃"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 27.98413,
+      "assignments": ["Si+"],
+      "formulas": ["Si"],
+      "families": ["Contamination"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 27.98713,
+      "assignments": ["AlH+"],
+      "formulas": ["AlH"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 28.03013,
+      "assignments": ["C₂H₄+"],
+      "formulas": ["C₂H₄"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 28.99134,
+      "assignments": ["SiH+"],
+      "formulas": ["SiH"],
+      "families": ["Contamination"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 29.00169,
+      "assignments": ["CHO+"],
+      "formulas": ["CHO"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 29.03971,
+      "assignments": ["C₂H₅+"],
+      "formulas": ["C₂H₅"],
+      "families": ["Saturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 31.01816,
+      "assignments": ["CH₃O+"],
+      "formulas": ["CH₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 37.00564,
+      "assignments": ["C₃H+"],
+      "formulas": ["C₃H"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 38.01613,
+      "assignments": ["C₃H₂+"],
+      "formulas": ["C₃H₂"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 41.04076,
+      "assignments": ["C₃H₅+"],
+      "formulas": ["C₃H₅"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 42.01145,
+      "assignments": ["C₂H₂O+"],
+      "formulas": ["C₂H₂O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 42.0472,
+      "assignments": ["C₃H₆+"],
+      "formulas": ["C₃H₆"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 43.018,
+      "assignments": ["C₂H₃O+"],
+      "formulas": ["C₂H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 43.05476,
+      "assignments": ["C₃H₇+"],
+      "formulas": ["C₃H₇"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 43.98139,
+      "assignments": ["AlOH+"],
+      "formulas": ["AlOH"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 44.0223,
+      "assignments": ["CH₅Al+"],
+      "formulas": ["CH₅Al"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 44.98994,
+      "assignments": ["SiHO+"],
+      "formulas": ["SiHO"],
+      "families": ["Contamination"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 44.9928,
+      "assignments": ["AlOH₂+"],
+      "formulas": ["AlOH₂"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 45.03439,
+      "assignments": ["C₂H₅O+"],
+      "formulas": ["C₂H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 47.01204,
+      "assignments": ["CH₃O₂+"],
+      "formulas": ["CH₃O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 50.01338,
+      "assignments": ["C₄H₂+"],
+      "formulas": ["C₄H₂"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 51.02218,
+      "assignments": ["C₄H₃+"],
+      "formulas": ["C₄H₃"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 51.98652,
+      "assignments": ["C₂HAl+"],
+      "formulas": ["C₂HAl"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 52.02909,
+      "assignments": ["C₄H₄+"],
+      "formulas": ["C₄H₄"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 52.99128,
+      "assignments": ["SiC₂H+"],
+      "formulas": ["SiC₂H"],
+      "families": ["Contamination"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 53.00044,
+      "assignments": ["C₃HO+"],
+      "formulas": ["C₃HO"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 53.03825,
+      "assignments": ["C₄H₅+"],
+      "formulas": ["C₄H₅"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 54.0444,
+      "assignments": ["C₄H₆+"],
+      "formulas": ["C₄H₆"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 55.01848,
+      "assignments": ["C₃H₃O+"],
+      "formulas": ["C₃H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 55.05495,
+      "assignments": ["C₄H₇+"],
+      "formulas": ["C₄H₇"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 56.0234,
+      "assignments": ["C₃H₄O+"],
+      "formulas": ["C₃H₄O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 56.06,
+      "assignments": ["C₄H₈+"],
+      "formulas": ["C₄H₈"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 57.03359,
+      "assignments": ["C₃H₅O+"],
+      "formulas": ["C₃H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 57.07072,
+      "assignments": ["C₄H₉+"],
+      "formulas": ["C₄H₉"],
+      "families": ["Unsaturated_carbon"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 57.9986,
+      "assignments": ["CH₃OAl+"],
+      "formulas": ["CH₃OAl"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 59.00717,
+      "assignments": ["CH₄OAl+"],
+      "formulas": ["CH₄OAl"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 59.0496,
+      "assignments": ["C₃H₇O+"],
+      "formulas": ["C₃H₇O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 59.99995,
+      "assignments": ["C₅+"],
+      "formulas": ["C₅"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 60.98419,
+      "assignments": ["AlO₂H₂+"],
+      "formulas": ["AlO₂H₂"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 61.00355,
+      "assignments": ["C₅H+"],
+      "formulas": ["C₅H"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 63.02106,
+      "assignments": ["C₅H₃+"],
+      "formulas": ["C₅H₃"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 64.02923,
+      "assignments": ["C₅H₄+"],
+      "formulas": ["C₅H₄"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 65.0393,
+      "assignments": ["C₅H₅+"],
+      "formulas": ["C₅H₅"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 66.00884,
+      "assignments": ["C₄H₂O+"],
+      "formulas": ["C₄H₂O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 66.04553,
+      "assignments": ["C₅H₆+"],
+      "formulas": ["C₅H₆"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 67.01727,
+      "assignments": ["C₄H₃O+"],
+      "formulas": ["C₄H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 67.05466,
+      "assignments": ["C₅H₇+"],
+      "formulas": ["C₅H₇"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 68.02524,
+      "assignments": ["C₄H₄O+"],
+      "formulas": ["C₄H₄O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 68.05907,
+      "assignments": ["C₅H₈+"],
+      "formulas": ["C₅H₈"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 68.99224,
+      "assignments": ["C₂H₂OAl+"],
+      "formulas": ["C₂H₂OAl"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 69.03408,
+      "assignments": ["C₄H₅O+"],
+      "formulas": ["C₄H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 69.07121,
+      "assignments": ["C₅H₉+"],
+      "formulas": ["C₅H₉"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 69.95553,
+      "assignments": ["Al₂O+"],
+      "formulas": ["Al₂O"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 70.03906,
+      "assignments": ["C₄H₆O+"],
+      "formulas": ["C₄H₆O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 70.07514,
+      "assignments": ["C₅H₁₀+"],
+      "formulas": ["C₅H₁₀"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 70.96475,
+      "assignments": ["Al₂OH+"],
+      "formulas": ["Al₂OH"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 71.01165,
+      "assignments": ["C₂H₄OAl+", "C₃H₃O₂+"],
+      "formulas": ["C₂H₄OAl", "C₃H₃O₂"],
+      "families": ["Al-based", "Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 71.05185,
+      "assignments": ["C₄H₇O+"],
+      "formulas": ["C₄H₇O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 73.99036,
+      "assignments": ["Al₂OH₄+"],
+      "formulas": ["Al₂OH₄"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 74.01207,
+      "assignments": ["C₆H₂+"],
+      "formulas": ["C₆H₂"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 74.01229,
+      "assignments": ["SiCH₇Al+"],
+      "formulas": ["SiCH₇Al"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 75.02143,
+      "assignments": ["C₆H₃+"],
+      "formulas": ["C₆H₃"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 76.02944,
+      "assignments": ["C₆H₄+"],
+      "formulas": ["C₆H₄"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 77.00016,
+      "assignments": ["C₅HO+"],
+      "formulas": ["C₅HO"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 77.0383,
+      "assignments": ["C₆H₅+"],
+      "formulas": ["C₆H₅"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 78.04481,
+      "assignments": ["C₆H₆+"],
+      "formulas": ["C₆H₆"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 78.99614,
+      "assignments": ["AlO₃H₄+"],
+      "formulas": ["AlO₃H₄"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 79.01652,
+      "assignments": ["C₅H₃O+"],
+      "formulas": ["C₅H₃O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 79.05372,
+      "assignments": ["C₆H₇+"],
+      "formulas": ["C₆H₇"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 80.05831,
+      "assignments": ["C₆H₈+"],
+      "formulas": ["C₆H₈"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 81.03487,
+      "assignments": ["C₅H₅O+"],
+      "formulas": ["C₅H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 81.07062,
+      "assignments": ["C₆H₉+"],
+      "formulas": ["C₆H₉"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 81.99876,
+      "assignments": ["C₃H₃OAl+"],
+      "formulas": ["C₃H₃OAl"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 82.04131,
+      "assignments": ["C₅H₆O+"],
+      "formulas": ["C₅H₆O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 83.00781,
+      "assignments": ["C₃H₄OAl+"],
+      "formulas": ["C₃H₄OAl"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 83.00931,
+      "assignments": ["C₄H₃O₂+"],
+      "formulas": ["C₄H₃O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 83.03172,
+      "assignments": ["AlO₃H₈+"],
+      "formulas": ["AlO₃H₈"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 83.0881,
+      "assignments": ["C₆H₁₁+"],
+      "formulas": ["C₆H₁₁"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 84.98306,
+      "assignments": ["C₂H₂O₂Al+", "CH₃OAl₂+"],
+      "formulas": ["C₂H₂O₂Al", "CH₃OAl₂"],
+      "families": ["Al-based", "Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 85.00625,
+      "assignments": ["C₇H+"],
+      "formulas": ["C₇H"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 86.01176,
+      "assignments": ["SiC₂H₇Al+"],
+      "formulas": ["SiC₂H₇Al"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 86.01179,
+      "assignments": ["C₇H₂+"],
+      "formulas": ["C₇H₂"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 86.95825,
+      "assignments": ["Al₂O₂H+"],
+      "formulas": ["Al₂O₂H"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 87.00119,
+      "assignments": ["C₂H₄O₂Al+", "CH₅OAl₂+"],
+      "formulas": ["C₂H₄O₂Al", "CH₅OAl₂"],
+      "families": ["Al-based", "Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 87.01997,
+      "assignments": ["SiC₂H₈Al+"],
+      "formulas": ["SiC₂H₈Al"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 87.02037,
+      "assignments": ["C₇H₃+"],
+      "formulas": ["C₇H₃"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 87.96721,
+      "assignments": ["Al₂O₂H₂+"],
+      "formulas": ["Al₂O₂H₂"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 88.02685,
+      "assignments": ["C₇H₄+"],
+      "formulas": ["C₇H₄"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 88.97782,
+      "assignments": ["Al₂O₂H₃+", "CH₂O₃Al+"],
+      "formulas": ["Al₂O₂H₃", "CH₂O₃Al"],
+      "families": ["Al-based", "Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 89.03683,
+      "assignments": ["C₇H₅+"],
+      "formulas": ["C₇H₅"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 90.04482,
+      "assignments": ["C₇H₆+"],
+      "formulas": ["C₇H₆"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 91.05379,
+      "assignments": ["C₇H₇+"],
+      "formulas": ["C₇H₇"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 92.02522,
+      "assignments": ["C₆H₄O+"],
+      "formulas": ["C₆H₄O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 92.0585,
+      "assignments": ["C₇H₈+"],
+      "formulas": ["C₇H₈"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 92.98937,
+      "assignments": ["C₃H₃Al₂+", "C₄H₂OAl+"],
+      "formulas": ["C₃H₃Al₂", "C₄H₂OAl"],
+      "families": ["Al-based", "Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 93.03355,
+      "assignments": ["C₆H₅O+"],
+      "formulas": ["C₆H₅O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 93.07014,
+      "assignments": ["C₇H₉+"],
+      "formulas": ["C₇H₉"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 94.03999,
+      "assignments": ["C₅H₇Al+", "C₆H₆O+"],
+      "formulas": ["C₅H₇Al", "C₆H₆O"],
+      "families": ["Al-based", "Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 94.96233,
+      "assignments": ["C₂HOAl₂+"],
+      "formulas": ["C₂HOAl₂"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 95.009,
+      "assignments": ["C₄H₄OAl+"],
+      "formulas": ["C₄H₄OAl"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 95.0104,
+      "assignments": ["C₅H₃O₂+"],
+      "formulas": ["C₅H₃O₂"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 95.04939,
+      "assignments": ["C₆H₇O+"],
+      "formulas": ["C₆H₇O"],
+      "families": ["Organic_oxygen"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 95.08702,
+      "assignments": ["C₇H₁₁+"],
+      "formulas": ["C₇H₁₁"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 98.0111,
+      "assignments": ["AlO₄H₇+"],
+      "formulas": ["AlO₄H₇"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 98.01122,
+      "assignments": ["C₈H₂+"],
+      "formulas": ["C₈H₂"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 98.01143,
+      "assignments": ["SiC₃H₇Al+"],
+      "formulas": ["SiC₃H₇Al"],
+      "families": ["Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    },
+    {
+      "mass": 99.00143,
+      "assignments": ["C₂H₅OAl₂+", "C₃H₄O₂Al+"],
+      "formulas": ["C₂H₅OAl₂", "C₃H₄O₂Al"],
+      "families": ["Al-based", "Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 99.01687,
+      "assignments": ["AlO₄H₈+", "SiC₃H₈Al+"],
+      "formulas": ["AlO₄H₈", "SiC₃H₈Al"],
+      "families": ["Al-based", "Al-based"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list - multiple assignments"
+    },
+    {
+      "mass": 99.02053,
+      "assignments": ["C₈H₃+"],
+      "formulas": ["C₈H₃"],
+      "families": ["Aromatic_formation"],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "User-provided positive ion list"
+    }
+  ]
+}

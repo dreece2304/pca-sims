@@ -1,0 +1,497 @@
+{
+  "metadata": {
+    "name": "Alucone Fragment Assignment Database",
+    "description": "Curated fragment assignments for alucone (aluminum-containing organic) compounds with butyne linker",
+    "version": "1.0",
+    "created": "2024-12-19",
+    "chemical_families": [
+      "Al-based",
+      "Saturated Carbon",
+      "Unsaturated Carbon",
+      "Carbonyl",
+      "Hydroxyl",
+      "Ether/Ester",
+      "Contamination"
+    ],
+    "notes": "High-confidence assignments prioritized for ToF-SIMS analysis of e-beam exposed alucone"
+  },
+  "fragments": [
+    {
+      "mass": 1.0084,
+      "assignment": "H-",
+      "formula": "H",
+      "family": "Hydroxyl",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Hydrogen anion"
+    },
+    {
+      "mass": 12.00072,
+      "assignment": "C-",
+      "formula": "C",
+      "family": "Saturated Carbon",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Carbon anion"
+    },
+    {
+      "mass": 13.0087,
+      "assignment": "CH-",
+      "formula": "CH",
+      "family": "Saturated Carbon",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Methyl radical anion"
+    },
+    {
+      "mass": 14.01628,
+      "assignment": "CH2-",
+      "formula": "CH2",
+      "family": "Saturated Carbon",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Methylene anion"
+    },
+    {
+      "mass": 15.99589,
+      "assignment": "O-",
+      "formula": "O",
+      "family": "Hydroxyl",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Oxygen anion"
+    },
+    {
+      "mass": 17.00371,
+      "assignment": "OH-",
+      "formula": "OH",
+      "family": "Hydroxyl",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Hydroxyl anion"
+    },
+    {
+      "mass": 24.00013,
+      "assignment": "C2-",
+      "formula": "C2",
+      "family": "Unsaturated Carbon",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Dicarbon anion"
+    },
+    {
+      "mass": 25.00863,
+      "assignment": "C2H-",
+      "formula": "C2H",
+      "family": "Unsaturated Carbon",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Ethynyl anion"
+    },
+    {
+      "mass": 27.0248,
+      "assignment": "C2H3-",
+      "formula": "C2H3",
+      "family": "Unsaturated Carbon",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Vinyl anion"
+    },
+    {
+      "mass": 29.00376,
+      "assignment": "CHO-",
+      "formula": "CHO",
+      "family": "Carbonyl",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Formyl anion"
+    },
+    {
+      "mass": 31.99029,
+      "assignment": "O2-",
+      "formula": "O2",
+      "family": "Hydroxyl",
+      "polarity": "negative",
+      "confidence": "Medium",
+      "notes": "Dioxygen anion"
+    },
+    {
+      "mass": 32.99777,
+      "assignment": "O2H-",
+      "formula": "O2H",
+      "family": "Hydroxyl",
+      "polarity": "negative",
+      "confidence": "Medium",
+      "notes": "Hydroperoxyl anion"
+    },
+    {
+      "mass": 34.97065,
+      "assignment": "Cl-",
+      "formula": "Cl",
+      "family": "Contamination",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Chloride contamination"
+    },
+    {
+      "mass": 36.96753,
+      "assignment": "37Cl-",
+      "formula": "37Cl",
+      "family": "Contamination",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Chloride isotope"
+    },
+    {
+      "mass": 39.99155,
+      "assignment": "CHAl-",
+      "formula": "CHAl",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Al-carbon bond"
+    },
+    {
+      "mass": 42.00394,
+      "assignment": "CH3Al-",
+      "formula": "CH3Al",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Methylaluminum anion"
+    },
+    {
+      "mass": 42.97745,
+      "assignment": "AlO-",
+      "formula": "AlO",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Aluminum oxide anion"
+    },
+    {
+      "mass": 43.98702,
+      "assignment": "AlOH-",
+      "formula": "AlOH",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Aluminum hydroxide"
+    },
+    {
+      "mass": 50.98303,
+      "assignment": "C2Al-",
+      "formula": "C2Al",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Dialuminum carbon"
+    },
+    {
+      "mass": 42.01252,
+      "assignment": "C2H2O-",
+      "formula": "C2H2O",
+      "family": "Ether/Ester",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Acetyl/vinyl alcohol"
+    },
+    {
+      "mass": 43.01981,
+      "assignment": "C2H3O-",
+      "formula": "C2H3O",
+      "family": "Ether/Ester",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Acetyl anion"
+    },
+    {
+      "mass": 58.00753,
+      "assignment": "C2H2O2-",
+      "formula": "C2H2O2",
+      "family": "Ether/Ester",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Acetate/oxalate"
+    },
+    {
+      "mass": 59.01578,
+      "assignment": "C2H3O2-",
+      "formula": "C2H3O2",
+      "family": "Ether/Ester",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Acetate anion"
+    },
+    {
+      "mass": 51.99572,
+      "assignment": "C3O-",
+      "formula": "C3O",
+      "family": "Carbonyl",
+      "polarity": "negative",
+      "confidence": "Medium",
+      "notes": "Tricarbon oxide"
+    },
+    {
+      "mass": 53.00443,
+      "assignment": "C3HO-",
+      "formula": "C3HO",
+      "family": "Carbonyl",
+      "polarity": "negative",
+      "confidence": "Medium",
+      "notes": "Propynyl oxide"
+    },
+    {
+      "mass": 57.03671,
+      "assignment": "C3H5O-",
+      "formula": "C3H5O",
+      "family": "Ether/Ester",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Propyl/allyl oxide"
+    },
+    {
+      "mass": 58.97279,
+      "assignment": "AlO2-",
+      "formula": "AlO2",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Aluminum dioxide"
+    },
+    {
+      "mass": 59.98191,
+      "assignment": "AlO2H-",
+      "formula": "AlO2H",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Aluminum dihydroxide"
+    },
+    {
+      "mass": 66.97721,
+      "assignment": "C2OAl-",
+      "formula": "C2OAl",
+      "family": "Al-based",
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Al-ether linkage"
+    },
+    {
+      "mass": 11.99812,
+      "assignment": "C+",
+      "formula": "C",
+      "family": "Saturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Carbon cation"
+    },
+    {
+      "mass": 13.00590,
+      "assignment": "CH+",
+      "formula": "CH",
+      "family": "Saturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Methyl radical cation"
+    },
+    {
+      "mass": 14.01400,
+      "assignment": "CH2+",
+      "formula": "CH2",
+      "family": "Saturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Methylene cation"
+    },
+    {
+      "mass": 15.02271,
+      "assignment": "CH3+",
+      "formula": "CH3",
+      "family": "Saturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Methyl cation"
+    },
+    {
+      "mass": 26.98097,
+      "assignment": "Al+",
+      "formula": "Al",
+      "family": "Al-based",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Aluminum cation"
+    },
+    {
+      "mass": 27.98713,
+      "assignment": "AlH+",
+      "formula": "AlH",
+      "family": "Al-based",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Aluminum hydride"
+    },
+    {
+      "mass": 27.98413,
+      "assignment": "Si+",
+      "formula": "Si",
+      "family": "Contamination",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Silicon contamination"
+    },
+    {
+      "mass": 28.99134,
+      "assignment": "SiH+",
+      "formula": "SiH",
+      "family": "Contamination",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Silicon hydride"
+    },
+    {
+      "mass": 26.01406,
+      "assignment": "C2H2+",
+      "formula": "C2H2",
+      "family": "Unsaturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Acetylene (butyne fragment)"
+    },
+    {
+      "mass": 27.02276,
+      "assignment": "C2H3+",
+      "formula": "C2H3",
+      "family": "Unsaturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Vinyl cation"
+    },
+    {
+      "mass": 28.03013,
+      "assignment": "C2H4+",
+      "formula": "C2H4",
+      "family": "Saturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Ethylene"
+    },
+    {
+      "mass": 29.00169,
+      "assignment": "CHO+",
+      "formula": "CHO",
+      "family": "Carbonyl",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Formyl cation"
+    },
+    {
+      "mass": 31.01816,
+      "assignment": "CH3O+",
+      "formula": "CH3O",
+      "family": "Ether/Ester",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Methoxy cation"
+    },
+    {
+      "mass": 42.01145,
+      "assignment": "C2H2O+",
+      "formula": "C2H2O",
+      "family": "Ether/Ester",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Acetyl/ketene"
+    },
+    {
+      "mass": 43.018,
+      "assignment": "C2H3O+",
+      "formula": "C2H3O",
+      "family": "Ether/Ester",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Acetyl cation"
+    },
+    {
+      "mass": 43.98139,
+      "assignment": "AlOH+",
+      "formula": "AlOH",
+      "family": "Al-based",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Aluminum hydroxide"
+    },
+    {
+      "mass": 44.9928,
+      "assignment": "AlOH2+",
+      "formula": "AlOH2",
+      "family": "Al-based",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Aluminum dihydroxide"
+    },
+    {
+      "mass": 57.9986,
+      "assignment": "CH3OAl+",
+      "formula": "CH3OAl",
+      "family": "Al-based",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Al-methoxy bond"
+    },
+    {
+      "mass": 68.99224,
+      "assignment": "C2H2OAl+",
+      "formula": "C2H2OAl",
+      "family": "Al-based",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Al-ester linkage"
+    },
+    {
+      "mass": 50.01338,
+      "assignment": "C4H2+",
+      "formula": "C4H2",
+      "family": "Unsaturated Carbon",
+      "polarity": "positive",
+      "confidence": "Medium",
+      "notes": "Butadiyne"
+    },
+    {
+      "mass": 51.02218,
+      "assignment": "C4H3+",
+      "formula": "C4H3",
+      "family": "Unsaturated Carbon",
+      "polarity": "positive",
+      "confidence": "Medium",
+      "notes": "Butynyl"
+    },
+    {
+      "mass": 53.03825,
+      "assignment": "C4H5+",
+      "formula": "C4H5",
+      "family": "Unsaturated Carbon",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Butene/cyclobutene"
+    },
+    {
+      "mass": 19.01790,
+      "assignment": "OH3+",
+      "formula": "OH3",
+      "family": "Hydroxyl",
+      "polarity": "positive",
+      "confidence": "Medium",
+      "notes": "Hydronium"
+    },
+    {
+      "mass": 45.03439,
+      "assignment": "C2H5O+",
+      "formula": "C2H5O",
+      "family": "Ether/Ester",
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Ethoxy cation"
+    }
+  ]
+}
