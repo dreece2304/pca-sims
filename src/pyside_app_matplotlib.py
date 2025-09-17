@@ -1566,8 +1566,7 @@ Export: Use export buttons to save data and plots
         if not self.pca_analyzer:
             return
 
-        # Backup original data for sample selection operations
-        self.original_raw_data = self.pca_analyzer.raw_data.copy()
+        # Original data is preserved in pca_analyzer.raw_data (immutable)
 
         # Get sample names from data columns (excluding first column which is masses)
         sample_names = list(self.pca_analyzer.raw_data.columns)
@@ -2114,7 +2113,7 @@ Export: Use export buttons to save data and plots
             self.fragment_list.clear()
             for mass, abs_loading in top_loadings.items():
                 original_loading = loadings_df.loc[mass, 'PC1']
-                item_text = f"m/z {mass:.3f} (loading: {original_loading:+.3f})"
+                item_text = f"m/z {mass:.3f} (loading: {original_loading:+.6f})"
                 item = QListWidgetItem(item_text)
                 item.setData(Qt.UserRole, mass)  # Store mass value
                 self.fragment_list.addItem(item)
@@ -2433,7 +2432,7 @@ Export: Use export buttons to save data and plots
                 self.assignment_table.setItem(i, 0, QTableWidgetItem(f"{mass:.4f}"))
 
                 # PC1 loading value
-                loading_item = QTableWidgetItem(f"{original_loading:+.3f}")
+                loading_item = QTableWidgetItem(f"{original_loading:+.6f}")
                 if original_loading > 0:
                     loading_item.setBackground(QColor(200, 255, 200))  # Light green for positive
                 else:
