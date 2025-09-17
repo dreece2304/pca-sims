@@ -372,8 +372,16 @@ class SimpleToFSIMSPCA:
         actual_masses = len(self.current_mass_values)
         if expected_masses != actual_masses:
             print(f"   ⚠️  Mass index adjustment: Expected {expected_masses}, got {actual_masses}")
-            # Create sequential index if sizes don't match
-            self.current_mass_values = np.arange(expected_masses)
+            # Use original mass values instead of sequential indices
+            if len(self.mass_values) >= expected_masses:
+                self.current_mass_values = self.mass_values[:expected_masses]
+            else:
+                # This should rarely happen, but handle gracefully
+                self.current_mass_values = np.concatenate([
+                    self.mass_values,
+                    np.arange(len(self.mass_values), expected_masses)
+                ])
+            print(f"   ✅ Adjusted to use original mass values: {self.current_mass_values[:5]}...")
 
         print(f"   Final preprocessed data shape: {data.shape}")
         print(f"   Data range: {data.values.min():.6f} to {data.values.max():.6f}")
@@ -497,10 +505,19 @@ class SimpleToFSIMSPCA:
 
         # Verify shapes match
         if len(mass_index) != self.loadings.shape[0]:
-            # Fallback: create a simple integer index if sizes don't match
+            # Fallback: use original mass values (truncated or padded as needed)
             print(f"⚠️  Warning: Mass index size ({len(mass_index)}) doesn't match loadings size ({self.loadings.shape[0]})")
-            print(f"   Using sequential mass index instead")
-            mass_index = np.arange(self.loadings.shape[0])
+            print(f"   Using original mass values as fallback")
+
+            if len(self.mass_values) >= self.loadings.shape[0]:
+                # Use first N mass values
+                mass_index = self.mass_values[:self.loadings.shape[0]]
+            else:
+                # Pad with sequential values if needed (rare case)
+                mass_index = np.concatenate([
+                    self.mass_values,
+                    np.arange(len(self.mass_values), self.loadings.shape[0])
+                ])
 
         loadings_df = pd.DataFrame(
             self.loadings,
