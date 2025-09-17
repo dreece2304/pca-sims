@@ -319,6 +319,14 @@ class SimpleToFSIMSPCA:
             self.current_mass_mask = np.ones(len(self.mass_values), dtype=bool)
             self.current_mass_values = self.mass_values.copy()
 
+        # Debug: Ensure current_mass_values matches preprocessed data shape
+        expected_masses = self.preprocessed_data.shape[1]  # number of columns (masses)
+        actual_masses = len(self.current_mass_values)
+        if expected_masses != actual_masses:
+            print(f"   ⚠️  Mass index adjustment: Expected {expected_masses}, got {actual_masses}")
+            # Create sequential index if sizes don't match
+            self.current_mass_values = np.arange(expected_masses)
+
         print(f"   Final preprocessed data shape: {data.shape}")
         print(f"   Data range: {data.values.min():.6f} to {data.values.max():.6f}")
         print(f"   Active masses: {len(self.current_mass_values)}/{len(self.mass_values)}")
@@ -439,7 +447,8 @@ class SimpleToFSIMSPCA:
         if len(mass_index) != self.loadings.shape[0]:
             # Fallback: create a simple integer index if sizes don't match
             print(f"⚠️  Warning: Mass index size ({len(mass_index)}) doesn't match loadings size ({self.loadings.shape[0]})")
-            mass_index = range(self.loadings.shape[0])
+            print(f"   Using sequential mass index instead")
+            mass_index = np.arange(self.loadings.shape[0])
 
         loadings_df = pd.DataFrame(
             self.loadings,

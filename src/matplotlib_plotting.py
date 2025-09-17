@@ -197,8 +197,8 @@ class PCAPlotCanvas(FigureCanvas):
         variance_ratios = pca_analyzer.explained_variance_ratio * 100
         components = range(1, len(variance_ratios) + 1)
         
-        # Use publication colors
-        bars = ax1.bar(components, variance_ratios, alpha=0.8, color='#2E86AB', 
+        # Use viridis colors for consistency
+        bars = ax1.bar(components, variance_ratios, alpha=0.8, color='#440154',
                       edgecolor='black', linewidth=0.8)
         ax1.set_xlabel('Principal Component', fontweight='bold')
         ax1.set_ylabel('Variance Explained (%)', fontweight='bold')
@@ -285,35 +285,44 @@ class PCAPlotCanvas(FigureCanvas):
         ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5, linewidth=1)
         ax2.axvline(x=0, color='gray', linestyle='--', alpha=0.5, linewidth=1)
         
-        # 3. PC1 loadings
+        # 3. PC1 loadings (highest at top)
         ax3 = self.fig.add_subplot(gs[1, 0])
         loadings_df = pca_analyzer.get_loadings_dataframe()
-        pc1_loadings = loadings_df['PC1'].abs().sort_values(ascending=False).head(15)
-        
+        pc1_loadings = loadings_df['PC1'].abs().sort_values(ascending=True).head(15)  # ascending=True puts highest at top
+
         y_pos = np.arange(len(pc1_loadings))
-        bars = ax3.barh(y_pos, pc1_loadings.values, alpha=0.7, color='orange')
+        bars = ax3.barh(y_pos, pc1_loadings.values, alpha=0.8, color='#21908C')  # viridis mid-tone
         ax3.set_yticks(y_pos)
         ax3.set_yticklabels([f'{idx:.3f}' for idx in pc1_loadings.index], fontsize=8)
-        ax3.set_xlabel('|PC1 Loading|')
-        ax3.set_title('Top PC1 Loadings')
+        ax3.set_xlabel('|PC1 Loading|', fontweight='bold')
+        ax3.set_title('C) Top PC1 Loadings', fontweight='bold', loc='left')
         ax3.grid(True, alpha=0.3, axis='x')
+
+        # Clean up spines
+        ax3.spines['top'].set_visible(False)
+        ax3.spines['right'].set_visible(False)
         
         # 4. Dose response (if available)
         ax4 = self.fig.add_subplot(gs[1, 1])
         
         if 'dose_id' in scores_df.columns:
-            # PC1 vs dose correlation
+            # PC1 vs dose correlation with viridis styling
             dose_groups = scores_df.groupby('dose_id')['PC1'].mean()
-            ax4.plot(dose_groups.index, dose_groups.values, 'o-', linewidth=2, markersize=8)
-            ax4.set_xlabel('Dose ID')
-            ax4.set_ylabel('PC1 Score')
-            ax4.set_title('Dose Response')
+            ax4.plot(dose_groups.index, dose_groups.values, 'o-', linewidth=2.5, markersize=8,
+                    color='#440154', markerfacecolor='#FDE725', markeredgecolor='#440154')
+            ax4.set_xlabel('Dose ID', fontweight='bold')
+            ax4.set_ylabel('PC1 Score', fontweight='bold')
+            ax4.set_title('D) Dose Response', fontweight='bold', loc='left')
             ax4.grid(True, alpha=0.3)
-            
+
+            # Clean up spines
+            ax4.spines['top'].set_visible(False)
+            ax4.spines['right'].set_visible(False)
+
             # Calculate correlation
             corr = np.corrcoef(dose_groups.index, dose_groups.values)[0, 1]
             ax4.text(0.05, 0.95, f'r = {corr:.3f}', transform=ax4.transAxes,
-                    bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+                    bbox=dict(boxstyle='round', facecolor='white', alpha=0.8), fontweight='bold')
         else:
             # Summary statistics table
             summary = pca_analyzer.get_results_summary()
@@ -333,7 +342,7 @@ class PCAPlotCanvas(FigureCanvas):
             table.auto_set_font_size(False)
             table.set_fontsize(10)
             table.scale(1.2, 1.5)
-            ax4.set_title('Summary Statistics')
+            ax4.set_title('D) Summary Statistics', fontweight='bold', loc='left')
         
         # Refresh canvas
         self.draw()
@@ -462,21 +471,21 @@ class InteractivePCAPlots:
         ax1.set_title('PC1 Loadings Spectrum', fontsize=14, fontweight='bold')
         ax1.grid(True, alpha=0.3)
         
-        # Top loadings bar chart
-        top_loadings = loadings_df['PC1'].abs().sort_values(ascending=False).head(top_n)
+        # Top loadings bar chart (highest at top)
+        top_loadings = loadings_df['PC1'].abs().sort_values(ascending=True).head(top_n)  # ascending=True puts highest at top
         y_pos = np.arange(len(top_loadings))
-        
-        bars = ax2.barh(y_pos, top_loadings.values, alpha=0.7)
+
+        bars = ax2.barh(y_pos, top_loadings.values, alpha=0.8)
         ax2.set_yticks(y_pos)
         ax2.set_yticklabels([f'{idx:.3f}' for idx in top_loadings.index])
         ax2.set_xlabel('|PC1 Loading|', fontsize=12)
         ax2.set_title(f'Top {top_n} PC1 Loadings', fontsize=14, fontweight='bold')
         ax2.grid(True, alpha=0.3, axis='x')
-        
-        # Color bars by positive/negative
+
+        # Color bars using viridis colors for positive/negative
         original_loadings = loadings_df.loc[top_loadings.index, 'PC1']
         for bar, loading in zip(bars, original_loadings):
-            bar.set_color('red' if loading < 0 else 'blue')
+            bar.set_color('#FDE725' if loading < 0 else '#440154')  # viridis yellow/purple
         
         plt.tight_layout()
         
