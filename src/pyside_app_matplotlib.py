@@ -284,10 +284,11 @@ class FragmentAssignmentDialog(QDialog):
     def populate_peak_intensities(self):
         """Populate peak intensities table"""
         try:
-            # Get sample data for this mass
+            # Get current working data (respects sample selection)
             if hasattr(self.parent_app, 'pca_analyzer') and self.parent_app.pca_analyzer:
-                raw_data = self.parent_app.pca_analyzer.raw_data
-                sample_metadata = self.parent_app.pca_analyzer.sample_metadata
+                working_data, working_metadata = self.parent_app.pca_analyzer.get_active_data()
+                raw_data = working_data.T  # Transpose to get masses as rows
+                sample_metadata = working_metadata
 
                 # Find closest mass in data (accounting for floating point precision)
                 mass_index = None
@@ -302,8 +303,19 @@ class FragmentAssignmentDialog(QDialog):
                     actual_mass = raw_data.index[mass_index]
                     intensities = raw_data.iloc[mass_index]
 
-                    # Group by dose
-                    dose_groups = sample_metadata.groupby('dose_id')
+                    # Group by dose using working metadata
+                    dose_groups = working_metadata.groupby('dose_id') if 'dose_id' in working_metadata.columns else None
+
+                    if dose_groups is None:
+                        # Fallback: treat each sample as its own group
+                        self.intensity_table.setRowCount(len(intensities))
+                        self.intensity_table.setColumnCount(2)
+                        self.intensity_table.setHorizontalHeaderLabels(["Sample", "Intensity"])
+
+                        for i, (sample_name, intensity) in enumerate(intensities.items()):
+                            self.intensity_table.setItem(i, 0, QTableWidgetItem(str(sample_name)))
+                            self.intensity_table.setItem(i, 1, QTableWidgetItem(f"{intensity:.4f}"))
+                        return
 
                     # Set up table
                     self.intensity_table.setRowCount(len(dose_groups))
@@ -2349,7 +2361,7 @@ Export: Use export buttons to save data and plots
             match['priority_score'] = self.calculate_assignment_priority(match, target_mass)
 
         # Sort by priority score first (higher is better), then by mass error, then by assignment name for deterministic ordering
-        matches.sort(key=lambda x: (-x['priority_score'], x['mass_error'], x.get('assignment', '')))
+        matches.sort(key=lambda x: (-x['priority_score'], x['mass_error'], x.get('assignments', [''])[0]))
         return matches[:max_matches]
 
     def calculate_assignment_priority(self, fragment, target_mass):
@@ -2375,7 +2387,9 @@ Export: Use export buttons to save data and plots
             score += 5   # Fair mass accuracy
 
         # Element-specific assignments based on mass ranges
-        assignment = fragment.get('assignment', '').upper()
+        # Handle both old and new database formats
+        assignments = fragment.get('assignments', [fragment.get('assignment', '')])
+        assignment = assignments[0].upper() if assignments and assignments[0] else ''
         formula = fragment.get('formula', '').upper()
 
         # Aluminum chemistry (m/z 26-28 range)
@@ -2644,8 +2658,11 @@ Export: Use export buttons to save data and plots
                     mass = fragment['mass']
                     # Only include fragments within the mass range of current data
                     if mass_range[0] <= mass <= mass_range[1]:
-                        assignment = fragment['assignment']
-                        family = fragment.get('family', 'Unknown')
+                        # Handle both old and new database formats
+                        assignments = fragment.get('assignments', [fragment.get('assignment', '')])
+                        families = fragment.get('families', [fragment.get('family', 'Unknown')])
+                        assignment = assignments[0] if assignments else 'Unknown'
+                        family = families[0] if families else 'Unknown'
                         list_text = f"m/z {mass:.3f}: {assignment} ({family})"
 
                         # Avoid duplicates from table
@@ -2715,7 +2732,7 @@ Export: Use export buttons to save data and plots
 
                 if mz in data_subset.index:
                     intensities = data_subset.loc[mz]
-                    doses = [dose_data[sample] for sample in selected_samples]
+                    doses = [dose_data[sample] for sample in sample_names]
 
                     # Sort by dose for plotting
                     dose_intensity_pairs = list(zip(doses, intensities))
@@ -2831,7 +2848,7 @@ Export: Use export buttons to save data and plots
                 if self.family_checkboxes[family].isChecked():
                     # Calculate family average intensity
                     family_intensities = []
-                    for sample in selected_samples:
+                    for sample in sample_names:
                         # Average intensity across all fragments in this family
                         fragment_intensities = []
                         for mz in fragments:
@@ -2844,7 +2861,7 @@ Export: Use export buttons to save data and plots
                             family_intensities.append(0)
 
                     # Get doses and sort
-                    doses = [dose_data[sample] for sample in selected_samples]
+                    doses = [dose_data[sample] for sample in sample_names]
                     dose_intensity_pairs = list(zip(doses, family_intensities))
                     dose_intensity_pairs.sort()
                     sorted_doses, sorted_intensities = zip(*dose_intensity_pairs)
