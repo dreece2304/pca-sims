@@ -1640,42 +1640,24 @@ Export: Use export buttons to save data and plots
             self.pca_analyzer.select_samples_by_names(selected_samples)
             
             # Update display names in working metadata
+            if 'display_name' not in self.pca_analyzer.working_metadata.columns:
+                self.pca_analyzer.working_metadata['display_name'] = self.pca_analyzer.working_metadata['sample_name']
+
             for original, display in display_names.items():
                 mask = self.pca_analyzer.working_metadata['sample_name'] == original
                 if mask.any():
                     self.pca_analyzer.working_metadata.loc[mask, 'display_name'] = display
-            column_rename_map = {original: display_names[original] for original in selected_samples}
-            selected_data_renamed = selected_data.rename(columns=column_rename_map)
-            
-            self.pca_analyzer.raw_data = selected_data_renamed
-            
-            # Update sample metadata with display names
-            sample_metadata = []
-            for original_name in selected_samples:
-                display_name = display_names[original_name]
-                
-                # Try to extract dose information from name
-                dose_id = self.extract_dose_from_name(display_name)
-                
-                sample_metadata.append({
-                    'sample_name': display_name,
-                    'original_name': original_name,
-                    'dose_id': dose_id
-                })
-            
-            # Update analyzer metadata
-            import pandas as pd
-            self.pca_analyzer.sample_metadata = pd.DataFrame(sample_metadata)
-            
+
             # Reset PCA completion flag
             self.pca_completed = False
-            
+
             # Reset button styling
             self.update_analysis_button.setText("Update Analysis")
             self.update_analysis_button.setStyleSheet("")
-            
-            self.data_status.setText(f"✅ Updated: {len(selected_samples)} samples selected")
-            
+
+            working_data, working_metadata = self.pca_analyzer.get_active_data()
+            self.data_status.setText(f"✅ Updated: {len(working_data.columns)} samples selected")
+
             # If PCA was already run, automatically re-run with new selection
             if hasattr(self.pca_analyzer, 'explained_variance_ratio'):
                 self.run_pca()
@@ -2458,26 +2440,53 @@ Export: Use export buttons to save data and plots
                     loading_item.setBackground(QColor(255, 200, 200))  # Light red for negative
                 self.assignment_table.setItem(i, 1, loading_item)
 
-                # Look up best assignment in database
-                fragment_matches = self.find_multiple_fragment_assignments(mass, tolerance=0.01, max_matches=1)
+                # Look up ALL possible assignments in database
+                fragment_matches = self.find_multiple_fragment_assignments(mass, tolerance=0.01, max_matches=10)
 
                 if fragment_matches:
-                    primary = fragment_matches[0]
-                    assignment_text = f"{primary['assignment']} ({primary['formula']})"
-                    confidence = primary.get('confidence', 'Medium')
+                    num_matches = len(fragment_matches)
+                    if num_matches == 1:
+                        # Single match - show it normally
+                        primary = fragment_matches[0]
+                        assignment_text = f"{primary['assignment']} ({primary['formula']})"
+                        confidence = primary.get('confidence', 'Medium')
+                        notes = f"{primary['family']}, {primary['mass_error_ppm']:.0f}ppm"
+                    else:
+                        # Multiple matches - indicate ambiguity
+                        assignment_text = f"[{num_matches} MATCHES] Click to review"
+                        confidence = "AMBIGUOUS"
+                        notes = f"{num_matches} possible assignments - requires review"
 
-                    self.assignment_table.setItem(i, 2, QTableWidgetItem(assignment_text))
-                    self.assignment_table.setItem(i, 3, QTableWidgetItem(confidence))
-                    notes = f"{primary['family']}, {primary['mass_error_ppm']:.0f}ppm"
+                    # Set items with appropriate styling
+                    assignment_item = QTableWidgetItem(assignment_text)
+                    confidence_item = QTableWidgetItem(confidence)
+
+                    # Highlight ambiguous assignments
+                    if num_matches > 1:
+                        assignment_item.setBackground(QColor(255, 255, 150))  # Yellow for multiple matches
+                        confidence_item.setBackground(QColor(255, 255, 150))
+                        assignment_item.setToolTip(f"Multiple possible assignments found for m/z {mass:.4f}")
+
+                    self.assignment_table.setItem(i, 2, assignment_item)
+                    self.assignment_table.setItem(i, 3, confidence_item)
                 else:
                     self.assignment_table.setItem(i, 2, QTableWidgetItem("[Unassigned]"))
                     self.assignment_table.setItem(i, 3, QTableWidgetItem(""))
-                    notes = f"Rank #{i+1} loading"
+                    notes = f"Rank #{i+1} loading - no database matches"
 
                 # Action button for detailed assignment
-                assign_btn = QPushButton("Assign")
-                assign_btn.setToolTip("Open detailed assignment dialog")
-                # Store mass and row in button properties to avoid lambda closure issues
+                if fragment_matches and len(fragment_matches) > 1:
+                    assign_btn = QPushButton(f"Review {len(fragment_matches)}")
+                    assign_btn.setToolTip(f"Review {len(fragment_matches)} possible assignments for m/z {mass:.4f}")
+                    assign_btn.setStyleSheet("background-color: #FFE66D; font-weight: bold;")  # Yellow highlight
+                elif fragment_matches:
+                    assign_btn = QPushButton("Confirm")
+                    assign_btn.setToolTip("Confirm single assignment or explore alternatives")
+                else:
+                    assign_btn = QPushButton("Assign")
+                    assign_btn.setToolTip("Manually assign this unidentified fragment")
+
+                # Store mass and row in button properties
                 assign_btn.setProperty("mass", mass)
                 assign_btn.setProperty("row", i)
                 assign_btn.clicked.connect(lambda checked, btn=assign_btn: self.open_assignment_dialog(
