@@ -3032,6 +3032,24 @@ Export: Use export buttons to save data and plots
 
         filters_layout.addLayout(intensity_filter_layout)
 
+        # Filter 2: Top N peaks (Stage 4)
+        topn_filter_layout = QHBoxLayout()
+        self.topn_filter_enabled = QCheckBox("Top N Peaks:")
+        self.topn_filter_enabled.setChecked(False)
+        self.topn_filter_enabled.stateChanged.connect(self.apply_stick_filters)
+        topn_filter_layout.addWidget(self.topn_filter_enabled)
+
+        self.topn_dropdown = QComboBox()
+        self.topn_dropdown.addItems(["All", "20", "50", "100", "200"])
+        self.topn_dropdown.setCurrentText("All")
+        self.topn_dropdown.currentTextChanged.connect(self.apply_stick_filters)
+        topn_filter_layout.addWidget(self.topn_dropdown)
+
+        topn_filter_layout.addWidget(QLabel("highest intensity peaks"))
+        topn_filter_layout.addStretch()
+
+        filters_layout.addLayout(topn_filter_layout)
+
         layout.addWidget(filters_group)
 
         # Plotting area
@@ -3216,6 +3234,7 @@ Export: Use export buttons to save data and plots
         """
         Apply all active filters to stick spectrum data
         Stage 3: Intensity threshold filter
+        Stage 4: Top N peaks filter
         """
         if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
             return
@@ -3238,6 +3257,34 @@ Export: Use export buttons to save data and plots
             mask &= intensity_mask
 
             print(f"   Intensity filter: {mask.sum()}/{len(mask)} peaks above {percent}% threshold")
+
+        # Filter 2: Top N peaks (applied after intensity filter)
+        if self.topn_filter_enabled.isChecked():
+            topn_text = self.topn_dropdown.currentText()
+
+            if topn_text != "All":
+                n_peaks = int(topn_text)
+
+                # Get indices of peaks that passed previous filters
+                passing_indices = np.where(mask)[0]
+
+                # Sort by intensity (descending) among passing peaks
+                passing_intensities = intensities[passing_indices]
+                sorted_indices = np.argsort(passing_intensities)[::-1]  # Descending
+
+                # Keep only top N
+                if len(sorted_indices) > n_peaks:
+                    # Indices to keep (top N)
+                    keep_indices = passing_indices[sorted_indices[:n_peaks]]
+
+                    # Update mask: set all to False, then set top N to True
+                    topn_mask = np.zeros(len(mz_values), dtype=bool)
+                    topn_mask[keep_indices] = True
+
+                    # Combine with previous mask
+                    mask &= topn_mask
+
+                    print(f"   Top N filter: kept {n_peaks} highest intensity peaks")
 
         # Apply mask to data
         filtered_mz = mz_values[mask]
