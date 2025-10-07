@@ -1,10 +1,10 @@
-# ToF-SIMS PCA Analysis System
+# ToF-SIMS PCA Data Processing & Analysis Pipeline
 
-## 🎯 **Status: PRODUCTION READY**
+## **Status: PRODUCTION READY**
 
-A comprehensive, modular scientific analysis platform for Time-of-Flight Secondary Ion Mass Spectrometry (ToF-SIMS) data with advanced PCA analysis, intelligent fragment assignment, and specialized debugging agents.
+A robust, reproducible data processing system for Time-of-Flight Secondary Ion Mass Spectrometry (ToF-SIMS) analysis with PCA computation, fragment assignment, and statistical analysis tools.
 
-**Last Updated**: January 2025 | **Phase 2**: Complete with Agent Architecture
+**Last Updated**: October 2025
 
 ---
 
@@ -13,209 +13,204 @@ A comprehensive, modular scientific analysis platform for Time-of-Flight Seconda
 ### **Environment Setup**
 ```bash
 # Required: pca-sims mamba environment (Python 3.10.18)
-source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python launch_enhanced.py
+source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims
 ```
 
-**Access at**: http://localhost:8502
+### **Core Workflows**
 
-### **Key Features**
-- **SIMS-Optimized PCA**: √(intensity) transform, mean center, Pareto scaling (all DEFAULT ON)
-- **Intelligent Fragment Assignment**: Multi-database integration with 90% coverage
-- **Variance Filtering**: 921 → 77 significant fragments at 1% threshold  
-- **Agent-Based Quality Assurance**: 6 specialized debugging agents
-- **Publication-Ready Outputs**: Interactive Plotly visualizations, high-resolution exports
+**GUI Application** (Qt6 with matplotlib):
+```bash
+python launch_optimized.py
+```
 
----
+**Data Import & Caching**:
+```bash
+# Import raw intensity matrices
+python scripts/import_matrix_intensities.py
 
-## 📊 **Performance Benchmarks**
+# Generate unified PCA cache
+python scripts/cache_pca.py
+```
 
-| Metric | Target | Achieved | Status |
-|--------|--------|----------|---------|
-| **Complete Workflow** | <120s | <60s | ✅ Exceeds |
-| **PC1 Variance** | >70% | 89.3% | ✅ Exceeds |
-| **Fragment Assignment Success** | >80% | >95% | ✅ Exceeds |
-| **Database Queries** | <20ms | <10ms | ✅ Exceeds |
-| **Plot Display Reliability** | >95% | 100% | ✅ Exceeds |
-| **Memory Usage** | <2GB | <1GB | ✅ Exceeds |
-
----
-
-## 🧪 **Scientific Validation**
-
-### **Verified with Real ToF-SIMS Data**
-- **Dataset**: 921 mass values, 15 samples (P1-P3, SQ1-SQ5 format)
-- **PC1 Variance**: 89.3% (perfect dose-response correlation: r = -0.986)
-- **Chemical Interpretation**: 
-  - Positive loadings → fragments decrease with dose (H⁻, Cl⁻)
-  - Negative loadings → fragments increase with dose (carbonyls, aromatics)
-
-### **Fragment Database System**
-- **Hybrid Architecture**: 36 curated + 50,691 comprehensive fragments
-- **Query Performance**: <10ms average response time  
-- **Assignment Success Rate**: >95% (improved from 60% through agent-based fixes)
-- **Multi-Criteria Scoring**: Mass accuracy + isotope validation + chemical reasonableness
-- **Element-Focused Search**: Optimized for expected elements (C,H,O,Al for Alucone)
+### **Key Capabilities**
+- **SIMS-Optimized PCA**: √(intensity) transform, mean centering, Pareto scaling
+- **Fragment Assignment**: Multi-database integration with ppm tolerance matching
+- **Statistical Analysis**: Pairwise comparisons, dose-response trends, replicate validation
+- **Data Export**: Excel workbooks, CSV, parquet caching, high-resolution plots
 
 ---
 
-## 📋 **Complete Workflow Guide**
+## 📊 **System Performance**
 
-### **1. Data Upload**
-- Upload ToF-SIMS .txt file (IonTof TIC-normalized format)
-- Select ion mode (Negative/Positive)
-- Configure output directory and element constraints
+| Metric | Performance |
+|--------|-------------|
+| **Complete Workflow** | <60s |
+| **PCA Computation** | <10s (921 features × 15 samples) |
+| **Fragment Assignment** | <1s (1,176 loadings) |
+| **Database Queries** | <10ms average |
+| **Cache Loading** | <0.5s (parquet) |
+| **Memory Usage** | <1GB |
 
-### **2. PCA Analysis** 
-- **Sample Selection**: Use P1-P3, SQ2-SQ5 (exclude SQ1 - substrate only)
-- **Preprocessing**: All SIMS optimizations DEFAULT ON
+### **Data Processing Results**
+- **Dataset**: 12 PCA analyses (8 pairwise, 2 trajectory, 2 dependent)
+- **Samples**: 102 scores records (15 unique samples)
+- **Features**: 1,176 loading records (201 unique m/z)
+- **Assignments**: 25.5% fragments assigned with confidence scores
+- **Replicates**: 3 per condition, validated
+
+---
+
+## 📋 **Data Processing Workflow**
+
+### **1. Raw Data Import**
+- Input: Tab-delimited ToF-SIMS intensity matrices
+- Formats: `P{replicate}_SQ{dose}` (e.g., P1_SQ4, P2_SQ2)
+- Dose mapping: SQ0 (as-deposited), SQ2-SQ5 (2000-15000 µC/cm²)
+- Note: SQ1 excluded (fully removed during development)
+
+### **2. PCA Analysis**
+- **Preprocessing**:
   - √(intensity) transform for variance stabilization
-  - Mean centering for PCA covariance analysis
+  - Mean centering for covariance analysis
   - Pareto scaling for peak balancing
-- **Run Analysis**: 5-8 components capture >99% variance
+- **Components**: 5-8 PCs capture >99% variance
+- **Sample Selection**: P1-P3 patterns, SQ2-SQ5 doses
 
 ### **3. Fragment Assignment**
-- **Three Methods Available**:
-  - Traditional database lookup (fast)
-  - Enhanced analysis with reverse engineering (comprehensive)
-  - Combined approach (recommended)
-- **Quality Control**: >70% confidence threshold for reliable assignments
+- **Methods**:
+  - ppm tolerance matching (default: 10 ppm)
+  - Mass defect analysis
+  - Isotope pattern validation
+- **Confidence Scoring**: High (>70%), Medium (50-70%), Low (<50%)
+- **Element Constraints**: Configurable by material system
 
-### **4. Variance Filtering** (New!)
-- Focus analysis on fragments contributing to variance
-- Configurable thresholds: 0.1% - 10% of maximum variance
-- Example: 921 → 77 fragments at 1% (retains scientific significance)
+### **4. Statistical Analysis**
+- Pairwise t-tests and effect sizes
+- Dose-response correlation analysis
+- Fragment trend visualization
+- Replicate validation
 
-### **5. Results & Export**
-- **Interactive Visualizations**: Scores plots, loadings analysis, mass defect classification
-- **Publication Outputs**: High-resolution PNG/SVG, LaTeX-compatible tables
-- **Comprehensive Reports**: Analysis metadata, confidence assessments
+### **5. Data Export**
+- Excel workbooks (multi-sheet: scores, loadings, variance, assignments)
+- CSV files for external analysis
+- Parquet caching for fast repeated access
+- High-resolution plots (PNG/SVG, 300 DPI)
 
 ---
 
 ## 🏗️ **System Architecture**
 
-### **Core Components**
+### **Core Modules**
 ```
-src/
-├── core/
-│   └── tof_sims_pca.py           # SIMS-optimized PCA engine
-├── databases/
-│   └── unified_fragment_database.py  # Hybrid database system
-├── analysis/
-│   ├── enhanced_confidence_scorer.py # Multi-criteria validation
-│   ├── mass_defect_analyzer.py       # Chemical classification
-│   └── fragment_composer.py          # Reverse formula engineering
-└── ui/
-    ├── app.py                    # Modular Streamlit interface
-    └── pages/                    # Specialized analysis pages
-        ├── data_upload.py
-        ├── pca_analysis.py
-        ├── fragment_assignment.py
-        └── [4 additional pages]
+pca-sims/
+├── src/                             # Core analysis code
+│   ├── simple_tof_sims_pca.py      # PCA engine
+│   ├── matplotlib_plotting.py      # Visualization
+│   ├── pyside_app_matplotlib.py    # Qt6 GUI
+│   └── multi_ion_manager.py        # Multi-polarity coordination
+├── tofsims/                         # Data IO package
+│   ├── io.py                       # Data loaders
+│   ├── preprocess.py               # Cleaning, validation
+│   ├── stats.py                    # Statistical tests
+│   └── figures.py                  # Plot generation
+├── scripts/                         # Analysis pipelines
+│   ├── cache_pca.py
+│   ├── import_matrix_intensities.py
+│   ├── process_all_pairwise_stats.py
+│   └── visualize_fragment_trends.py
+├── data/                            # Input data (raw)
+│   ├── NegativeIon/
+│   ├── PositiveIon/
+│   └── FragmentDatabase/
+├── outputs/                         # PCA results (generated, gitignored)
+├── results/                         # Analysis outputs (generated, gitignored)
+│   ├── cache/                      # Parquet files
+│   ├── figures/                    # Plots
+│   └── tables/                     # Statistical results
+├── docs/                            # Technical documentation
+│   ├── TECHNICAL_REFERENCE.md      # Methods & capabilities
+│   ├── IO_CONTRACT.md              # Data schemas
+│   └── README_INTENSITIES.md       # Intensity import guide
+└── config/                          # System configuration
+    └── tofsims.yaml                # Analysis parameters
 ```
 
-### **Agent System** (`agents/`)
-Specialized debugging agents for systematic validation:
-
-| Agent | Focus Area | Key Responsibilities |
-|-------|------------|---------------------|
-| **PCA Core Agent** | Analysis Engine | Preprocessing validation, performance optimization |
-| **Database Agent** | Fragment Databases | Query optimization, coverage validation |
-| **Analysis Agent** | Scoring Modules | Confidence accuracy, chemical validity |
-| **UI Agent** | Interface | Streamlit compatibility, user experience |
-| **Integration Agent** | End-to-End | Workflow validation, system reliability |
-| **Compatibility Agent** | Dependencies | Package version management, conflict resolution |
+### **Data Flow**
+```
+Raw ToF-SIMS Data → Import → PCA Analysis → Fragment Assignment → Statistics → Export
+     (.txt)           ↓         (Excel)           (CSV)              ↓          ↓
+                  Parquet                                         Figures   Tables
+                  Cache
+```
 
 ---
 
 ## 🔧 **Technical Specifications**
 
-### **Environment Requirements**
+### **Environment**
 - **Python**: 3.10.18 (mamba environment: `pca-sims`)
-- **Core Packages**: NumPy 2.2.6, Pandas 2.3.2, Scikit-learn latest
-- **Web Framework**: Streamlit 1.9.0 with compatibility fixes
+- **Core Packages**: NumPy 2.2.6, Pandas 2.3.2, Scikit-learn, Matplotlib 3.x
+- **GUI**: PySide6 (Qt6), native matplotlib backend
 - **Visualization**: Plotly 5.x, Altair 4.2.2
+- **Platform**: Linux (WSL2 compatible)
 
-### **Data Compatibility** 
-- **Input Format**: Tab-delimited ToF-SIMS data (IonTof format)
-- **Sample Size**: 15-50 samples, 500-2000 mass values
-- **Expected Results**: PC1 >80% variance for dose-response data
+### **Data Compatibility**
+- **Input Format**: Tab-delimited ToF-SIMS data
+- **Sample Size**: 15-50 samples, 500-2000 m/z features
+- **Replicate Structure**: 3 replicates per condition
+- **Polarity**: Positive and negative ion modes
 
-### **Streamlit 1.9.0 Compatibility**
-All modern API features implemented with compatibility layers:
-- `st.tabs()` → `st.selectbox()` for view selection
-- `st.rerun()` → `st.experimental_rerun()` 
-- `st.divider()` → `st.markdown("---")`
-- Button parameters adjusted for version compatibility
-
----
-
-## 🎯 **Key Applications**
-
-### **Dose-Response Studies**
-- **Mechanism identification**: Crosslinking vs carbonization pathways
-- **Quantitative analysis**: Systematic dose progression validation
-- **Chemical validation**: Fragment trend consistency with known mechanisms
-
-### **Material Characterization**
-- **Composition analysis**: Organic vs inorganic content classification
-- **Contamination detection**: Si substrate, processing chemicals
-- **Evolution tracking**: Chemical transformation pathway mapping
+### **Fragment Database**
+- **Size**: 50,691+ fragments
+- **Query Performance**: <10ms average
+- **Assignment Methods**: Exact mass, mass defect, isotope patterns
+- **Confidence Scoring**: Multi-criteria validation
+- **Element Constraints**: Material-specific (C,H,O,Al for alucone)
 
 ---
 
-## 🚨 **Agent-Based Quality Assurance**
+## 📚 **Usage Examples**
 
-### **Recent Agent-Based Fixes (January 2025)**
-All critical issues identified and resolved through systematic agent analysis:
+### **Load Cached Data**
+```python
+import pandas as pd
+from tofsims.io import load_intensities_cache
 
-✅ **UI Agent**: Fixed PCA plot data corruption - plots now display consistently  
-✅ **Database Agent**: Implemented missing search method - 95%+ assignment success  
-✅ **Compatibility Agent**: Verified Streamlit 1.9.0 compatibility - full functionality  
-✅ **Integration Agent**: Confirmed end-to-end workflow - production ready  
+# Load PCA outputs
+scores = pd.read_parquet('results/cache/scores_merged.parquet')
+loadings = pd.read_parquet('results/cache/loadings_merged.parquet')
+variance = pd.read_parquet('results/cache/variance_explained.parquet')
 
-### **Run Compatibility Check**
+# Load raw intensities
+intensities = load_intensities_cache()
+
+# Filter examples
+pairwise_10k = scores[scores['analysis_id'] == 'pairwise_positive_10000']
+high_conf = loadings[loadings['confidence'] == 'High']
+```
+
+### **Run PCA Analysis**
+```python
+from src.simple_tof_sims_pca import SimpleToFSIMSPCA
+
+pca = SimpleToFSIMSPCA('data/NegativeIon/NegIonTIC.txt')
+pca.load_data()
+pca.preprocess_data()  # Applies SIMS-optimized pipeline
+pca.run_pca(5)
+
+print(f"PC1 variance: {pca.variance_explained[0]:.1f}%")
+```
+
+### **Statistical Analysis**
 ```bash
-cd /home/dreece23/pca-sims
-source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python agents/compatibility_checker.py
-```
+# Pairwise comparisons
+python scripts/process_all_pairwise_stats.py
 
-### **Individual Agent Validation**
-```bash
-# Validate specific components
-python -m agents.pca_core_agent --validate-outputs
-python -m agents.database_agent --check-coverage  
-python -m agents.integration_agent --full-workflow-test
-```
+# Fragment trends across doses
+python scripts/visualize_fragment_trends.py
 
----
-
-## 📚 **Example Results**
-
-### **PCA Analysis** (Validated with your data)
-```
-✅ Data Loading: 921 mass values, 15 samples loaded successfully
-✅ Preprocessing: √transform + mean center + Pareto scaling applied  
-✅ PCA Results: PC1 = 89.3%, PC2 = 8.6%, Total = 99.8% (5 components)
-✅ Dose Correlation: r = -0.986 (perfect dose-response trend)
-```
-
-### **Fragment Assignment** (Improved through Agent-Based Debugging)
-```
-✅ Database Integration: 50,691 fragments loaded, <10ms query times
-✅ Assignment Success Rate: >95% (improved from 60% via missing method fix)
-✅ Confidence Scoring: Multi-criteria assessment with isotope validation  
-✅ Element Optimization: Focused search using sidebar constraints (C,H,O,Al + contaminants)
-✅ Variance Filter: 77 significant fragments retained (8.4% of 921)
-```
-
-### **Chemical Interpretation**
-```
-Fragment Trends (Validated):
-- H⁻ (m/z 1.008): Decreases with dose (consumed in crosslinking)
-- Cl⁻ (m/z 34.970): Decreases with dose (removed during development)  
-- C₂HO⁻ (m/z 41.004): Increases with dose (carbonyl formation)
-- C₆H⁻ (m/z 73.008): Increases with dose (aromatic/graphitic networks)
+# Generate summary statistics
+python scripts/analyze_fragment_statistics.py
 ```
 
 ---
@@ -224,44 +219,59 @@ Fragment Trends (Validated):
 
 ### **Common Issues**
 1. **Import errors**: Ensure `conda activate pca-sims` before running
-2. **Port conflicts**: Launch uses port 8502 by default  
-3. **Memory issues**: Large datasets require >4GB RAM
-4. **Package conflicts**: Run `python agents/compatibility_checker.py`
+2. **Empty cache**: Run `python scripts/cache_pca.py` first
+3. **Missing files**: Check file paths in `config/tofsims.yaml`
+4. **Assignment failures**: Adjust ppm_tolerance (try 10-50 ppm)
 
 ### **Validation Checks**
 ```bash
 # Test core functionality
 cd /home/dreece23/pca-sims
-source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python -c "
+source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims
+
+# Quick PCA test
+python -c "
 import sys; sys.path.append('src')
-from core.tof_sims_pca import ToFSIMSPCA
-pca = ToFSIMSPCA('data/NegativeIon/NegIonTIC.txt', 'outputs', False)
-pca.load_data(); pca.preprocess_data(True, True, True); pca.run_pca(5)
+from simple_tof_sims_pca import SimpleToFSIMSPCA
+pca = SimpleToFSIMSPCA('data/NegativeIon/NegIonTIC.txt')
+pca.load_data(); pca.preprocess_data(); pca.run_pca(5)
 print(f'✅ System OK: PC1 variance = {pca.variance_explained[0]:.1f}%')
 "
 ```
 
-**Expected Output**: `✅ System OK: PC1 variance = 89.3%`
+### **Expected Output**
+```
+✅ System OK: PC1 variance = 89.3%
+```
 
 ---
 
-## 🎉 **Project Status**
+## 📖 **Documentation**
 
-### **✅ Production Ready - Agent-Validated**
-The ToF-SIMS PCA Analysis System has been **validated and optimized** through comprehensive agent-based analysis:
+- **[TECHNICAL_REFERENCE.md](docs/TECHNICAL_REFERENCE.md)**: Methods, capabilities, configuration
+- **[IO_CONTRACT.md](docs/IO_CONTRACT.md)**: Data schemas and file formats
+- **[README_INTENSITIES.md](docs/README_INTENSITIES.md)**: Raw intensity import guide
+- **[CLAUDE.md](CLAUDE.md)**: Development environment and workflows
 
-- **Scientific Excellence**: SIMS-optimized preprocessing with validated 89.3% PC1 variance
-- **Technical Excellence**: All critical issues fixed via agent analysis - 100% plot reliability, 95%+ fragment assignment success  
-- **Maintenance Excellence**: 6 specialized debugging agents provide systematic validation
-- **User Excellence**: Unified element constraints, intuitive interface, publication-quality outputs
+---
 
-### **Key Fixes Applied (January 2025)**
-✅ **Plot Display Fixed**: PCA plots now consistently show data (was: empty plots)  
-✅ **Fragment Assignment Improved**: 95%+ success rate (was: 60% due to missing database method)  
-✅ **Element Constraints Unified**: Sidebar settings used throughout (was: inconsistent per page)  
-✅ **Streamlit Compatibility**: Full 1.9.0 compatibility verified  
+## 🎯 **Project Scope**
 
-**The system is production-ready for ToF-SIMS research with all critical issues resolved through agent-based debugging.**
+**This toolkit provides**:
+- ✅ Data import and preprocessing
+- ✅ PCA computation with SIMS optimization
+- ✅ Fragment assignment with confidence scoring
+- ✅ Statistical analysis tools
+- ✅ Data export and visualization
+- ✅ Reproducible caching system
+
+**This toolkit does NOT provide**:
+- ❌ Scientific interpretation or conclusions
+- ❌ Mechanistic explanations
+- ❌ Publication figure preparation
+- ❌ Research planning or experimental design
+
+**Researchers use this system to generate analyzed datasets for their own interpretation and publication.**
 
 ---
 
@@ -269,15 +279,15 @@ The ToF-SIMS PCA Analysis System has been **validated and optimized** through co
 
 If you use this system in your research:
 ```
-ToF-SIMS PCA Analysis System with Agent-Based Quality Assurance
-Enhanced Modular Scientific Analysis Platform
+ToF-SIMS PCA Data Processing & Analysis Pipeline
+Modular Data Processing System for Mass Spectrometry Analysis
 [Your Institution], 2025
 ```
 
 ## 🤝 **Support**
 
-For issues or questions:
-1. Check this documentation and run validation checks
-2. Use agent system for systematic debugging: `python agents/compatibility_checker.py`
-3. Verify environment: `conda activate pca-sims` before all operations
-4. Check performance: PC1 variance should be >80% for dose-response data
+For technical issues:
+1. Check documentation: `docs/TECHNICAL_REFERENCE.md`
+2. Verify environment: `conda activate pca-sims`
+3. Run validation checks (see Troubleshooting section)
+4. Check configuration: `config/tofsims.yaml`
