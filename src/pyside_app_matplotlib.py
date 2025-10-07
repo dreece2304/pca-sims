@@ -3050,6 +3050,35 @@ Export: Use export buttons to save data and plots
 
         filters_layout.addLayout(topn_filter_layout)
 
+        # Filter 3: m/z range (Stage 5)
+        mz_range_layout = QHBoxLayout()
+        self.mz_range_enabled = QCheckBox("m/z Range:")
+        self.mz_range_enabled.setChecked(False)
+        self.mz_range_enabled.stateChanged.connect(self.apply_stick_filters)
+        mz_range_layout.addWidget(self.mz_range_enabled)
+
+        mz_range_layout.addWidget(QLabel("Min:"))
+        self.mz_min_input = QLineEdit()
+        self.mz_min_input.setPlaceholderText("1.0")
+        self.mz_min_input.setMaximumWidth(80)
+        self.mz_min_input.textChanged.connect(self.validate_mz_range)
+        mz_range_layout.addWidget(self.mz_min_input)
+
+        mz_range_layout.addWidget(QLabel("Max:"))
+        self.mz_max_input = QLineEdit()
+        self.mz_max_input.setPlaceholderText("300.0")
+        self.mz_max_input.setMaximumWidth(80)
+        self.mz_max_input.textChanged.connect(self.validate_mz_range)
+        mz_range_layout.addWidget(self.mz_max_input)
+
+        self.mz_range_status = QLabel("✓")
+        self.mz_range_status.setStyleSheet("color: green;")
+        mz_range_layout.addWidget(self.mz_range_status)
+
+        mz_range_layout.addStretch()
+
+        filters_layout.addLayout(mz_range_layout)
+
         layout.addWidget(filters_group)
 
         # Plotting area
@@ -3216,6 +3245,39 @@ Export: Use export buttons to save data and plots
                 title=self.current_stick_data['title']
             )
 
+    def validate_mz_range(self):
+        """Validate m/z range inputs and apply filter if valid"""
+        # Get input values
+        min_text = self.mz_min_input.text().strip()
+        max_text = self.mz_max_input.text().strip()
+
+        # If both empty, valid (use full range)
+        if not min_text and not max_text:
+            self.mz_range_status.setText("✓")
+            self.mz_range_status.setStyleSheet("color: green;")
+            self.apply_stick_filters()
+            return
+
+        # Try to parse as floats
+        try:
+            mz_min = float(min_text) if min_text else 0.0
+            mz_max = float(max_text) if max_text else 1000.0
+
+            # Validate min < max
+            if mz_min >= mz_max:
+                self.mz_range_status.setText("✗ Min ≥ Max")
+                self.mz_range_status.setStyleSheet("color: red;")
+                return
+
+            # Valid range
+            self.mz_range_status.setText("✓")
+            self.mz_range_status.setStyleSheet("color: green;")
+            self.apply_stick_filters()
+
+        except ValueError:
+            self.mz_range_status.setText("✗ Invalid")
+            self.mz_range_status.setStyleSheet("color: red;")
+
     def update_intensity_filter_label(self):
         """Update intensity filter label to show threshold value"""
         if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
@@ -3235,6 +3297,7 @@ Export: Use export buttons to save data and plots
         Apply all active filters to stick spectrum data
         Stage 3: Intensity threshold filter
         Stage 4: Top N peaks filter
+        Stage 5: m/z range filter
         """
         if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
             return
@@ -3285,6 +3348,26 @@ Export: Use export buttons to save data and plots
                     mask &= topn_mask
 
                     print(f"   Top N filter: kept {n_peaks} highest intensity peaks")
+
+        # Filter 3: m/z range
+        if self.mz_range_enabled.isChecked():
+            # Get range values
+            min_text = self.mz_min_input.text().strip()
+            max_text = self.mz_max_input.text().strip()
+
+            # Only apply if valid inputs
+            if self.mz_range_status.text() == "✓":
+                try:
+                    mz_min = float(min_text) if min_text else mz_values.min()
+                    mz_max = float(max_text) if max_text else mz_values.max()
+
+                    mz_range_mask = (mz_values >= mz_min) & (mz_values <= mz_max)
+                    mask &= mz_range_mask
+
+                    print(f"   m/z range filter: {mask.sum()}/{len(mask)} peaks in range [{mz_min:.1f}, {mz_max:.1f}]")
+
+                except ValueError:
+                    pass  # Skip if invalid
 
         # Apply mask to data
         filtered_mz = mz_values[mask]
