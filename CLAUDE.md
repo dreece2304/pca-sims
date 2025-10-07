@@ -146,6 +146,60 @@ QT_QPA_PLATFORM=xcb
 
 ---
 
+## 📝 **Documentation Governance**
+
+### **Project Scope - Data Processing NOT Interpretation**
+This is a **data processing and analysis toolkit** - it generates analyzed datasets, NOT scientific conclusions.
+
+### **Allowed Documentation**
+✅ **Technical specifications** (data formats, schemas, APIs)
+✅ **Usage instructions** (how to run scripts, load data)
+✅ **Configuration references** (YAML parameters, options)
+✅ **Code structure** (module organization, key functions)
+✅ **Development workflow** (git, testing, deployment)
+✅ **Performance metrics** (speed, memory usage, validation results)
+
+### **Prohibited Documentation**
+❌ **Scientific interpretations** (chemistry, mechanisms, "why" explanations)
+❌ **Research conclusions** (findings, discoveries, cause-effect claims)
+❌ **Publication materials** (figures, tables, manuscripts)
+❌ **Future research plans** (experiments, hypotheses, speculative applications)
+❌ **Summary/report markdown files** (unless explicitly requested by user)
+
+### **Documentation Standards**
+
+**✅ Good Examples** (objective, data-focused):
+- "Fragment m/z 65.0031 assigned to C₄HO⁻ with High confidence (±0.0004 Da error)"
+- "Intensity increases 119% from SQ2 to SQ5 (3 replicates, p < 0.01)"
+- "PC1 explains 89.3% variance across dose series"
+- "Assignment success rate: 95% (improved from 60% via database fix)"
+
+**❌ Bad Examples** (interpretive, conclusive):
+- "Thermodynamic stabilization creates optimized networks"
+- "Carbonyl cascade demonstrates radical rearrangement mechanism"
+- "E-beam processing transforms resist into semiconductive material"
+- "This discovery enables novel applications in quantum devices"
+
+### **AI Assistant Instructions**
+- **Never create** summary/report markdown files without explicit user request
+- **Provide summaries** in chat responses only (not as files)
+- **Update existing docs** only for technical changes (new features, bug fixes, config updates)
+- **Ask before creating** any new documentation file
+- **Consolidate** rather than proliferate documents
+- **Report trends and patterns** without causal explanations - let researchers interpret
+
+### **Core Documentation Files** (keep minimal)
+1. `README.md` - Project overview, quick start, technical specs
+2. `CLAUDE.md` - Development environment, workflows, governance (this file)
+3. `docs/TECHNICAL_REFERENCE.md` - Methods, capabilities, configuration
+4. `docs/IO_CONTRACT.md` - Data schemas and file formats
+5. `docs/README_INTENSITIES.md` - Intensity import guide
+6. `config/tofsims.yaml` - System configuration
+
+All other documentation should be archived or deleted unless actively needed for development.
+
+---
+
 ## 🔄 **Git Workflow & Development Process**
 
 ### **Repository Setup**
@@ -221,15 +275,13 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ✅ **Environment**: Stable mamba/conda setup
 ✅ **Project Structure**: Clean, organized, maintainable
 
-### **Recent Updates (September 2025)**
-🧹 **Project Reorganization**: Removed 14 redundant files
-🧹 **Single Launcher**: Consolidated to `launch_optimized.py`
-🧹 **Clean Structure**: Organized scientific project layout
-🧹 **Bug Fix**: Sample deselection/reselection now works correctly
-🎨 **Viridis Colors**: Consistent viridis color scheme throughout
-📊 **Enhanced Results**: Added PC1 score and loadings interpretation
-🧪 **Test Policy**: Clean up successful tests, maintain strict structure
+### **Recent Updates (October 2025)**
+📦 **IO System**: Unified data loading with parquet caching
+📊 **Statistical Tools**: Pairwise comparisons, dose trajectory analysis
+🗃️ **Data Pipeline**: tofsims package for data import/preprocessing
+📚 **Documentation Consolidation**: Streamlined to core technical docs
+🎯 **Project Scope**: Clear separation of data processing vs interpretation
 
 **Ready for Enhancement**: Add new analysis features, improve visualizations, extend data support.
 
-**Last Updated**: September 2025 - Enhanced Production System
+**Last Updated**: October 2025 - Data Processing Pipeline
