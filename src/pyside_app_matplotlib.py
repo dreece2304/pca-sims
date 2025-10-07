@@ -3003,6 +3003,37 @@ Export: Use export buttons to save data and plots
 
         layout.addWidget(options_group)
 
+        # Filters section (Stage 3+)
+        filters_group = QGroupBox("Peak Filters")
+        filters_group.setCheckable(True)
+        filters_group.setChecked(False)  # Collapsed by default
+        filters_layout = QVBoxLayout(filters_group)
+
+        # Filter 1: Intensity threshold (Stage 3)
+        intensity_filter_layout = QHBoxLayout()
+        self.intensity_filter_enabled = QCheckBox("Intensity Threshold:")
+        self.intensity_filter_enabled.setChecked(False)
+        self.intensity_filter_enabled.stateChanged.connect(self.apply_stick_filters)
+        intensity_filter_layout.addWidget(self.intensity_filter_enabled)
+
+        self.intensity_slider = QSlider(Qt.Horizontal)
+        self.intensity_slider.setMinimum(0)
+        self.intensity_slider.setMaximum(100)
+        self.intensity_slider.setValue(0)
+        self.intensity_slider.setTickPosition(QSlider.TicksBelow)
+        self.intensity_slider.setTickInterval(10)
+        self.intensity_slider.valueChanged.connect(self.update_intensity_filter_label)
+        self.intensity_slider.valueChanged.connect(self.apply_stick_filters)
+        intensity_filter_layout.addWidget(self.intensity_slider)
+
+        self.intensity_filter_label = QLabel("0.000 (0% of max)")
+        self.intensity_filter_label.setMinimumWidth(150)
+        intensity_filter_layout.addWidget(self.intensity_filter_label)
+
+        filters_layout.addLayout(intensity_filter_layout)
+
+        layout.addWidget(filters_group)
+
         # Plotting area
         plot_group = QGroupBox("Mass Spectrum")
         plot_layout = QVBoxLayout(plot_group)
@@ -3166,6 +3197,79 @@ Export: Use export buttons to save data and plots
                 show_sd_plot=show_sd,
                 title=self.current_stick_data['title']
             )
+
+    def update_intensity_filter_label(self):
+        """Update intensity filter label to show threshold value"""
+        if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
+            return
+
+        # Get max intensity from unfiltered data
+        max_intensity = self.current_stick_data['intensities'].max()
+
+        # Calculate threshold value from slider percentage
+        percent = self.intensity_slider.value()
+        threshold = (percent / 100.0) * max_intensity
+
+        self.intensity_filter_label.setText(f"{threshold:.3e} ({percent}% of max)")
+
+    def apply_stick_filters(self):
+        """
+        Apply all active filters to stick spectrum data
+        Stage 3: Intensity threshold filter
+        """
+        if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
+            return
+
+        # Start with all data (unfiltered)
+        mz_values = self.current_stick_data['mz_values']
+        intensities = self.current_stick_data['intensities']
+        std_devs = self.current_stick_data['std_devs']
+
+        # Create filter mask (True = keep peak)
+        mask = np.ones(len(mz_values), dtype=bool)
+
+        # Filter 1: Intensity threshold
+        if self.intensity_filter_enabled.isChecked():
+            max_intensity = intensities.max()
+            percent = self.intensity_slider.value()
+            threshold = (percent / 100.0) * max_intensity
+
+            intensity_mask = intensities >= threshold
+            mask &= intensity_mask
+
+            print(f"   Intensity filter: {mask.sum()}/{len(mask)} peaks above {percent}% threshold")
+
+        # Apply mask to data
+        filtered_mz = mz_values[mask]
+        filtered_intensities = intensities[mask]
+        filtered_std_devs = std_devs[mask]
+
+        # Filter fragment assignments
+        if hasattr(self, 'current_fragment_assignments'):
+            # Update visibility of assignments based on filter
+            for i, assignment in enumerate(self.current_fragment_assignments):
+                assignment['filtered'] = not mask[i]  # Mark as filtered if not in mask
+
+        # Rebuild labels (only for visible peaks)
+        labels = {}
+        if hasattr(self, 'current_fragment_assignments'):
+            for i, assignment in enumerate(self.current_fragment_assignments):
+                if mask[i] and assignment['show_label'] and assignment['assignment'] != "Unassigned":
+                    labels[assignment['mz']] = assignment['assignment']
+
+        # Update plot
+        show_sd = self.show_sd_checkbox.isChecked()
+        self.stick_canvas.plot_stick_spectrum(
+            mz_values=filtered_mz,
+            intensities=filtered_intensities,
+            std_devs=filtered_std_devs,
+            labels=labels,
+            show_sd_plot=show_sd,
+            title=self.current_stick_data['title']
+        )
+
+        # Update statistics
+        print(f"✅ Filters applied: {mask.sum()}/{len(mask)} peaks visible")
 
     def show_fragment_table_dialog(self):
         """
