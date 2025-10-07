@@ -3079,6 +3079,36 @@ Export: Use export buttons to save data and plots
 
         filters_layout.addLayout(mz_range_layout)
 
+        # Filter 4: PCA loadings (Stage 6)
+        pca_loadings_layout = QHBoxLayout()
+        self.pca_loadings_enabled = QCheckBox("PCA Loadings:")
+        self.pca_loadings_enabled.setChecked(False)
+        self.pca_loadings_enabled.stateChanged.connect(self.apply_stick_filters)
+        pca_loadings_layout.addWidget(self.pca_loadings_enabled)
+
+        pca_loadings_layout.addWidget(QLabel("|PC1| >"))
+        self.pca_loadings_slider = QSlider(Qt.Horizontal)
+        self.pca_loadings_slider.setMinimum(0)
+        self.pca_loadings_slider.setMaximum(100)
+        self.pca_loadings_slider.setValue(5)  # Default 0.05
+        self.pca_loadings_slider.setTickPosition(QSlider.TicksBelow)
+        self.pca_loadings_slider.setTickInterval(10)
+        self.pca_loadings_slider.valueChanged.connect(self.update_pca_loadings_label)
+        self.pca_loadings_slider.valueChanged.connect(self.apply_stick_filters)
+        pca_loadings_layout.addWidget(self.pca_loadings_slider)
+
+        self.pca_loadings_label = QLabel("0.05")
+        self.pca_loadings_label.setMinimumWidth(80)
+        pca_loadings_layout.addWidget(self.pca_loadings_label)
+
+        self.pca_loadings_status = QLabel("(PCA not run)")
+        self.pca_loadings_status.setStyleSheet("color: gray;")
+        pca_loadings_layout.addWidget(self.pca_loadings_status)
+
+        pca_loadings_layout.addStretch()
+
+        filters_layout.addLayout(pca_loadings_layout)
+
         layout.addWidget(filters_group)
 
         # Plotting area
@@ -3278,6 +3308,14 @@ Export: Use export buttons to save data and plots
             self.mz_range_status.setText("✗ Invalid")
             self.mz_range_status.setStyleSheet("color: red;")
 
+    def update_pca_loadings_label(self):
+        """Update PCA loadings filter label to show threshold value"""
+        # Convert slider value (0-100) to loading threshold (0.00-1.00)
+        slider_value = self.pca_loadings_slider.value()
+        threshold = slider_value / 100.0
+
+        self.pca_loadings_label.setText(f"{threshold:.2f}")
+
     def update_intensity_filter_label(self):
         """Update intensity filter label to show threshold value"""
         if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
@@ -3298,6 +3336,7 @@ Export: Use export buttons to save data and plots
         Stage 3: Intensity threshold filter
         Stage 4: Top N peaks filter
         Stage 5: m/z range filter
+        Stage 6: PCA loadings filter
         """
         if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
             return
@@ -3368,6 +3407,51 @@ Export: Use export buttons to save data and plots
 
                 except ValueError:
                     pass  # Skip if invalid
+
+        # Filter 4: PCA loadings (Stage 6)
+        if self.pca_loadings_enabled.isChecked():
+            # Check if PCA has been run
+            if hasattr(self, 'pca_completed') and self.pca_completed:
+                try:
+                    # Get PCA loadings for PC1
+                    loadings_df = self.pca_analyzer.get_loadings_dataframe()
+
+                    if 'PC1' in loadings_df.columns:
+                        # Get threshold from slider
+                        slider_value = self.pca_loadings_slider.value()
+                        threshold = slider_value / 100.0
+
+                        # Match m/z values to loadings
+                        # For each m/z in spectrum, find corresponding loading
+                        pca_mask = np.zeros(len(mz_values), dtype=bool)
+
+                        for i, mz in enumerate(mz_values):
+                            # Find loading for this m/z (exact match)
+                            if mz in loadings_df.index:
+                                loading = loadings_df.loc[mz, 'PC1']
+                                abs_loading = abs(loading)
+
+                                # Keep if absolute loading exceeds threshold
+                                if abs_loading >= threshold:
+                                    pca_mask[i] = True
+
+                        # Combine with previous mask
+                        mask &= pca_mask
+
+                        print(f"   PCA loadings filter: {mask.sum()}/{len(mask)} peaks with |PC1| >= {threshold:.2f}")
+
+                        # Update status
+                        self.pca_loadings_status.setText(f"({mask.sum()} peaks)")
+                        self.pca_loadings_status.setStyleSheet("color: green;")
+
+                except Exception as e:
+                    print(f"   Warning: PCA loadings filter failed: {e}")
+                    self.pca_loadings_status.setText("(Error)")
+                    self.pca_loadings_status.setStyleSheet("color: red;")
+            else:
+                # PCA not run
+                self.pca_loadings_status.setText("(PCA not run)")
+                self.pca_loadings_status.setStyleSheet("color: gray;")
 
         # Apply mask to data
         filtered_mz = mz_values[mask]
