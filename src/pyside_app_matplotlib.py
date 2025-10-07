@@ -2995,6 +2995,12 @@ Export: Use export buttons to save data and plots
         options_layout.addWidget(self.show_sd_checkbox)
 
         options_layout.addStretch()
+
+        # Fragment table button (Stage 2)
+        view_table_btn = QPushButton("📋 View Fragment Table")
+        view_table_btn.clicked.connect(self.show_fragment_table_dialog)
+        options_layout.addWidget(view_table_btn)
+
         layout.addWidget(options_group)
 
         # Plotting area
@@ -3015,7 +3021,7 @@ Export: Use export buttons to save data and plots
     def plot_stick_spectrum(self):
         """
         Plot stick spectrum for selected dose
-        Stage 1: Basic implementation - load data, average replicates, plot
+        Stage 2: Fragment assignment integration - load assignments and display labels
         """
         # Check if data is loaded
         if not hasattr(self, 'pca_analyzer') or self.pca_analyzer is None:
@@ -3063,18 +3069,53 @@ Export: Use export buttons to save data and plots
             mz_values = raw_data.index.values
 
             # Get polarity for title
-            polarity_display = Polarity.display_name(self.polarity)
+            polarity_display = Polarity.display_name(self.multi_ion_manager.active_polarity)
 
             # Create title
             title = f"{polarity_display} - {dose_text}"
 
-            # Plot
+            # Stage 2: Load fragment database and find assignments
+            if not hasattr(self, 'fragment_database') or not self.fragment_database:
+                self.load_fragment_database()
+
+            # Build fragment assignment data for all peaks
+            fragment_assignments = []
+            labels = {}  # Will store {mz: label_text} for labeled peaks
+
+            current_polarity = self.multi_ion_manager.active_polarity
+
+            for i, mz in enumerate(mz_values):
+                # Find matching assignment within ±0.0001 Da tolerance
+                matches = self.find_multiple_fragment_assignments(
+                    target_mass=mz,
+                    tolerance_ppm=100.0,  # ~100 ppm gives ±0.0001 Da at m/z=1
+                    polarity=current_polarity,
+                    max_matches=1
+                )
+
+                # Store assignment info (even if unassigned)
+                assignment_info = {
+                    'mz': mz,
+                    'mean_intensity': mean_intensities[i],
+                    'std_dev': std_devs[i],
+                    'cv_percent': (std_devs[i] / mean_intensities[i] * 100) if mean_intensities[i] > 0 else 0,
+                    'assignment': matches[0]['assignments'][0] if matches else "Unassigned",
+                    'formula': matches[0]['formulas'][0] if matches else "",
+                    'confidence': matches[0].get('confidence', '') if matches else "",
+                    'show_label': False  # Default: don't show label
+                }
+                fragment_assignments.append(assignment_info)
+
+            # Store fragment assignment data for table display
+            self.current_fragment_assignments = fragment_assignments
+
+            # Plot (with empty labels for now - user will toggle them in table)
             show_sd = self.show_sd_checkbox.isChecked()
             self.stick_canvas.plot_stick_spectrum(
                 mz_values=mz_values,
                 intensities=mean_intensities,
                 std_devs=std_devs,
-                labels={},  # No labels in Stage 1
+                labels=labels,  # Empty for now
                 show_sd_plot=show_sd,
                 title=title
             )
@@ -3084,12 +3125,17 @@ Export: Use export buttons to save data and plots
                 'mz_values': mz_values,
                 'intensities': mean_intensities,
                 'std_devs': std_devs,
-                'title': title
+                'title': title,
+                'labels': labels
             }
+
+            # Count assignments
+            assigned_count = sum(1 for a in fragment_assignments if a['assignment'] != "Unassigned")
 
             print(f"✅ Plotted stick spectrum for {sq_label}")
             print(f"   {len(mz_values)} m/z values")
             print(f"   {len(sample_names)} replicates averaged")
+            print(f"   {assigned_count}/{len(mz_values)} peaks assigned")
 
         except Exception as e:
             QMessageBox.critical(
@@ -3104,14 +3150,202 @@ Export: Use export buttons to save data and plots
         """Update stick spectrum when display options change"""
         if hasattr(self, 'current_stick_data') and self.current_stick_data:
             show_sd = self.show_sd_checkbox.isChecked()
+
+            # Rebuild labels from fragment assignments based on show_label flags
+            labels = {}
+            if hasattr(self, 'current_fragment_assignments'):
+                for assignment in self.current_fragment_assignments:
+                    if assignment['show_label'] and assignment['assignment'] != "Unassigned":
+                        labels[assignment['mz']] = assignment['assignment']
+
             self.stick_canvas.plot_stick_spectrum(
                 mz_values=self.current_stick_data['mz_values'],
                 intensities=self.current_stick_data['intensities'],
                 std_devs=self.current_stick_data['std_devs'],
-                labels={},  # No labels in Stage 1
+                labels=labels,
                 show_sd_plot=show_sd,
                 title=self.current_stick_data['title']
             )
+
+    def show_fragment_table_dialog(self):
+        """
+        Show pop-out dialog with fragment assignment table
+        Stage 2: Read-only table with sortable columns and label toggles
+        """
+        # Check if fragment data exists
+        if not hasattr(self, 'current_fragment_assignments') or not self.current_fragment_assignments:
+            QMessageBox.information(
+                self,
+                "No Data",
+                "Please plot a stick spectrum first."
+            )
+            return
+
+        # Create dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Fragment Assignment Table")
+        dialog.resize(1000, 600)
+        layout = QVBoxLayout(dialog)
+
+        # Header with statistics
+        header_label = QLabel()
+        total = len(self.current_fragment_assignments)
+        assigned = sum(1 for a in self.current_fragment_assignments if a['assignment'] != "Unassigned")
+        header_label.setText(f"📊 Fragment Assignments: {assigned}/{total} peaks assigned ({assigned/total*100:.1f}%)")
+        header_label.setStyleSheet("font-size: 12px; font-weight: bold; padding: 5px;")
+        layout.addWidget(header_label)
+
+        # Search box
+        search_layout = QHBoxLayout()
+        search_layout.addWidget(QLabel("🔍 Search:"))
+        search_box = QLineEdit()
+        search_box.setPlaceholderText("Filter by m/z or assignment...")
+        search_layout.addWidget(search_box)
+        layout.addLayout(search_layout)
+
+        # Table widget
+        table = QTableWidget()
+        table.setColumnCount(7)
+        table.setHorizontalHeaderLabels([
+            "m/z", "Mean Intensity", "Std Dev", "CV%",
+            "Assignment", "Confidence", "Show Label"
+        ])
+        table.setSortingEnabled(True)
+        table.setEditTriggers(QTableWidget.NoEditTriggers)  # Read-only except for checkboxes
+        table.setSelectionBehavior(QTableWidget.SelectRows)
+
+        # Populate table
+        table.setRowCount(len(self.current_fragment_assignments))
+        for row, assignment in enumerate(self.current_fragment_assignments):
+            # m/z (4 decimals)
+            mz_item = QTableWidgetItem(f"{assignment['mz']:.4f}")
+            mz_item.setData(Qt.UserRole, assignment['mz'])  # Store numeric value for sorting
+            table.setItem(row, 0, mz_item)
+
+            # Mean Intensity (scientific notation)
+            intensity_item = QTableWidgetItem(f"{assignment['mean_intensity']:.3e}")
+            intensity_item.setData(Qt.UserRole, assignment['mean_intensity'])
+            table.setItem(row, 1, intensity_item)
+
+            # Std Dev (scientific notation)
+            sd_item = QTableWidgetItem(f"{assignment['std_dev']:.3e}")
+            sd_item.setData(Qt.UserRole, assignment['std_dev'])
+            table.setItem(row, 2, sd_item)
+
+            # CV% (2 decimals)
+            cv_item = QTableWidgetItem(f"{assignment['cv_percent']:.2f}%")
+            cv_item.setData(Qt.UserRole, assignment['cv_percent'])
+            table.setItem(row, 3, cv_item)
+
+            # Assignment
+            assignment_item = QTableWidgetItem(assignment['assignment'])
+            if assignment['assignment'] == "Unassigned":
+                assignment_item.setForeground(QColor(150, 150, 150))  # Gray for unassigned
+            table.setItem(row, 4, assignment_item)
+
+            # Confidence
+            confidence_item = QTableWidgetItem(assignment['confidence'])
+            table.setItem(row, 5, confidence_item)
+
+            # Show Label checkbox
+            checkbox_widget = QWidget()
+            checkbox_layout = QHBoxLayout(checkbox_widget)
+            checkbox_layout.setContentsMargins(0, 0, 0, 0)
+            checkbox_layout.setAlignment(Qt.AlignCenter)
+
+            checkbox = QCheckBox()
+            checkbox.setChecked(assignment['show_label'])
+            checkbox.setEnabled(assignment['assignment'] != "Unassigned")  # Disable for unassigned
+
+            # Connect checkbox to update function
+            checkbox.stateChanged.connect(
+                lambda state, r=row: self.toggle_fragment_label(r, state)
+            )
+
+            checkbox_layout.addWidget(checkbox)
+            table.setCellWidget(row, 6, checkbox_widget)
+
+        # Resize columns to content
+        table.resizeColumnsToContents()
+        layout.addWidget(table)
+
+        # Search functionality
+        def filter_table(text):
+            text_lower = text.lower()
+            for row in range(table.rowCount()):
+                # Check m/z and assignment columns
+                mz_text = table.item(row, 0).text().lower()
+                assignment_text = table.item(row, 4).text().lower()
+                match = text_lower in mz_text or text_lower in assignment_text
+                table.setRowHidden(row, not match)
+
+        search_box.textChanged.connect(filter_table)
+
+        # Buttons
+        button_layout = QHBoxLayout()
+
+        # Export button
+        export_btn = QPushButton("💾 Export to CSV")
+        export_btn.clicked.connect(lambda: self.export_fragment_table(dialog))
+        button_layout.addWidget(export_btn)
+
+        button_layout.addStretch()
+
+        # Close button
+        close_btn = QPushButton("Close")
+        close_btn.clicked.connect(dialog.accept)
+        button_layout.addWidget(close_btn)
+
+        layout.addLayout(button_layout)
+
+        dialog.exec()
+
+    def toggle_fragment_label(self, row_index, state):
+        """Toggle show_label flag for a fragment and refresh plot"""
+        if hasattr(self, 'current_fragment_assignments') and row_index < len(self.current_fragment_assignments):
+            self.current_fragment_assignments[row_index]['show_label'] = (state == Qt.Checked)
+            # Refresh plot to show/hide label
+            self.update_stick_spectrum_display()
+
+    def export_fragment_table(self, parent_dialog):
+        """Export fragment assignment table to CSV"""
+        if not hasattr(self, 'current_fragment_assignments') or not self.current_fragment_assignments:
+            return
+
+        # Get save location
+        default_path = f"/home/dreece23/pca-sims/outputs/fragment_table_{self.multi_ion_manager.active_polarity}.csv"
+        file_path, _ = QFileDialog.getSaveFileName(
+            parent_dialog,
+            "Export Fragment Table",
+            default_path,
+            "CSV files (*.csv);;All files (*)"
+        )
+
+        if file_path:
+            try:
+                import csv
+                with open(file_path, 'w', newline='') as f:
+                    writer = csv.writer(f)
+                    # Header
+                    writer.writerow(['m/z', 'Mean Intensity', 'Std Dev', 'CV%',
+                                   'Assignment', 'Confidence', 'Show Label'])
+                    # Data
+                    for assignment in self.current_fragment_assignments:
+                        writer.writerow([
+                            f"{assignment['mz']:.4f}",
+                            f"{assignment['mean_intensity']:.6e}",
+                            f"{assignment['std_dev']:.6e}",
+                            f"{assignment['cv_percent']:.2f}",
+                            assignment['assignment'],
+                            assignment['confidence'],
+                            'Yes' if assignment['show_label'] else 'No'
+                        ])
+
+                QMessageBox.information(parent_dialog, "Export Complete",
+                                       f"Fragment table exported to:\n{file_path}")
+            except Exception as e:
+                QMessageBox.critical(parent_dialog, "Export Error",
+                                   f"Failed to export table:\n{str(e)}")
 
     def refresh_fragment_list(self):
         """Populate fragment list from current PCA loadings"""
