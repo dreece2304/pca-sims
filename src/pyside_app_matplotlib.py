@@ -38,6 +38,7 @@ import numpy as np
 sys.path.append(str(Path(__file__).parent))
 from simple_tof_sims_pca import SimpleToFSIMSPCA
 from matplotlib_plotting import PCAPlotCanvas, InteractivePCAPlots
+from stick_spectrum_plotting import StickSpectrumCanvas
 
 # ===== APPLICATION CONSTANTS =====
 class Polarity:
@@ -1202,6 +1203,10 @@ class ToFSIMSPCAApp(QMainWindow):
         # Fragment Assignment tab
         self.assignment_widget = self.create_fragment_assignment_tab()
         self.plot_tabs.addTab(self.assignment_widget, "Fragment Assignment")
+
+        # Stick Spectrum tab
+        self.stick_spectrum_widget = self.create_stick_spectrum_tab()
+        self.plot_tabs.addTab(self.stick_spectrum_widget, "📊 Stick Spectrum")
 
         # Database Management tab (keep for future enhancement)
         self.database_mgmt_widget = self.create_database_management_tab()
@@ -2941,6 +2946,172 @@ Export: Use export buttons to save data and plots
         layout.addStretch()
 
         return widget
+
+    def create_stick_spectrum_tab(self):
+        """
+        Create Stick Spectrum tab for mass spectrum visualization
+        Stage 1: Basic implementation with dose selection and plotting
+        """
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+
+        # Header
+        header_label = QLabel("📊 Stick Spectrum Visualization")
+        header_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+        layout.addWidget(header_label)
+
+        # Dose selection section
+        dose_group = QGroupBox("Sample Selection")
+        dose_layout = QHBoxLayout(dose_group)
+
+        dose_layout.addWidget(QLabel("Select Dose Level:"))
+
+        # Dose buttons (SQ0, SQ2-SQ5 only - SQ1 is excluded)
+        self.dose_buttons = QComboBox()
+        self.dose_buttons.addItems([
+            "SQ0 (As-deposited, 0 µC/cm²)",
+            "SQ2 (2000 µC/cm²)",
+            "SQ3 (5000 µC/cm²)",
+            "SQ4 (10000 µC/cm²)",
+            "SQ5 (15000 µC/cm²)"
+        ])
+        dose_layout.addWidget(self.dose_buttons)
+
+        # Plot button
+        plot_spectrum_btn = QPushButton("📈 Plot Spectrum")
+        plot_spectrum_btn.clicked.connect(self.plot_stick_spectrum)
+        dose_layout.addWidget(plot_spectrum_btn)
+
+        dose_layout.addStretch()
+        layout.addWidget(dose_group)
+
+        # Options section
+        options_group = QGroupBox("Display Options")
+        options_layout = QHBoxLayout(options_group)
+
+        self.show_sd_checkbox = QCheckBox("Show Replicate Variability (SD plot)")
+        self.show_sd_checkbox.setChecked(False)
+        self.show_sd_checkbox.stateChanged.connect(self.update_stick_spectrum_display)
+        options_layout.addWidget(self.show_sd_checkbox)
+
+        options_layout.addStretch()
+        layout.addWidget(options_group)
+
+        # Plotting area
+        plot_group = QGroupBox("Mass Spectrum")
+        plot_layout = QVBoxLayout(plot_group)
+
+        # Create stick spectrum canvas
+        self.stick_canvas = StickSpectrumCanvas(widget, width=12, height=8)
+        self.stick_toolbar = NavigationToolbar(self.stick_canvas, widget)
+
+        plot_layout.addWidget(self.stick_toolbar)
+        plot_layout.addWidget(self.stick_canvas)
+
+        layout.addWidget(plot_group)
+
+        return widget
+
+    def plot_stick_spectrum(self):
+        """
+        Plot stick spectrum for selected dose
+        Stage 1: Basic implementation - load data, average replicates, plot
+        """
+        # Check if data is loaded
+        if not hasattr(self, 'pca_analyzer') or self.pca_analyzer is None:
+            QMessageBox.warning(
+                self,
+                "No Data Loaded",
+                "Please load data first using the main data loading section."
+            )
+            return
+
+        # Get selected dose
+        dose_text = self.dose_buttons.currentText()
+        # Extract SQ number (e.g., "SQ0" from "SQ0 (As-deposited, 0 µC/cm²)")
+        sq_label = dose_text.split()[0]  # "SQ0", "SQ2", etc.
+        dose_num = int(sq_label.replace("SQ", ""))  # 0, 2, 3, 4, 5
+
+        try:
+            # Get raw data (TIC-normalized, no preprocessing)
+            raw_data = self.pca_analyzer.raw_data  # DataFrame with m/z as index
+            sample_metadata = self.pca_analyzer.sample_metadata
+
+            # Filter samples for selected dose
+            dose_mask = sample_metadata['dose_id'] == dose_num
+            dose_samples = sample_metadata[dose_mask]
+
+            if len(dose_samples) == 0:
+                QMessageBox.warning(
+                    self,
+                    "No Data",
+                    f"No samples found for {sq_label}"
+                )
+                return
+
+            # Get column names for this dose (P1, P2, P3)
+            sample_names = dose_samples['sample_name'].tolist()
+
+            # Extract intensity data for these samples
+            dose_data = raw_data[sample_names]
+
+            # Calculate mean and std across replicates
+            mean_intensities = dose_data.mean(axis=1).values
+            std_devs = dose_data.std(axis=1).values
+
+            # Get m/z values
+            mz_values = raw_data.index.values
+
+            # Get polarity for title
+            polarity_display = Polarity.display_name(self.polarity)
+
+            # Create title
+            title = f"{polarity_display} - {dose_text}"
+
+            # Plot
+            show_sd = self.show_sd_checkbox.isChecked()
+            self.stick_canvas.plot_stick_spectrum(
+                mz_values=mz_values,
+                intensities=mean_intensities,
+                std_devs=std_devs,
+                labels={},  # No labels in Stage 1
+                show_sd_plot=show_sd,
+                title=title
+            )
+
+            # Store current plot data for replotting when options change
+            self.current_stick_data = {
+                'mz_values': mz_values,
+                'intensities': mean_intensities,
+                'std_devs': std_devs,
+                'title': title
+            }
+
+            print(f"✅ Plotted stick spectrum for {sq_label}")
+            print(f"   {len(mz_values)} m/z values")
+            print(f"   {len(sample_names)} replicates averaged")
+
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Plot Error",
+                f"Error plotting stick spectrum:\n{str(e)}"
+            )
+            import traceback
+            traceback.print_exc()
+
+    def update_stick_spectrum_display(self):
+        """Update stick spectrum when display options change"""
+        if hasattr(self, 'current_stick_data') and self.current_stick_data:
+            show_sd = self.show_sd_checkbox.isChecked()
+            self.stick_canvas.plot_stick_spectrum(
+                mz_values=self.current_stick_data['mz_values'],
+                intensities=self.current_stick_data['intensities'],
+                std_devs=self.current_stick_data['std_devs'],
+                labels={},  # No labels in Stage 1
+                show_sd_plot=show_sd,
+                title=self.current_stick_data['title']
+            )
 
     def refresh_fragment_list(self):
         """Populate fragment list from current PCA loadings"""
