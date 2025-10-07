@@ -1,1915 +1,4035 @@
 {
   "metadata": {
-    "name": "Clean Alucone Fragment Database",
-    "description": "Fragment assignments from user-approved lists - O5H9- removed, proper format",
-    "version": "5.0",
-    "created": "2025-09-15",
-    "total_fragments": 178,
-    "negative_fragments": 81,
-    "positive_fragments": 97,
+    "name": "ToF-SIMS Fragment Database from Excel Lists",
+    "description": "Fragment assignments created from user-provided Excel files",
+    "version": "6.0",
+    "created": "2025-09-16",
+    "total_fragments": 235,
+    "negative_fragments": 110,
+    "positive_fragments": 125,
     "chemical_families": [
       "Al-based",
       "Saturated_carbon",
       "Unsaturated_carbon",
-      "Aromatic_formation",
       "Organic_oxygen",
       "Carbonyl",
       "Hydroxyl",
       "Contamination",
       "Unknown"
     ],
-    "notes": "Clean database with O5H9- removed, multiple assignments per mass properly formatted"
+    "notes": "Database created from NegFragmentsList.xlsx and PosFragmentsList.xlsx"
   },
   "fragments": [
     {
       "mass": 1.0084,
-      "assignments": ["H-"],
-      "formulas": ["H"],
-      "families": ["Unknown"],
+      "assignments": [
+        "H-"
+      ],
+      "formulas": [
+        "H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 12.00072,
-      "assignments": ["C-"],
-      "formulas": ["C"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C-"
+      ],
+      "formulas": [
+        "C"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 13.0087,
-      "assignments": ["CH-"],
-      "formulas": ["CH"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "CH-"
+      ],
+      "formulas": [
+        "CH"
+      ],
+      "families": [
+        "Saturated_carbon"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 14.01628,
-      "assignments": ["CH₂-"],
-      "formulas": ["CH₂"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "CH_2-"
+      ],
+      "formulas": [
+        "CH2"
+      ],
+      "families": [
+        "Saturated_carbon"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 15.99589,
-      "assignments": ["O-"],
-      "formulas": ["O"],
-      "families": ["Hydroxyl"],
+      "assignments": [
+        "O-"
+      ],
+      "formulas": [
+        "O"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 17.00371,
-      "assignments": ["OH-"],
-      "formulas": ["OH"],
-      "families": ["Hydroxyl"],
+      "assignments": [
+        "OH-"
+      ],
+      "formulas": [
+        "OH"
+      ],
+      "families": [
+        "Hydroxyl"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 24.00013,
-      "assignments": ["C₂-"],
-      "formulas": ["C₂"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C_2-"
+      ],
+      "formulas": [
+        "C2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 25.00863,
-      "assignments": ["C₂H-"],
-      "formulas": ["C₂H"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C_2H-"
+      ],
+      "formulas": [
+        "C2H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 27.0248,
-      "assignments": ["C₂H₃-"],
-      "formulas": ["C₂H₃"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C_2H_3-"
+      ],
+      "formulas": [
+        "C2H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 29.00376,
-      "assignments": ["CHO-"],
-      "formulas": ["CHO"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "CHO-"
+      ],
+      "formulas": [
+        "CHO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 31.99029,
-      "assignments": ["O₂-"],
-      "formulas": ["O₂"],
-      "families": ["Hydroxyl"],
+      "assignments": [
+        "O_2-"
+      ],
+      "formulas": [
+        "O2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 32.99777,
-      "assignments": ["O₂H-"],
-      "formulas": ["O₂H"],
-      "families": ["Hydroxyl"],
+      "assignments": [
+        "O_2H-"
+      ],
+      "formulas": [
+        "O2H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 34.97065,
-      "assignments": ["Cl-"],
-      "formulas": ["Cl"],
-      "families": ["Contamination"],
+      "assignments": [
+        "Cl-"
+      ],
+      "formulas": [
+        "Cl"
+      ],
+      "families": [
+        "Contamination"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 36.00077,
-      "assignments": ["C₃-"],
-      "formulas": ["C₃"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_3-"
+      ],
+      "formulas": [
+        "C3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 36.96753,
-      "assignments": ["³⁷Cl-"],
-      "formulas": ["³⁷Cl"],
-      "families": ["Contamination"],
+      "assignments": [
+        "^37Cl-"
+      ],
+      "formulas": [
+        "^37Cl"
+      ],
+      "families": [
+        "Contamination"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 37.00881,
-      "assignments": ["C₃H-"],
-      "formulas": ["C₃H"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "Cl- contamination"
+      ],
+      "formulas": [
+        "Cl"
+      ],
+      "families": [
+        "Contamination"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Chlorine contamination peak - updated from C3H- assignment"
     },
     {
       "mass": 39.99155,
-      "assignments": ["CHAl-"],
-      "formulas": ["CHAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "CHAl-"
+      ],
+      "formulas": [
+        "CHAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 42.00394,
-      "assignments": ["CH₃Al-"],
-      "formulas": ["CH₃Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "CH_3Al-"
+      ],
+      "formulas": [
+        "CH3Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 42.01252,
-      "assignments": ["C₂H₂O-"],
-      "formulas": ["C₂H₂O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2H_2O-"
+      ],
+      "formulas": [
+        "C2H2O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 42.97745,
-      "assignments": ["AlO-"],
-      "formulas": ["AlO"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO-"
+      ],
+      "formulas": [
+        "AlO"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 43.01981,
-      "assignments": ["C₂H₃O-"],
-      "formulas": ["C₂H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2H_3O-"
+      ],
+      "formulas": [
+        "C2H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 43.98702,
-      "assignments": ["AlOH-"],
-      "formulas": ["AlOH"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlOH-"
+      ],
+      "formulas": [
+        "AlOH"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 44.99941,
-      "assignments": ["CHO₂-"],
-      "formulas": ["CHO₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "CHO_2-"
+      ],
+      "formulas": [
+        "CHO2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 48.00048,
-      "assignments": ["C₄-"],
-      "formulas": ["C₄"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4-"
+      ],
+      "formulas": [
+        "C4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 49.0094,
-      "assignments": ["C₄H-"],
-      "formulas": ["C₄H"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H-"
+      ],
+      "formulas": [
+        "C4H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 50.01472,
-      "assignments": ["C₄H₂-"],
-      "formulas": ["C₄H₂"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_2-"
+      ],
+      "formulas": [
+        "C4H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 50.98303,
-      "assignments": ["C₂Al-"],
-      "formulas": ["C₂Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_2Al-"
+      ],
+      "formulas": [
+        "C2Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 51.02556,
-      "assignments": ["C₄H₃-"],
-      "formulas": ["C₄H₃"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_3-"
+      ],
+      "formulas": [
+        "C4H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 51.99572,
-      "assignments": ["C₃O-"],
-      "formulas": ["C₃O"],
-      "families": ["Carbonyl"],
+      "assignments": [
+        "C_3O-"
+      ],
+      "formulas": [
+        "C3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 53.00443,
-      "assignments": ["C₃HO-"],
-      "formulas": ["C₃HO"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3HO-"
+      ],
+      "formulas": [
+        "C3HO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 54.01106,
-      "assignments": ["C₃H₂O-"],
-      "formulas": ["C₃H₂O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_2O-"
+      ],
+      "formulas": [
+        "C3H2O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 55.02067,
-      "assignments": ["C₃H₃O-"],
-      "formulas": ["C₃H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_3O-"
+      ],
+      "formulas": [
+        "C3H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 57.03671,
-      "assignments": ["C₃H₅O-"],
-      "formulas": ["C₃H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_5O-"
+      ],
+      "formulas": [
+        "C3H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 58.00753,
-      "assignments": ["C₂H₂O₂-"],
-      "formulas": ["C₂H₂O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2H_2O_2-"
+      ],
+      "formulas": [
+        "C2H2O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 58.97279,
-      "assignments": ["AlO₂-"],
-      "formulas": ["AlO₂"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_2-"
+      ],
+      "formulas": [
+        "AlO2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 59.01578,
-      "assignments": ["C₂H₃O₂-"],
-      "formulas": ["C₂H₃O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2H_3O_2-"
+      ],
+      "formulas": [
+        "C2H3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 59.98191,
-      "assignments": ["AlO₂H-"],
-      "formulas": ["AlO₂H"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_2H-"
+      ],
+      "formulas": [
+        "AlO2H"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 60.00166,
-      "assignments": ["C₅-"],
-      "formulas": ["C₅"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5-"
+      ],
+      "formulas": [
+        "C5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 60.99026,
-      "assignments": ["AlO₂H₂-"],
-      "formulas": ["AlO₂H₂"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_2H_2-"
+      ],
+      "formulas": [
+        "AlO2H2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 60.9906,
-      "assignments": ["CHO₃-"],
-      "formulas": ["CHO₃"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "CHO_3-"
+      ],
+      "formulas": [
+        "CHO3"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 61.01037,
-      "assignments": ["C₅H-"],
-      "formulas": ["C₅H"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H-"
+      ],
+      "formulas": [
+        "C5H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 62.0188,
-      "assignments": ["C₅H₂-"],
-      "formulas": ["C₅H₂"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_2-"
+      ],
+      "formulas": [
+        "C5H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 63.02619,
-      "assignments": ["C₅H₃-"],
-      "formulas": ["C₅H₃"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_3-"
+      ],
+      "formulas": [
+        "C5H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 63.99579,
-      "assignments": ["C₄O-"],
-      "formulas": ["C₄O"],
-      "families": ["Carbonyl"],
+      "assignments": [
+        "C_4O-"
+      ],
+      "formulas": [
+        "C4O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 64.03129,
-      "assignments": ["C₅H₄-"],
-      "formulas": ["C₅H₄"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_4-"
+      ],
+      "formulas": [
+        "C5H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 65.00391,
-      "assignments": ["C₄HO-"],
-      "formulas": ["C₄HO"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4HO-"
+      ],
+      "formulas": [
+        "C4HO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 65.04077,
-      "assignments": ["C₅H₅-"],
-      "formulas": ["C₅H₅"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_5-"
+      ],
+      "formulas": [
+        "C5H5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 66.00841,
-      "assignments": ["C₃H₃Al-", "C₄H₂O-"],
-      "formulas": ["C₃H₃Al", "C₄H₂O"],
-      "families": ["Al-based", "Organic_oxygen"],
+      "assignments": [
+        "C_3H_3Al-"
+      ],
+      "formulas": [
+        "C3H3Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 66.00841,
+      "assignments": [
+        "C_4H_2O-"
+      ],
+      "formulas": [
+        "C4H2O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 66.97721,
-      "assignments": ["C₂OAl-"],
-      "formulas": ["C₂OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_2OAl-"
+      ],
+      "formulas": [
+        "C2OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 67.0204,
-      "assignments": ["C₄H₃O-"],
-      "formulas": ["C₄H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_3O-"
+      ],
+      "formulas": [
+        "C4H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 68.02251,
-      "assignments": ["C₃H₅Al-", "C₄H₄O-"],
-      "formulas": ["C₃H₅Al", "C₄H₄O"],
-      "families": ["Al-based", "Organic_oxygen"],
+      "assignments": [
+        "C_3H_5Al-"
+      ],
+      "formulas": [
+        "C3H5Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 68.02251,
+      "assignments": [
+        "C_4H_4O-"
+      ],
+      "formulas": [
+        "C4H4O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 68.99883,
-      "assignments": ["C₃HO₂-"],
-      "formulas": ["C₃HO₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3HO_2-"
+      ],
+      "formulas": [
+        "C3HO2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 69.03678,
-      "assignments": ["C₄H₅O-"],
-      "formulas": ["C₄H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_5O-"
+      ],
+      "formulas": [
+        "C4H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 70.00448,
-      "assignments": ["C₂H₃OAl-", "C₃H₂O₂-"],
-      "formulas": ["C₂H₃OAl", "C₃H₂O₂"],
-      "families": ["Al-based", "Organic_oxygen"],
+      "assignments": [
+        "C_2H_3OAl-"
+      ],
+      "formulas": [
+        "C2H3OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 70.00448,
+      "assignments": [
+        "C_3H_2O_2-"
+      ],
+      "formulas": [
+        "C3H2O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 71.01549,
-      "assignments": ["C₃H₃O₂-"],
-      "formulas": ["C₃H₃O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_3O_2-"
+      ],
+      "formulas": [
+        "C3H3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 72.00041,
-      "assignments": ["C₆-"],
-      "formulas": ["C₆"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6-"
+      ],
+      "formulas": [
+        "C6"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 72.99397,
-      "assignments": ["C₂HO₃-"],
-      "formulas": ["C₂HO₃"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2HO_3-"
+      ],
+      "formulas": [
+        "C2HO3"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 73.00847,
-      "assignments": ["C₆H-"],
-      "formulas": ["C₆H"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H-"
+      ],
+      "formulas": [
+        "C6H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 74.01388,
-      "assignments": ["C₆H₂-"],
-      "formulas": ["C₆H₂"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_2-"
+      ],
+      "formulas": [
+        "C6H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 74.98645,
-      "assignments": ["C₄Al-"],
-      "formulas": ["C₄Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_4Al-"
+      ],
+      "formulas": [
+        "C4Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
-      "confidence": "Low",
-      "notes": "User-provided negative ion list - chemically questionable"
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 75.02461,
-      "assignments": ["C₆H₃-"],
-      "formulas": ["C₆H₃"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_3-"
+      ],
+      "formulas": [
+        "C6H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 75.97403,
-      "assignments": ["AlO₃H-"],
-      "formulas": ["AlO₃H"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_3H-"
+      ],
+      "formulas": [
+        "AlO3H"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 75.99408,
-      "assignments": ["C₄HAl-", "C₅O-"],
-      "formulas": ["C₄HAl", "C₅O"],
-      "families": ["Al-based", "Carbonyl"],
+      "assignments": [
+        "C_4HAl-"
+      ],
+      "formulas": [
+        "C4HAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 75.99408,
+      "assignments": [
+        "C_5O-"
+      ],
+      "formulas": [
+        "C5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 76.03066,
-      "assignments": ["C₆H₄-"],
-      "formulas": ["C₆H₄"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_4-"
+      ],
+      "formulas": [
+        "C6H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 76.98238,
-      "assignments": ["AlO₃H₂-"],
-      "formulas": ["AlO₃H₂"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_3H_2-"
+      ],
+      "formulas": [
+        "AlO3H2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 77.00299,
-      "assignments": ["C₅HO-"],
-      "formulas": ["C₅HO"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5HO-"
+      ],
+      "formulas": [
+        "C5HO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 78.01136,
-      "assignments": ["C₅H₂O-"],
-      "formulas": ["C₅H₂O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5H_2O-"
+      ],
+      "formulas": [
+        "C5H2O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 78.99862,
-      "assignments": ["C₂H₄OCl-", "AlO₃H₄-"],
-      "formulas": ["C₂H₄OCl", "AlO₃H₄"],
-      "families": ["Contamination", "Al-based"],
+      "assignments": [
+        "C_2H_4OCl-"
+      ],
+      "formulas": [
+        "C2H4OCl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 78.99862,
+      "assignments": [
+        "AlO_3H_4-"
+      ],
+      "formulas": [
+        "AlO3H4"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 79.02046,
-      "assignments": ["C₅H₃O-"],
-      "formulas": ["C₅H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5H_3O-"
+      ],
+      "formulas": [
+        "C5H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 82.00682,
-      "assignments": ["C₄H₂O₂-"],
-      "formulas": ["C₄H₂O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_2O_2-"
+      ],
+      "formulas": [
+        "C4H2O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 82.97191,
-      "assignments": ["C₂O₂Al-"],
-      "formulas": ["C₂O₂Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_2O_2Al-"
+      ],
+      "formulas": [
+        "C2O2Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 83.01542,
-      "assignments": ["C₄H₃O₂-"],
-      "formulas": ["C₄H₃O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_3O_2-"
+      ],
+      "formulas": [
+        "C4H3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 83.99999,
-      "assignments": ["CH₅O₂Cl-", "C₇-"],
-      "formulas": ["CH₅O₂Cl", "C₇"],
-      "families": ["Contamination", "Aromatic_formation"],
+      "assignments": [
+        "CH_5O_2Cl-"
+      ],
+      "formulas": [
+        "CH5O2Cl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 83.99999,
+      "assignments": [
+        "C_7-"
+      ],
+      "formulas": [
+        "C7"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 84.98746,
-      "assignments": ["C₄H₂Cl-", "C₂H₂O₂Al-"],
-      "formulas": ["C₄H₂Cl", "C₂H₂O₂Al"],
-      "families": ["Contamination", "Al-based"],
+      "assignments": [
+        "C_4H_2Cl-"
+      ],
+      "formulas": [
+        "C4H2Cl"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 84.98746,
+      "assignments": [
+        "C_2H_2O_2Al-"
+      ],
+      "formulas": [
+        "C2H2O2Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 85.00771,
-      "assignments": ["CH₆O₂Cl-", "C₇H-"],
-      "formulas": ["CH₆O₂Cl", "C₇H"],
-      "families": ["Contamination", "Aromatic_formation"],
+      "assignments": [
+        "CH_6O_2Cl-"
+      ],
+      "formulas": [
+        "CH6O2Cl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 85.00771,
+      "assignments": [
+        "C_7H-"
+      ],
+      "formulas": [
+        "C7H"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 86.01665,
-      "assignments": ["C₇H₂-"],
-      "formulas": ["C₇H₂"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_2-"
+      ],
+      "formulas": [
+        "C7H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 86.9603,
-      "assignments": ["Al₂O₂H-"],
-      "formulas": ["Al₂O₂H"],
-      "families": ["Al-based"],
+      "assignments": [
+        "Al_2O_2H-"
+      ],
+      "formulas": [
+        "Al2O2H"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 87.02425,
-      "assignments": ["C₇H₃-"],
-      "formulas": ["C₇H₃"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_3-"
+      ],
+      "formulas": [
+        "C7H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 88.03131,
-      "assignments": ["C₇H₄-"],
-      "formulas": ["C₇H₄"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_4-"
+      ],
+      "formulas": [
+        "C7H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 89.00424,
-      "assignments": ["ClO₃H₆-", "C₆HO-"],
-      "formulas": ["ClO₃H₆", "C₆HO"],
-      "families": ["Contamination", "Organic_oxygen"],
+      "assignments": [
+        "ClO_3H_6-"
+      ],
+      "formulas": [
+        "ClO3H6"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments, O5H9- removed"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 89.00424,
+      "assignments": [
+        "C_6HO-"
+      ],
+      "formulas": [
+        "C6HO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 89.04152,
+      "assignments": [
+        "O_5H_9-"
+      ],
+      "formulas": [
+        "O5H9"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 90.01008,
-      "assignments": ["C₆H₂O-"],
-      "formulas": ["C₆H₂O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_6H_2O-"
+      ],
+      "formulas": [
+        "C6H2O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 90.97665,
-      "assignments": ["C₄OAl-"],
-      "formulas": ["C₄OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_4OAl-"
+      ],
+      "formulas": [
+        "C4OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 91.02053,
-      "assignments": ["C₆H₃O-"],
-      "formulas": ["C₆H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_6H_3O-"
+      ],
+      "formulas": [
+        "C6H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 92.02685,
-      "assignments": ["C₆H₄O-"],
-      "formulas": ["C₆H₄O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_6H_4O-"
+      ],
+      "formulas": [
+        "C6H4O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 92.99793,
-      "assignments": ["C₅HO₂-"],
-      "formulas": ["C₅HO₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5HO_2-"
+      ],
+      "formulas": [
+        "C5HO2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 93.03704,
-      "assignments": ["C₆H₅O-"],
-      "formulas": ["C₆H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_6H_5O-"
+      ],
+      "formulas": [
+        "C6H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 94.99308,
-      "assignments": ["AlO₄H₄-"],
-      "formulas": ["AlO₄H₄"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_4H_4-"
+      ],
+      "formulas": [
+        "AlO4H4"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 94.99323,
-      "assignments": ["C₂H₄O₂Cl-"],
-      "formulas": ["C₂H₄O₂Cl"],
-      "families": ["Contamination"],
+      "assignments": [
+        "C_2H_4O_2Cl-"
+      ],
+      "formulas": [
+        "C2H4O2Cl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 95.01609,
-      "assignments": ["C₅H₃O₂-"],
-      "formulas": ["C₅H₃O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5H_3O_2-"
+      ],
+      "formulas": [
+        "C5H3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 95.99979,
-      "assignments": ["C₂H₅O₂Cl-", "C₈-", "AlO₄H₅-"],
-      "formulas": ["C₂H₅O₂Cl", "C₈", "AlO₄H₅"],
-      "families": ["Contamination", "Aromatic_formation", "Al-based"],
+      "assignments": [
+        "C_2H_5O_2Cl-"
+      ],
+      "formulas": [
+        "C2H5O2Cl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 95.99979,
+      "assignments": [
+        "C_8-"
+      ],
+      "formulas": [
+        "C8"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 95.99979,
+      "assignments": [
+        "AlO_4H_5-"
+      ],
+      "formulas": [
+        "AlO4H5"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 97.00888,
-      "assignments": ["C₈H-", "AlO₄H₆-"],
-      "formulas": ["C₈H", "AlO₄H₆"],
-      "families": ["Aromatic_formation", "Al-based"],
+      "assignments": [
+        "C_8H-"
+      ],
+      "formulas": [
+        "C8H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 97.00888,
+      "assignments": [
+        "AlO_4H_6-"
+      ],
+      "formulas": [
+        "AlO4H6"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 98.01334,
-      "assignments": ["C₂H₇O₂Cl-", "C₈H₂-", "AlO₄H₇-"],
-      "formulas": ["C₂H₇O₂Cl", "C₈H₂", "AlO₄H₇"],
-      "families": ["Contamination", "Aromatic_formation", "Al-based"],
+      "assignments": [
+        "C_2H_7O_2Cl-"
+      ],
+      "formulas": [
+        "C2H7O2Cl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 98.01334,
+      "assignments": [
+        "C_8H_2-"
+      ],
+      "formulas": [
+        "C8H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 98.01334,
+      "assignments": [
+        "AlO_4H_7-"
+      ],
+      "formulas": [
+        "AlO4H7"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 99.02373,
-      "assignments": ["C₂H₈O₂Cl-", "C₈H₃-", "AlO₄H₈-"],
-      "formulas": ["C₂H₈O₂Cl", "C₈H₃", "AlO₄H₈"],
-      "families": ["Contamination", "Aromatic_formation", "Al-based"],
+      "assignments": [
+        "C_2H_8O_2Cl-"
+      ],
+      "formulas": [
+        "C2H8O2Cl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "User-provided negative ion list - multiple assignments"
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 99.02373,
+      "assignments": [
+        "C_8H_3-"
+      ],
+      "formulas": [
+        "C8H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 99.02373,
+      "assignments": [
+        "AlO_4H_8-"
+      ],
+      "formulas": [
+        "AlO4H8"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 11.99812,
-      "assignments": ["C+"],
-      "formulas": ["C"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C+"
+      ],
+      "formulas": [
+        "C"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 13.0059,
-      "assignments": ["CH+"],
-      "formulas": ["CH"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "CH+"
+      ],
+      "formulas": [
+        "CH"
+      ],
+      "families": [
+        "Saturated_carbon"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 14.014,
-      "assignments": ["CH₂+"],
-      "formulas": ["CH₂"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "CH_2+"
+      ],
+      "formulas": [
+        "CH2"
+      ],
+      "families": [
+        "Saturated_carbon"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 15.02271,
-      "assignments": ["CH₃+"],
-      "formulas": ["CH₃"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "CH_3+"
+      ],
+      "formulas": [
+        "CH3"
+      ],
+      "families": [
+        "Saturated_carbon"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 19.0179,
-      "assignments": ["H₃O+"],
-      "formulas": ["H₃O"],
-      "families": ["Hydroxyl"],
+      "assignments": [
+        "OH_3+"
+      ],
+      "formulas": [
+        "OH3"
+      ],
+      "families": [
+        "Hydroxyl"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - corrected from OH3+"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 26.01406,
-      "assignments": ["C₂H₂+"],
-      "formulas": ["C₂H₂"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C_2H_2+"
+      ],
+      "formulas": [
+        "C2H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 26.98097,
-      "assignments": ["Al+"],
-      "formulas": ["Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "Al+"
+      ],
+      "formulas": [
+        "Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 27.02276,
-      "assignments": ["C₂H₃+"],
-      "formulas": ["C₂H₃"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C_2H_3+"
+      ],
+      "formulas": [
+        "C2H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 27.98413,
-      "assignments": ["Si+"],
-      "formulas": ["Si"],
-      "families": ["Contamination"],
+      "assignments": [
+        "Si+"
+      ],
+      "formulas": [
+        "Si"
+      ],
+      "families": [
+        "Contamination"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 27.98713,
-      "assignments": ["AlH+"],
-      "formulas": ["AlH"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlH+"
+      ],
+      "formulas": [
+        "AlH"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 28.03013,
-      "assignments": ["C₂H₄+"],
-      "formulas": ["C₂H₄"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C_2H_4+"
+      ],
+      "formulas": [
+        "C2H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 28.99134,
-      "assignments": ["SiH+"],
-      "formulas": ["SiH"],
-      "families": ["Contamination"],
+      "assignments": [
+        "SiH+"
+      ],
+      "formulas": [
+        "SiH"
+      ],
+      "families": [
+        "Contamination"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 29.00169,
-      "assignments": ["CHO+"],
-      "formulas": ["CHO"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "CHO+"
+      ],
+      "formulas": [
+        "CHO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 29.03971,
-      "assignments": ["C₂H₅+"],
-      "formulas": ["C₂H₅"],
-      "families": ["Saturated_carbon"],
+      "assignments": [
+        "C_2H_5+"
+      ],
+      "formulas": [
+        "C2H5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 31.01816,
-      "assignments": ["CH₃O+"],
-      "formulas": ["CH₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "CH_3O+"
+      ],
+      "formulas": [
+        "CH3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 37.00564,
-      "assignments": ["C₃H+"],
-      "formulas": ["C₃H"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_3H+"
+      ],
+      "formulas": [
+        "C3H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 38.01613,
-      "assignments": ["C₃H₂+"],
-      "formulas": ["C₃H₂"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_3H_2+"
+      ],
+      "formulas": [
+        "C3H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 41.04076,
-      "assignments": ["C₃H₅+"],
-      "formulas": ["C₃H₅"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_3H_5+"
+      ],
+      "formulas": [
+        "C3H5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 42.01145,
-      "assignments": ["C₂H₂O+"],
-      "formulas": ["C₂H₂O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2H_2O+"
+      ],
+      "formulas": [
+        "C2H2O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 42.0472,
-      "assignments": ["C₃H₆+"],
-      "formulas": ["C₃H₆"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_3H_6+"
+      ],
+      "formulas": [
+        "C3H6"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 43.018,
-      "assignments": ["C₂H₃O+"],
-      "formulas": ["C₂H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2H_3O+"
+      ],
+      "formulas": [
+        "C2H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 43.05476,
-      "assignments": ["C₃H₇+"],
-      "formulas": ["C₃H₇"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_3H_7+"
+      ],
+      "formulas": [
+        "C3H7"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 43.98139,
-      "assignments": ["AlOH+"],
-      "formulas": ["AlOH"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlOH+"
+      ],
+      "formulas": [
+        "AlOH"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 44.0223,
-      "assignments": ["CH₅Al+"],
-      "formulas": ["CH₅Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "CH_5Al+"
+      ],
+      "formulas": [
+        "CH5Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 44.98994,
-      "assignments": ["SiHO+"],
-      "formulas": ["SiHO"],
-      "families": ["Contamination"],
+      "assignments": [
+        "SiHO+"
+      ],
+      "formulas": [
+        "SiHO"
+      ],
+      "families": [
+        "Contamination"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 44.9928,
-      "assignments": ["AlOH₂+"],
-      "formulas": ["AlOH₂"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlOH_2+"
+      ],
+      "formulas": [
+        "AlOH2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 45.03439,
-      "assignments": ["C₂H₅O+"],
-      "formulas": ["C₂H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_2H_5O+"
+      ],
+      "formulas": [
+        "C2H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 47.01204,
-      "assignments": ["CH₃O₂+"],
-      "formulas": ["CH₃O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "CH_3O_2+"
+      ],
+      "formulas": [
+        "CH3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 50.01338,
-      "assignments": ["C₄H₂+"],
-      "formulas": ["C₄H₂"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_2+"
+      ],
+      "formulas": [
+        "C4H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 51.02218,
-      "assignments": ["C₄H₃+"],
-      "formulas": ["C₄H₃"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_3+"
+      ],
+      "formulas": [
+        "C4H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 51.98652,
-      "assignments": ["C₂HAl+"],
-      "formulas": ["C₂HAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_2HAl+"
+      ],
+      "formulas": [
+        "C2HAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 52.02909,
-      "assignments": ["C₄H₄+"],
-      "formulas": ["C₄H₄"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_4+"
+      ],
+      "formulas": [
+        "C4H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 52.99128,
-      "assignments": ["SiC₂H+"],
-      "formulas": ["SiC₂H"],
-      "families": ["Contamination"],
+      "assignments": [
+        "SiC_2H+"
+      ],
+      "formulas": [
+        "SiC2H"
+      ],
+      "families": [
+        "Contamination"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 53.00044,
-      "assignments": ["C₃HO+"],
-      "formulas": ["C₃HO"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3HO+"
+      ],
+      "formulas": [
+        "C3HO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 53.03825,
-      "assignments": ["C₄H₅+"],
-      "formulas": ["C₄H₅"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_5+"
+      ],
+      "formulas": [
+        "C4H5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 54.0444,
-      "assignments": ["C₄H₆+"],
-      "formulas": ["C₄H₆"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_6+"
+      ],
+      "formulas": [
+        "C4H6"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 55.01848,
-      "assignments": ["C₃H₃O+"],
-      "formulas": ["C₃H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_3O+"
+      ],
+      "formulas": [
+        "C3H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 55.05495,
-      "assignments": ["C₄H₇+"],
-      "formulas": ["C₄H₇"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_7+"
+      ],
+      "formulas": [
+        "C4H7"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 56.0234,
-      "assignments": ["C₃H₄O+"],
-      "formulas": ["C₃H₄O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_4O+"
+      ],
+      "formulas": [
+        "C3H4O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 56.06,
-      "assignments": ["C₄H₈+"],
-      "formulas": ["C₄H₈"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_8+"
+      ],
+      "formulas": [
+        "C4H8"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 57.03359,
-      "assignments": ["C₃H₅O+"],
-      "formulas": ["C₃H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_5O+"
+      ],
+      "formulas": [
+        "C3H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 57.07072,
-      "assignments": ["C₄H₉+"],
-      "formulas": ["C₄H₉"],
-      "families": ["Unsaturated_carbon"],
+      "assignments": [
+        "C_4H_9+"
+      ],
+      "formulas": [
+        "C4H9"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 57.9986,
-      "assignments": ["CH₃OAl+"],
-      "formulas": ["CH₃OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "CH_3OAl+"
+      ],
+      "formulas": [
+        "CH3OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 59.00717,
-      "assignments": ["CH₄OAl+"],
-      "formulas": ["CH₄OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "CH_4OAl+"
+      ],
+      "formulas": [
+        "CH4OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 59.0496,
-      "assignments": ["C₃H₇O+"],
-      "formulas": ["C₃H₇O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_3H_7O+"
+      ],
+      "formulas": [
+        "C3H7O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 59.99995,
-      "assignments": ["C₅+"],
-      "formulas": ["C₅"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5+"
+      ],
+      "formulas": [
+        "C5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 60.98419,
-      "assignments": ["AlO₂H₂+"],
-      "formulas": ["AlO₂H₂"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_2H_2+"
+      ],
+      "formulas": [
+        "AlO2H2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 61.00355,
-      "assignments": ["C₅H+"],
-      "formulas": ["C₅H"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H+"
+      ],
+      "formulas": [
+        "C5H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 63.02106,
-      "assignments": ["C₅H₃+"],
-      "formulas": ["C₅H₃"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_3+"
+      ],
+      "formulas": [
+        "C5H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 64.02923,
-      "assignments": ["C₅H₄+"],
-      "formulas": ["C₅H₄"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_4+"
+      ],
+      "formulas": [
+        "C5H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 65.0393,
-      "assignments": ["C₅H₅+"],
-      "formulas": ["C₅H₅"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_5+"
+      ],
+      "formulas": [
+        "C5H5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 66.00884,
-      "assignments": ["C₄H₂O+"],
-      "formulas": ["C₄H₂O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_2O+"
+      ],
+      "formulas": [
+        "C4H2O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 66.04553,
-      "assignments": ["C₅H₆+"],
-      "formulas": ["C₅H₆"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_6+"
+      ],
+      "formulas": [
+        "C5H6"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 67.01727,
-      "assignments": ["C₄H₃O+"],
-      "formulas": ["C₄H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_3O+"
+      ],
+      "formulas": [
+        "C4H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 67.05466,
-      "assignments": ["C₅H₇+"],
-      "formulas": ["C₅H₇"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_7+"
+      ],
+      "formulas": [
+        "C5H7"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 68.02524,
-      "assignments": ["C₄H₄O+"],
-      "formulas": ["C₄H₄O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_4O+"
+      ],
+      "formulas": [
+        "C4H4O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 68.05907,
-      "assignments": ["C₅H₈+"],
-      "formulas": ["C₅H₈"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_8+"
+      ],
+      "formulas": [
+        "C5H8"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 68.99224,
-      "assignments": ["C₂H₂OAl+"],
-      "formulas": ["C₂H₂OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_2H_2OAl+"
+      ],
+      "formulas": [
+        "C2H2OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 69.03408,
-      "assignments": ["C₄H₅O+"],
-      "formulas": ["C₄H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_5O+"
+      ],
+      "formulas": [
+        "C4H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 69.07121,
-      "assignments": ["C₅H₉+"],
-      "formulas": ["C₅H₉"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_9+"
+      ],
+      "formulas": [
+        "C5H9"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 69.95553,
-      "assignments": ["Al₂O+"],
-      "formulas": ["Al₂O"],
-      "families": ["Al-based"],
+      "assignments": [
+        "Al_2O+"
+      ],
+      "formulas": [
+        "Al2O"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 70.03906,
-      "assignments": ["C₄H₆O+"],
-      "formulas": ["C₄H₆O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_6O+"
+      ],
+      "formulas": [
+        "C4H6O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 70.07514,
-      "assignments": ["C₅H₁₀+"],
-      "formulas": ["C₅H₁₀"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_5H_10+"
+      ],
+      "formulas": [
+        "C5H10"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 70.96475,
-      "assignments": ["Al₂OH+"],
-      "formulas": ["Al₂OH"],
-      "families": ["Al-based"],
+      "assignments": [
+        "Al_2OH+"
+      ],
+      "formulas": [
+        "Al2OH"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 71.01165,
-      "assignments": ["C₂H₄OAl+", "C₃H₃O₂+"],
-      "formulas": ["C₂H₄OAl", "C₃H₃O₂"],
-      "families": ["Al-based", "Organic_oxygen"],
+      "assignments": [
+        "C_2H_4OAl+"
+      ],
+      "formulas": [
+        "C2H4OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 71.01165,
+      "assignments": [
+        "C_3H_3O_2+"
+      ],
+      "formulas": [
+        "C3H3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 71.05185,
-      "assignments": ["C₄H₇O+"],
-      "formulas": ["C₄H₇O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_7O+"
+      ],
+      "formulas": [
+        "C4H7O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 73.99036,
-      "assignments": ["Al₂OH₄+"],
-      "formulas": ["Al₂OH₄"],
-      "families": ["Al-based"],
+      "assignments": [
+        "Al_2OH_4+"
+      ],
+      "formulas": [
+        "Al2OH4"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 74.01207,
-      "assignments": ["C₆H₂+"],
-      "formulas": ["C₆H₂"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_2+"
+      ],
+      "formulas": [
+        "C6H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 74.01229,
-      "assignments": ["SiCH₇Al+"],
-      "formulas": ["SiCH₇Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "SiCH_7Al+"
+      ],
+      "formulas": [
+        "SiCH7Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 75.02143,
-      "assignments": ["C₆H₃+"],
-      "formulas": ["C₆H₃"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_3+"
+      ],
+      "formulas": [
+        "C6H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 76.02944,
-      "assignments": ["C₆H₄+"],
-      "formulas": ["C₆H₄"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_4+"
+      ],
+      "formulas": [
+        "C6H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 77.00016,
-      "assignments": ["C₅HO+"],
-      "formulas": ["C₅HO"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5HO+"
+      ],
+      "formulas": [
+        "C5HO"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 77.0383,
-      "assignments": ["C₆H₅+"],
-      "formulas": ["C₆H₅"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_5+"
+      ],
+      "formulas": [
+        "C6H5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 78.04481,
-      "assignments": ["C₆H₆+"],
-      "formulas": ["C₆H₆"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_6+"
+      ],
+      "formulas": [
+        "C6H6"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 78.99614,
-      "assignments": ["AlO₃H₄+"],
-      "formulas": ["AlO₃H₄"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_3H_4+"
+      ],
+      "formulas": [
+        "AlO3H4"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 79.01652,
-      "assignments": ["C₅H₃O+"],
-      "formulas": ["C₅H₃O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5H_3O+"
+      ],
+      "formulas": [
+        "C5H3O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 79.05372,
-      "assignments": ["C₆H₇+"],
-      "formulas": ["C₆H₇"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_7+"
+      ],
+      "formulas": [
+        "C6H7"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 80.05831,
-      "assignments": ["C₆H₈+"],
-      "formulas": ["C₆H₈"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_8+"
+      ],
+      "formulas": [
+        "C6H8"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 81.03487,
-      "assignments": ["C₅H₅O+"],
-      "formulas": ["C₅H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5H_5O+"
+      ],
+      "formulas": [
+        "C5H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 81.07062,
-      "assignments": ["C₆H₉+"],
-      "formulas": ["C₆H₉"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_9+"
+      ],
+      "formulas": [
+        "C6H9"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 81.99876,
-      "assignments": ["C₃H₃OAl+"],
-      "formulas": ["C₃H₃OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_3H_3OAl+"
+      ],
+      "formulas": [
+        "C3H3OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 82.04131,
-      "assignments": ["C₅H₆O+"],
-      "formulas": ["C₅H₆O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5H_6O+"
+      ],
+      "formulas": [
+        "C5H6O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 83.00781,
-      "assignments": ["C₃H₄OAl+"],
-      "formulas": ["C₃H₄OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_3H_4OAl+"
+      ],
+      "formulas": [
+        "C3H4OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 83.00931,
-      "assignments": ["C₄H₃O₂+"],
-      "formulas": ["C₄H₃O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_4H_3O_2+"
+      ],
+      "formulas": [
+        "C4H3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 83.03172,
-      "assignments": ["AlO₃H₈+"],
-      "formulas": ["AlO₃H₈"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_3H_8+"
+      ],
+      "formulas": [
+        "AlO3H8"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 83.0881,
-      "assignments": ["C₆H₁₁+"],
-      "formulas": ["C₆H₁₁"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_6H_11+"
+      ],
+      "formulas": [
+        "C6H11"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 84.98306,
-      "assignments": ["C₂H₂O₂Al+", "CH₃OAl₂+"],
-      "formulas": ["C₂H₂O₂Al", "CH₃OAl₂"],
-      "families": ["Al-based", "Al-based"],
+      "assignments": [
+        "C_2H_2O_2Al+"
+      ],
+      "formulas": [
+        "C2H2O2Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 84.98306,
+      "assignments": [
+        "CH_3OAl_2+"
+      ],
+      "formulas": [
+        "CH3OAl2"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 85.00625,
-      "assignments": ["C₇H+"],
-      "formulas": ["C₇H"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H+"
+      ],
+      "formulas": [
+        "C7H"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 86.01176,
-      "assignments": ["SiC₂H₇Al+"],
-      "formulas": ["SiC₂H₇Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "SiC_2H_7Al+"
+      ],
+      "formulas": [
+        "SiC2H7Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 86.01179,
-      "assignments": ["C₇H₂+"],
-      "formulas": ["C₇H₂"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_2+"
+      ],
+      "formulas": [
+        "C7H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 86.95825,
-      "assignments": ["Al₂O₂H+"],
-      "formulas": ["Al₂O₂H"],
-      "families": ["Al-based"],
+      "assignments": [
+        "Al_2O_2H+"
+      ],
+      "formulas": [
+        "Al2O2H"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 87.00119,
-      "assignments": ["C₂H₄O₂Al+", "CH₅OAl₂+"],
-      "formulas": ["C₂H₄O₂Al", "CH₅OAl₂"],
-      "families": ["Al-based", "Al-based"],
+      "assignments": [
+        "C_2H_4O_2Al+"
+      ],
+      "formulas": [
+        "C2H4O2Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 87.00119,
+      "assignments": [
+        "CH_5OAl_2+"
+      ],
+      "formulas": [
+        "CH5OAl2"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 87.01997,
-      "assignments": ["SiC₂H₈Al+"],
-      "formulas": ["SiC₂H₈Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "SiC_2H_8Al+"
+      ],
+      "formulas": [
+        "SiC2H8Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 87.02037,
-      "assignments": ["C₇H₃+"],
-      "formulas": ["C₇H₃"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_3+"
+      ],
+      "formulas": [
+        "C7H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 87.96721,
-      "assignments": ["Al₂O₂H₂+"],
-      "formulas": ["Al₂O₂H₂"],
-      "families": ["Al-based"],
+      "assignments": [
+        "Al_2O_2H_2+"
+      ],
+      "formulas": [
+        "Al2O2H2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 88.02685,
-      "assignments": ["C₇H₄+"],
-      "formulas": ["C₇H₄"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_4+"
+      ],
+      "formulas": [
+        "C7H4"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 88.97782,
-      "assignments": ["Al₂O₂H₃+", "CH₂O₃Al+"],
-      "formulas": ["Al₂O₂H₃", "CH₂O₃Al"],
-      "families": ["Al-based", "Al-based"],
+      "assignments": [
+        "Al_2O_2H_3+"
+      ],
+      "formulas": [
+        "Al2O2H3"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 88.97782,
+      "assignments": [
+        "CH_2O_3Al+"
+      ],
+      "formulas": [
+        "CH2O3Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 89.03683,
-      "assignments": ["C₇H₅+"],
-      "formulas": ["C₇H₅"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_5+"
+      ],
+      "formulas": [
+        "C7H5"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 90.04482,
-      "assignments": ["C₇H₆+"],
-      "formulas": ["C₇H₆"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_6+"
+      ],
+      "formulas": [
+        "C7H6"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 91.05379,
-      "assignments": ["C₇H₇+"],
-      "formulas": ["C₇H₇"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_7+"
+      ],
+      "formulas": [
+        "C7H7"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 92.02522,
-      "assignments": ["C₆H₄O+"],
-      "formulas": ["C₆H₄O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_6H_4O+"
+      ],
+      "formulas": [
+        "C6H4O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 92.0585,
-      "assignments": ["C₇H₈+"],
-      "formulas": ["C₇H₈"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_8+"
+      ],
+      "formulas": [
+        "C7H8"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 92.98937,
-      "assignments": ["C₃H₃Al₂+", "C₄H₂OAl+"],
-      "formulas": ["C₃H₃Al₂", "C₄H₂OAl"],
-      "families": ["Al-based", "Al-based"],
+      "assignments": [
+        "C_3H_3Al_2+"
+      ],
+      "formulas": [
+        "C3H3Al2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 92.98937,
+      "assignments": [
+        "C_4H_2OAl+"
+      ],
+      "formulas": [
+        "C4H2OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 93.03355,
-      "assignments": ["C₆H₅O+"],
-      "formulas": ["C₆H₅O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_6H_5O+"
+      ],
+      "formulas": [
+        "C6H5O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 93.07014,
-      "assignments": ["C₇H₉+"],
-      "formulas": ["C₇H₉"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_9+"
+      ],
+      "formulas": [
+        "C7H9"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 94.03999,
-      "assignments": ["C₅H₇Al+", "C₆H₆O+"],
-      "formulas": ["C₅H₇Al", "C₆H₆O"],
-      "families": ["Al-based", "Organic_oxygen"],
+      "assignments": [
+        "C_5H_7Al+"
+      ],
+      "formulas": [
+        "C5H7Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 94.03999,
+      "assignments": [
+        "C_6H_6O+"
+      ],
+      "formulas": [
+        "C6H6O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 94.96233,
-      "assignments": ["C₂HOAl₂+"],
-      "formulas": ["C₂HOAl₂"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_2HOAl_2+"
+      ],
+      "formulas": [
+        "C2HOAl2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 95.009,
-      "assignments": ["C₄H₄OAl+"],
-      "formulas": ["C₄H₄OAl"],
-      "families": ["Al-based"],
+      "assignments": [
+        "C_4H_4OAl+"
+      ],
+      "formulas": [
+        "C4H4OAl"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 95.0104,
-      "assignments": ["C₅H₃O₂+"],
-      "formulas": ["C₅H₃O₂"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_5H_3O_2+"
+      ],
+      "formulas": [
+        "C5H3O2"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 95.04939,
-      "assignments": ["C₆H₇O+"],
-      "formulas": ["C₆H₇O"],
-      "families": ["Organic_oxygen"],
+      "assignments": [
+        "C_6H_7O+"
+      ],
+      "formulas": [
+        "C6H7O"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 95.08702,
-      "assignments": ["C₇H₁₁+"],
-      "formulas": ["C₇H₁₁"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_7H_11+"
+      ],
+      "formulas": [
+        "C7H11"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 98.0111,
-      "assignments": ["AlO₄H₇+"],
-      "formulas": ["AlO₄H₇"],
-      "families": ["Al-based"],
+      "assignments": [
+        "AlO_4H_7+"
+      ],
+      "formulas": [
+        "AlO4H7"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 98.01122,
-      "assignments": ["C₈H₂+"],
-      "formulas": ["C₈H₂"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_8H_2+"
+      ],
+      "formulas": [
+        "C8H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 98.01143,
-      "assignments": ["SiC₃H₇Al+"],
-      "formulas": ["SiC₃H₇Al"],
-      "families": ["Al-based"],
+      "assignments": [
+        "SiC_3H_7Al+"
+      ],
+      "formulas": [
+        "SiC3H7Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 99.00143,
-      "assignments": ["C₂H₅OAl₂+", "C₃H₄O₂Al+"],
-      "formulas": ["C₂H₅OAl₂", "C₃H₄O₂Al"],
-      "families": ["Al-based", "Al-based"],
+      "assignments": [
+        "C_2H_5OAl_2+"
+      ],
+      "formulas": [
+        "C2H5OAl2"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 99.00143,
+      "assignments": [
+        "C_3H_4O_2Al+"
+      ],
+      "formulas": [
+        "C3H4O2Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 99.01687,
-      "assignments": ["AlO₄H₈+", "SiC₃H₈Al+"],
-      "formulas": ["AlO₄H₈", "SiC₃H₈Al"],
-      "families": ["Al-based", "Al-based"],
+      "assignments": [
+        "AlO_4H_8+"
+      ],
+      "formulas": [
+        "AlO4H8"
+      ],
+      "families": [
+        "Al-based"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list - multiple assignments"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 99.01687,
+      "assignments": [
+        "SiC_3H_8Al+"
+      ],
+      "formulas": [
+        "SiC3H8Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 99.02053,
-      "assignments": ["C₈H₃+"],
-      "formulas": ["C₈H₃"],
-      "families": ["Aromatic_formation"],
+      "assignments": [
+        "C_8H_3+"
+      ],
+      "formulas": [
+        "C8H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "User-provided positive ion list"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 63.0211,
+      "assignment": "-0.244235",
+      "formula": "C_5H_3+ (C5H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 26.981,
+      "assignment": "+0.226668",
+      "formula": "Al+ (Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 74.0121,
+      "assignment": "-0.211537",
+      "formula": "C_6H_2+ (C6H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 98.0114,
+      "assignment": "-0.191927",
+      "formula": "C_8H_2+ (C8H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 87.02,
+      "assignment": "-0.191034",
+      "formula": "C_7H_3+ (C7H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 86.0118,
+      "assignment": "-0.186864",
+      "formula": "C_7H_2+ (C7H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 50.0134,
+      "assignment": "-0.171902",
+      "formula": "C_4H_2+ (C4H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 43.0548,
+      "assignment": "+0.170943",
+      "formula": "C_3H_7+ (C3H7)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 51.0222,
+      "assignment": "-0.153172",
+      "formula": "C_4H_3+ (C4H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 99.0205,
+      "assignment": "-0.134757",
+      "formula": "C_8H_3+ (C8H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 99.0169,
+      "assignment": "-0.128133",
+      "formula": "[3 MATCHES] Click to review",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 78.0448,
+      "assignment": "+0.122258",
+      "formula": "C_6H_6+ (C6H6)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 27.0228,
+      "assignment": "-0.115217",
+      "formula": "C_2H_3+ (C2H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 26.0141,
+      "assignment": "-0.111487",
+      "formula": "C_2H_2+ (C2H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 75.0214,
+      "assignment": "-0.109188",
+      "formula": "C_6H_3+ (C6H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 86.9583,
+      "assignment": "+0.106877",
+      "formula": "Al_2O_2H+ (Al2O2H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 55.0549,
+      "assignment": "+0.106231",
+      "formula": "C_4H_7+ (C4H7)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 37.0056,
+      "assignment": "-0.105320",
+      "formula": "C_3H+ (C3H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 29.0397,
+      "assignment": "+0.105119",
+      "formula": "C_2H_5+ (C2H5)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 38.0161,
+      "assignment": "-0.105091",
+      "formula": "C_3H_2+ (C3H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 57.0707,
+      "assignment": "+0.099257",
+      "formula": "C_4H_9+ (C4H9)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 41.0408,
+      "assignment": "+0.097854",
+      "formula": "C_3H_5+ (C3H5)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 85.0062,
+      "assignment": "-0.079887",
+      "formula": "C_7H+ (C7H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 64.0292,
+      "assignment": "-0.077687",
+      "formula": "C_5H_4+ (C5H4)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 17.0037,
+      "assignment": "+0.396871",
+      "formula": "OH- (OH)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 15.9959,
+      "assignment": "+0.350008",
+      "formula": "O- (O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 53.0044,
+      "assignment": "-0.171921",
+      "formula": "C_3HO- (C3HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 65.0039,
+      "assignment": "-0.158730",
+      "formula": "C_4HO- (C4HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 58.9728,
+      "assignment": "+0.150133",
+      "formula": "AlO_2- (AlO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 42.9774,
+      "assignment": "+0.119586",
+      "formula": "AlO- (AlO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 73.0085,
+      "assignment": "-0.103541",
+      "formula": "C_6H- (C6H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 14.0163,
+      "assignment": "+0.093662",
+      "formula": "CH_2- (CH2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 12.0007,
+      "assignment": "+0.093310",
+      "formula": "C- (C)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 74.9865,
+      "assignment": "-0.091863",
+      "formula": "C_4Al- (C4Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 42.0039,
+      "assignment": "+0.076509",
+      "formula": "CH_3Al- (CH3Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 25.0086,
+      "assignment": "+0.073271",
+      "formula": "C_2H- (C2H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 31.9903,
+      "assignment": "+0.069888",
+      "formula": "O_2- (O2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 44.9994,
+      "assignment": "+0.068877",
+      "formula": "CHO_2- (CHO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 89.0415,
+      "assignment": "-0.063322",
+      "formula": "O_5H_9- (O5H9)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 91.0205,
+      "assignment": "-0.060506",
+      "formula": "C_6H_3O- (C6H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 97.0089,
+      "assignment": "-0.055985",
+      "formula": "C_8H- (C8H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 39.9915,
+      "assignment": "+0.055628",
+      "formula": "CHAl- (CHAl)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 75.0246,
+      "assignment": "-0.055000",
+      "formula": "C_6H_3- (C6H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 89.0042,
+      "assignment": "-0.054515",
+      "formula": "C_6HO- (C6HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 82.0068,
+      "assignment": "-0.054403",
+      "formula": "C_4H_2O_2- (C4H2O2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 55.0207,
+      "assignment": "-0.053691",
+      "formula": "C_3H_3O- (C3H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 68.9988,
+      "assignment": "-0.119820",
+      "formula": "C_3HO_2- (C3HO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 43.0198,
+      "assignment": "-0.106382",
+      "formula": "C_2H_3O- (C2H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 61.0104,
+      "assignment": "-0.104024",
+      "formula": "C_5H- (C5H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 86.0166,
+      "assignment": "-0.102166",
+      "formula": "C_7H_2- (C7H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 63.0262,
+      "assignment": "-0.092914",
+      "formula": "C_5H_3- (C5H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 72.0004,
+      "assignment": "-0.089413",
+      "formula": "C_6- (C6)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 85.0077,
+      "assignment": "-0.084228",
+      "formula": "C_7H- (C7H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 48.0005,
+      "assignment": "-0.083940",
+      "formula": "C_4- (C4)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
     }
   ]
 }

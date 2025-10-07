@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
     QTabWidget, QSplitter, QMenuBar, QMenu, QDialog, QTableWidget,
     QTableWidgetItem, QHeaderView, QAbstractItemView, QInputDialog,
     QListWidget, QListWidgetItem, QLineEdit, QFormLayout, QComboBox,
-    QScrollArea, QFrame
+    QScrollArea, QFrame, QDoubleSpinBox
 )
 from PySide6.QtCore import QThread, Signal, Qt, QSettings
 from PySide6.QtGui import QColor
@@ -38,6 +38,30 @@ import numpy as np
 sys.path.append(str(Path(__file__).parent))
 from simple_tof_sims_pca import SimpleToFSIMSPCA
 from matplotlib_plotting import PCAPlotCanvas, InteractivePCAPlots
+
+# ===== APPLICATION CONSTANTS =====
+class Polarity:
+    """Ion polarity constants - single source of truth for polarity values"""
+    NEGATIVE = "negative"
+    POSITIVE = "positive"
+
+    @staticmethod
+    def display_name(polarity: str) -> str:
+        """Convert internal polarity value to display name"""
+        return {
+            Polarity.NEGATIVE: "Negative Ion",
+            Polarity.POSITIVE: "Positive Ion"
+        }.get(polarity, polarity)
+
+    @staticmethod
+    def from_display_name(display: str) -> str:
+        """Convert display name to internal polarity value"""
+        display_lower = display.lower()
+        if "negative" in display_lower:
+            return Polarity.NEGATIVE
+        elif "positive" in display_lower:
+            return Polarity.POSITIVE
+        return display
 
 
 class FragmentAssignmentDialog(QDialog):
@@ -129,9 +153,7 @@ class FragmentAssignmentDialog(QDialog):
 
     def create_intensity_plot(self):
         """Create a compact matplotlib plot for intensity trends"""
-        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
         from matplotlib.figure import Figure
-        import matplotlib.pyplot as plt
 
         # Create matplotlib figure
         self.intensity_figure = Figure(figsize=(4, 3), dpi=100)
@@ -154,36 +176,78 @@ class FragmentAssignmentDialog(QDialog):
 
         return plot_widget
 
-    def update_intensity_plot(self, dose_data, intensity_data):
-        """Update the intensity trend plot with data"""
+    def update_intensity_plot(self, dose_data, intensity_data, dose_labels=None):
+        """Update the intensity trend plot with data and optional labels"""
         try:
+            print(f"📊 Updating intensity plot with {len(dose_data)} dose points and {len(intensity_data)} intensity points")
+            print(f"   Dose data: {dose_data}")
+            print(f"   Intensity data: {intensity_data}")
+            if dose_labels:
+                print(f"   Dose labels: {dose_labels}")
+
             self.intensity_figure.clear()
             ax = self.intensity_figure.add_subplot(111)
 
             if len(dose_data) > 0 and len(intensity_data) > 0:
-                # Create compact scatter plot with trend line
-                ax.scatter(dose_data, intensity_data, c='steelblue', s=40, alpha=0.7, edgecolors='darkblue')
+                # Sort data by dose value for proper trend line
+                if dose_labels and len(dose_labels) == len(dose_data):
+                    sorted_data = sorted(zip(dose_data, intensity_data, dose_labels))
+                    sorted_doses, sorted_intensities, sorted_labels = zip(*sorted_data)
 
-                # Add trend line if we have enough points
-                if len(dose_data) > 1:
-                    import numpy as np
-                    z = np.polyfit(dose_data, intensity_data, 1)
-                    p = np.poly1d(z)
-                    ax.plot(dose_data, p(dose_data), 'r--', alpha=0.8, linewidth=1.5)
+                    # Use x-positions for plotting but show custom labels
+                    x_positions = list(range(len(sorted_doses)))
 
-                    # Determine trend direction
-                    slope = z[0]
-                    if abs(slope) > max(intensity_data) * 0.01:  # Significant trend
-                        trend_text = "↗ Increasing" if slope > 0 else "↘ Decreasing"
-                        trend_color = "green" if slope > 0 else "red"
-                    else:
-                        trend_text = "→ Stable"
-                        trend_color = "blue"
+                    # Create compact scatter plot
+                    ax.scatter(x_positions, sorted_intensities, c='steelblue', s=40, alpha=0.7, edgecolors='darkblue')
 
-                    ax.text(0.02, 0.98, trend_text, transform=ax.transAxes,
-                           verticalalignment='top', fontsize=9, color=trend_color, weight='bold')
+                    # Add trend line if we have enough points
+                    if len(x_positions) > 1:
+                        import numpy as np
+                        z = np.polyfit(x_positions, sorted_intensities, 1)
+                        p = np.poly1d(z)
+                        ax.plot(x_positions, p(x_positions), 'r--', alpha=0.8, linewidth=1.5)
 
-                ax.set_xlabel('Dose (SQ)', fontsize=9)
+                        # Determine trend direction
+                        slope = z[0]
+                        if abs(slope) > max(sorted_intensities) * 0.01:  # Significant trend
+                            trend_text = "↗ Increasing" if slope > 0 else "↘ Decreasing"
+                            trend_color = "green" if slope > 0 else "red"
+                        else:
+                            trend_text = "→ Stable"
+                            trend_color = "blue"
+
+                        ax.text(0.02, 0.98, trend_text, transform=ax.transAxes,
+                               verticalalignment='top', fontsize=9, color=trend_color, weight='bold')
+
+                    # Set custom x-axis labels
+                    ax.set_xticks(x_positions)
+                    ax.set_xticklabels(sorted_labels, rotation=45, ha='right', fontsize=8)
+                    ax.set_xlabel('Electron Beam Dose', fontsize=9)
+                else:
+                    # Fallback to original behavior
+                    ax.scatter(dose_data, intensity_data, c='steelblue', s=40, alpha=0.7, edgecolors='darkblue')
+
+                    # Add trend line if we have enough points
+                    if len(dose_data) > 1:
+                        import numpy as np
+                        z = np.polyfit(dose_data, intensity_data, 1)
+                        p = np.poly1d(z)
+                        ax.plot(dose_data, p(dose_data), 'r--', alpha=0.8, linewidth=1.5)
+
+                        # Determine trend direction
+                        slope = z[0]
+                        if abs(slope) > max(intensity_data) * 0.01:  # Significant trend
+                            trend_text = "↗ Increasing" if slope > 0 else "↘ Decreasing"
+                            trend_color = "green" if slope > 0 else "red"
+                        else:
+                            trend_text = "→ Stable"
+                            trend_color = "blue"
+
+                        ax.text(0.02, 0.98, trend_text, transform=ax.transAxes,
+                               verticalalignment='top', fontsize=9, color=trend_color, weight='bold')
+
+                    ax.set_xlabel('Dose (SQ)', fontsize=9)
+
                 ax.set_ylabel('Intensity', fontsize=9)
                 ax.tick_params(axis='both', which='major', labelsize=8)
                 ax.grid(True, alpha=0.3)
@@ -198,6 +262,8 @@ class FragmentAssignmentDialog(QDialog):
 
         except Exception as e:
             print(f"Warning: Could not update intensity plot: {e}")
+            import traceback
+            print(f"Traceback: {traceback.format_exc()}")
 
     def create_candidates_tab(self):
         """Create tab showing candidate fragment assignments from database"""
@@ -294,10 +360,16 @@ class FragmentAssignmentDialog(QDialog):
                 mass_index = None
                 min_diff = float('inf')
                 for idx, data_mass in enumerate(raw_data.index):
-                    diff = abs(data_mass - self.mass)
-                    if diff < min_diff:
-                        min_diff = diff
-                        mass_index = idx
+                    try:
+                        # Ensure data_mass is a float
+                        data_mass_float = float(data_mass)
+                        diff = abs(data_mass_float - self.mass)
+                        if diff < min_diff:
+                            min_diff = diff
+                            mass_index = idx
+                    except (ValueError, TypeError):
+                        # Skip non-numeric mass values
+                        continue
 
                 if mass_index is not None and min_diff < 0.001:  # Within 1 mDa
                     actual_mass = raw_data.index[mass_index]
@@ -324,13 +396,24 @@ class FragmentAssignmentDialog(QDialog):
                         "Sample Group", "Mean Intensity", "Std Dev", "Min", "Max"
                     ])
 
-                    # Collect data for plotting
+                    # Collect data for plotting with metadata support
                     dose_data = []
                     intensity_data = []
+                    dose_labels = []
 
                     for row, (dose_id, group) in enumerate(dose_groups):
                         group_samples = group['sample_name'].tolist()
-                        group_intensities = [intensities[sample] for sample in group_samples if sample in intensities.index]
+                        # Safely access intensities with proper error handling
+                        group_intensities = []
+                        for sample in group_samples:
+                            try:
+                                if sample in intensities.index:
+                                    intensity_val = intensities[sample]
+                                    if pd.notna(intensity_val):  # Check for NaN
+                                        group_intensities.append(float(intensity_val))
+                            except (KeyError, ValueError, TypeError):
+                                # Skip problematic intensity values
+                                continue
 
                         if group_intensities:
                             import numpy as np
@@ -339,21 +422,54 @@ class FragmentAssignmentDialog(QDialog):
                             min_int = np.min(group_intensities)
                             max_int = np.max(group_intensities)
 
-                            self.intensity_table.setItem(row, 0, QTableWidgetItem(f"SQ{dose_id}"))
+                            # Determine display label using metadata
+                            if group_samples and hasattr(self.parent_app.pca_analyzer, 'sample_metadata') and 'sample_type' in self.parent_app.pca_analyzer.sample_metadata.columns:
+                                sample_name = group_samples[0]  # Use first sample as representative
+                                sample_mask = self.parent_app.pca_analyzer.sample_metadata['sample_name'] == sample_name
+                                if sample_mask.any():
+                                    sample_meta = self.parent_app.pca_analyzer.sample_metadata.loc[sample_mask].iloc[0]
+                                    sample_type = sample_meta.get('sample_type', 'E-beam Exposed')
+
+                                    if sample_type == 'As-Deposited':
+                                        dose_label = 'As-Deposited'
+                                        dose_value = 0  # For plotting position
+                                    elif sample_type == 'E-beam Exposed':
+                                        dose_value = sample_meta.get('actual_dose', dose_id)
+                                        dose_label = f'{dose_value} μC/cm²'
+                                    else:
+                                        dose_label = f'SQ{dose_id}'
+                                        dose_value = dose_id
+                                else:
+                                    dose_label = f'SQ{dose_id}'
+                                    dose_value = dose_id
+                            else:
+                                dose_label = f'SQ{dose_id}'
+                                dose_value = dose_id
+
+                            self.intensity_table.setItem(row, 0, QTableWidgetItem(dose_label))
                             self.intensity_table.setItem(row, 1, QTableWidgetItem(f"{mean_int:.2e}"))
                             self.intensity_table.setItem(row, 2, QTableWidgetItem(f"{std_int:.2e}"))
                             self.intensity_table.setItem(row, 3, QTableWidgetItem(f"{min_int:.2e}"))
                             self.intensity_table.setItem(row, 4, QTableWidgetItem(f"{max_int:.2e}"))
 
                             # Collect data for plot
-                            dose_data.append(dose_id)
+                            dose_data.append(dose_value)
                             intensity_data.append(mean_int)
+                            dose_labels.append(dose_label)
 
                     self.intensity_table.resizeColumnsToContents()
 
-                    # Update the intensity plot
-                    if hasattr(self, 'update_intensity_plot'):
+                    # Update the intensity plot with labels
+                    print(f"🔍 About to call update_intensity_plot with {len(dose_data)} doses and {len(intensity_data)} intensities")
+                    print(f"🔍 dose_data={dose_data}, intensity_data={intensity_data}, dose_labels={dose_labels}")
+
+                    # Always call update_intensity_plot with the data we collected
+                    if len(dose_data) > 0 and len(dose_labels) == len(dose_data):
+                        self.update_intensity_plot(dose_data, intensity_data, dose_labels)
+                    elif len(dose_data) > 0:
                         self.update_intensity_plot(dose_data, intensity_data)
+                    else:
+                        print("⚠️  No dose data collected for plotting")
 
         except Exception as e:
             print(f"Error populating peak intensities: {e}")
@@ -364,9 +480,11 @@ class FragmentAssignmentDialog(QDialog):
             tolerance_mda = self.tolerance_spin.value()
             tolerance_da = tolerance_mda / 1000.0
 
-            # Get candidate assignments
+            # Get candidate assignments using ppm tolerance
+            # Convert mDa to ppm for this mass
+            tolerance_ppm = (tolerance_da * 1e6) / self.mass
             candidates = self.parent_app.find_multiple_fragment_assignments(
-                self.mass, tolerance=tolerance_da, max_matches=10
+                self.mass, tolerance_ppm=tolerance_ppm, max_matches=10
             )
 
             # Populate candidates table
@@ -464,6 +582,197 @@ class PCAWorker(QThread):
             self.error.emit(str(e))
 
 
+class CustomDoseDialog(QDialog):
+    """Dialog for setting custom dose values and sample types for dose-response analysis"""
+
+    def __init__(self, parent, dose_ids, saved_metadata=None):
+        super().__init__(parent)
+        self.dose_ids = sorted(dose_ids)
+        self.dose_values = {}
+        self.sample_metadata = {}
+        self.saved_metadata = saved_metadata  # Store saved metadata for pre-population
+
+        self.setWindowTitle("Configure Sample Metadata")
+        self.setModal(True)
+        self.resize(600, 500)
+
+        layout = QVBoxLayout(self)
+
+        # Instructions
+        instructions = QLabel(
+            "Configure sample types and dose values for each dose group.\n"
+            "• As-Deposited: Control samples (dose = 0)\n"
+            "• E-Beam Exposed: Samples with electron beam exposure\n"
+            "• Excluded: Samples to exclude from analysis"
+        )
+        instructions.setWordWrap(True)
+        layout.addWidget(instructions)
+
+        # Create table for dose configuration
+        self.config_table = QTableWidget()
+        self.config_table.setRowCount(len(self.dose_ids))
+        self.config_table.setColumnCount(3)
+        self.config_table.setHorizontalHeaderLabels(["Dose Group", "Sample Type", "Dose Value (μC/cm²)"])
+
+        # Configure table
+        header = self.config_table.horizontalHeader()
+        header.resizeSection(0, 100)  # Dose Group
+        header.resizeSection(1, 200)  # Sample Type
+        header.resizeSection(2, 200)  # Dose Value
+
+        self.sample_type_combos = {}
+        self.dose_value_inputs = {}
+
+        # Extract saved dose values if available
+        saved_dose_values = {}
+        saved_sample_types = {}
+        if saved_metadata and 'custom_dose_values' in saved_metadata and 'metadata' in saved_metadata:
+            saved_dose_values = saved_metadata['custom_dose_values']
+            # Extract sample types from metadata (check first sample of each dose_id)
+            for sample_name, sample_meta in saved_metadata['metadata'].items():
+                dose_id_key = str(sample_meta.get('dose_id', sample_name.split('_SQ')[-1].replace('SQ', '')))
+                if dose_id_key not in saved_sample_types:
+                    saved_sample_types[dose_id_key] = sample_meta.get('sample_type', 'E-Beam Exposed')
+
+        # Populate table
+        for row, dose_id in enumerate(self.dose_ids):
+            # Dose group label
+            self.config_table.setItem(row, 0, QTableWidgetItem(f"SQ{dose_id}"))
+
+            # Sample type dropdown
+            sample_type_combo = QComboBox()
+            sample_type_combo.addItems(["E-Beam Exposed", "As-Deposited", "Excluded"])
+
+            # Check if we have saved sample type for this dose_id
+            dose_id_str = str(dose_id)
+            if dose_id_str in saved_sample_types:
+                saved_type = saved_sample_types[dose_id_str]
+                sample_type_combo.setCurrentText(saved_type)
+                print(f"   Pre-populating SQ{dose_id}: {saved_type}")
+            else:
+                # Set default based on dose_id (SQ0 = As-Deposited, others = E-Beam Exposed)
+                if dose_id == 0:
+                    sample_type_combo.setCurrentText("As-Deposited")
+                else:
+                    sample_type_combo.setCurrentText("E-Beam Exposed")
+
+            sample_type_combo.currentTextChanged.connect(lambda text, d_id=dose_id: self.on_sample_type_changed(d_id, text))
+            self.config_table.setCellWidget(row, 1, sample_type_combo)
+            self.sample_type_combos[dose_id] = sample_type_combo
+
+            # Dose value input
+            dose_input = QDoubleSpinBox()
+            dose_input.setRange(0.0, 100000.0)
+            dose_input.setDecimals(2)
+            dose_input.setSuffix(" μC/cm²")
+
+            # Check if we have saved dose value for this dose_id
+            if dose_id_str in saved_dose_values:
+                saved_dose = float(saved_dose_values[dose_id_str])
+                dose_input.setValue(saved_dose)
+                print(f"   Pre-populating SQ{dose_id} dose: {saved_dose}")
+                # Enable/disable based on sample type
+                if dose_id_str in saved_sample_types and saved_sample_types[dose_id_str] == "As-Deposited":
+                    dose_input.setEnabled(False)
+            else:
+                # Set default dose value
+                if dose_id == 0:
+                    dose_input.setValue(0.0)
+                    dose_input.setEnabled(False)  # Disabled for As-Deposited
+                else:
+                    dose_input.setValue(dose_id * 1000.0)  # Default scaling
+
+            self.config_table.setCellWidget(row, 2, dose_input)
+            self.dose_value_inputs[dose_id] = dose_input
+
+        layout.addWidget(self.config_table)
+
+        # Buttons
+        button_layout = QHBoxLayout()
+
+        # Reset button
+        reset_btn = QPushButton("Reset to Defaults")
+        reset_btn.clicked.connect(self.reset_to_defaults)
+        button_layout.addWidget(reset_btn)
+
+        # Cancel and OK buttons
+        button_layout.addStretch()
+        cancel_btn = QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.reject)
+        button_layout.addWidget(cancel_btn)
+
+        ok_btn = QPushButton("Save Configuration")
+        ok_btn.clicked.connect(self.accept_configuration)
+        ok_btn.setDefault(True)
+        button_layout.addWidget(ok_btn)
+
+        layout.addLayout(button_layout)
+
+    def on_sample_type_changed(self, dose_id, sample_type):
+        """Handle sample type change - enable/disable dose input"""
+        dose_input = self.dose_value_inputs[dose_id]
+
+        if sample_type == "As-Deposited":
+            dose_input.setValue(0.0)
+            dose_input.setEnabled(False)
+        elif sample_type == "Excluded":
+            dose_input.setEnabled(False)
+        else:  # E-Beam Exposed
+            dose_input.setEnabled(True)
+            if dose_input.value() == 0.0:
+                dose_input.setValue(dose_id * 1000.0)  # Default scaling
+
+    def reset_to_defaults(self):
+        """Reset all inputs to default values"""
+        for dose_id in self.dose_ids:
+            combo = self.sample_type_combos[dose_id]
+            dose_input = self.dose_value_inputs[dose_id]
+
+            if dose_id == 0:
+                combo.setCurrentText("As-Deposited")
+                dose_input.setValue(0.0)
+                dose_input.setEnabled(False)
+            else:
+                combo.setCurrentText("E-Beam Exposed")
+                dose_input.setValue(dose_id * 1000.0)
+                dose_input.setEnabled(True)
+
+    def get_sample_metadata(self):
+        """Get the configured sample metadata"""
+        return self.sample_metadata.copy()
+
+    def accept_configuration(self):
+        """Validate and accept the configuration"""
+        try:
+            # Clear previous data
+            self.dose_values = {}
+            self.sample_metadata = {}
+
+            # Collect configuration for each dose group
+            for dose_id in self.dose_ids:
+                sample_type = self.sample_type_combos[dose_id].currentText()
+                dose_value = self.dose_value_inputs[dose_id].value()
+
+                # Store dose value for plotting
+                self.dose_values[dose_id] = dose_value
+
+                # Store metadata for each sample in this dose group
+                # We'll need sample names from the parent to create full metadata
+                self.sample_metadata[dose_id] = {
+                    'sample_type': sample_type,
+                    'dose': dose_value,
+                    'dose_units': 'μC/cm²',
+                    'include': sample_type != 'Excluded',
+                    'notes': ''
+                }
+
+            self.accept()
+
+        except Exception as e:
+            QMessageBox.warning(self, "Configuration Error",
+                              f"Error in configuration: {e}")
+
+
 class ToFSIMSPCAApp(QMainWindow):
     """Main PySide6 ToF-SIMS PCA Application with Matplotlib"""
     
@@ -471,7 +780,13 @@ class ToFSIMSPCAApp(QMainWindow):
         super().__init__()
         self.pca_analyzer = None
         self.pca_completed = False
-        
+        self.worker = None  # Initialize worker thread reference
+
+        # Multi-ion data management
+        from multi_ion_manager import MultiIonDataManager
+        self.multi_ion_manager = MultiIonDataManager()
+        self.dual_ion_mode = False  # Track if both ion modes are available
+
         # Group-based sample management state
         self.selected_patterns = set()  # Track which patterns are selected
         self.selected_squares = set()   # Track which squares are selected
@@ -490,6 +805,7 @@ class ToFSIMSPCAApp(QMainWindow):
         # Initialize database protection and pending assignments
         self.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.pending_assignments = []
+        self.user_confirmed_assignments = {}  # Store user-confirmed assignments by m/z
         self.initialize_database_protection()
 
         # Create UI
@@ -497,7 +813,60 @@ class ToFSIMSPCAApp(QMainWindow):
         self.create_menu_bar()
 
         print("🚀 PySide6 ToF-SIMS PCA Application (Matplotlib) Initialized")
-    
+
+    def closeEvent(self, event):
+        """Handle application close event with proper cleanup"""
+        print("🔄 Closing application...")
+
+        try:
+            # Stop any running worker threads
+            if hasattr(self, 'worker') and self.worker is not None:
+                if self.worker.isRunning():
+                    print("   Stopping worker thread...")
+                    self.worker.terminate()
+                    self.worker.wait(3000)  # Wait up to 3 seconds
+                    if self.worker.isRunning():
+                        print("   Force killing worker thread...")
+                        self.worker.kill()
+                self.worker.deleteLater()
+                self.worker = None
+
+            # Clean up matplotlib figures and canvases
+            # Close all matplotlib figures
+            plt.close('all')
+
+            # Clean up main plot canvas
+            if hasattr(self, 'plot_canvas'):
+                self.plot_canvas.close()
+
+            # Clean up any other matplotlib canvases
+            for attr_name in dir(self):
+                if 'canvas' in attr_name.lower():
+                    canvas = getattr(self, attr_name)
+                    if hasattr(canvas, 'close'):
+                        canvas.close()
+                    elif hasattr(canvas, 'deleteLater'):
+                        canvas.deleteLater()
+
+            # Save settings
+            if hasattr(self, 'settings'):
+                self.settings.sync()
+
+            print("   ✅ Cleanup completed")
+
+        except Exception as e:
+            print(f"   ⚠️ Error during cleanup: {e}")
+
+        # Accept the close event
+        event.accept()
+
+        # Ensure proper Qt cleanup
+        if hasattr(self, 'deleteLater'):
+            self.deleteLater()
+
+        # Quit the application completely
+        QApplication.instance().quit()
+
     def init_ui(self):
         """Initialize the user interface"""
         # Central widget with splitter
@@ -608,28 +977,45 @@ class ToFSIMSPCAApp(QMainWindow):
         """Create data loading section"""
         group = QGroupBox("📁 Data Loading")
         layout = QVBoxLayout(group)
-        
+
         # File selection
         file_layout = QHBoxLayout()
         self.file_label = QLabel("No file selected")
         self.browse_button = QPushButton("Browse...")
         self.browse_button.clicked.connect(self.browse_file)
-        
+
         file_layout.addWidget(QLabel("Data file:"))
         file_layout.addWidget(self.file_label)
         file_layout.addWidget(self.browse_button)
-        
+
         layout.addLayout(file_layout)
-        
+
         # Default file button
         default_button = QPushButton("Load Default Data")
         default_button.clicked.connect(self.load_default_data)
         layout.addWidget(default_button)
-        
+
+        # Polarity selection for multi-ion mode
+        polarity_layout = QHBoxLayout()
+        polarity_layout.addWidget(QLabel("Ion Mode:"))
+
+        self.polarity_combo = QComboBox()
+        self.polarity_combo.addItem("Negative Ion", "negative")
+        self.polarity_combo.addItem("Positive Ion", "positive")
+        self.polarity_combo.setCurrentIndex(0)  # Default to negative
+        self.polarity_combo.currentTextChanged.connect(self.on_polarity_changed)
+        self.polarity_combo.setEnabled(False)  # Disabled until dual data is loaded
+        self.polarity_combo.setToolTip("Switch between negative and positive ion modes")
+
+        polarity_layout.addWidget(self.polarity_combo)
+        polarity_layout.addStretch()
+
+        layout.addLayout(polarity_layout)
+
         # Status
         self.data_status = QLabel("Ready to load data")
         layout.addWidget(self.data_status)
-        
+
         parent_layout.addWidget(group)
     
     def create_sample_management_section(self, parent_layout):
@@ -716,27 +1102,17 @@ class ToFSIMSPCAApp(QMainWindow):
         self.sqrt_checkbox.setChecked(True)
         self.sqrt_checkbox.setToolTip("Stabilizes variance for count data")
 
-        self.mean_checkbox = QCheckBox("Mean Center")
-        self.mean_checkbox.setChecked(True)
-        self.mean_checkbox.setToolTip("Required for covariance-based PCA")
-
         self.pareto_checkbox = QCheckBox("Pareto Scale")
         self.pareto_checkbox.setChecked(True)
         self.pareto_checkbox.setToolTip("Balances large vs small peaks")
 
-        self.filter_cl_checkbox = QCheckBox("Filter Cl peaks")
-        self.filter_cl_checkbox.setChecked(False)
-        self.filter_cl_checkbox.setToolTip("Remove Cl- peaks (m/z 34.971 and 36.968) before PCA")
-
-        self.filter_si_checkbox = QCheckBox("Filter Si peaks")
-        self.filter_si_checkbox.setChecked(False)
-        self.filter_si_checkbox.setToolTip("Remove Si+ peaks (m/z 27.984 and related) before PCA")
+        self.filter_contamination_checkbox = QCheckBox("Filter contamination peaks")
+        self.filter_contamination_checkbox.setChecked(False)
+        self.filter_contamination_checkbox.setToolTip("Remove all contamination peaks (Cl, Si, etc.) from database before PCA")
 
         layout.addWidget(self.sqrt_checkbox, 0, 0)
-        layout.addWidget(self.mean_checkbox, 0, 1)
-        layout.addWidget(self.pareto_checkbox, 1, 0)
-        layout.addWidget(self.filter_cl_checkbox, 1, 1)
-        layout.addWidget(self.filter_si_checkbox, 2, 0)
+        layout.addWidget(self.pareto_checkbox, 0, 1)
+        layout.addWidget(self.filter_contamination_checkbox, 1, 0)
 
         parent_layout.addWidget(group)
     
@@ -827,17 +1203,16 @@ class ToFSIMSPCAApp(QMainWindow):
         self.assignment_widget = self.create_fragment_assignment_tab()
         self.plot_tabs.addTab(self.assignment_widget, "Fragment Assignment")
 
-        # Individual Fragment Trends tab
-        self.individual_trends_widget = self.create_individual_fragment_trends_tab()
-        self.plot_tabs.addTab(self.individual_trends_widget, "Fragment Trends")
-
-        # Familial Trends tab
-        self.familial_trends_widget = self.create_familial_trends_tab()
-        self.plot_tabs.addTab(self.familial_trends_widget, "Familial Trends")
-
-        # Database Management tab
+        # Database Management tab (keep for future enhancement)
         self.database_mgmt_widget = self.create_database_management_tab()
         self.plot_tabs.addTab(self.database_mgmt_widget, "🗃️ Database Management")
+
+        # ===== REMOVED UNUSED TABS =====
+        # The following tabs were removed to reduce code complexity:
+        # - Group Analysis (lines 2515-2616) - Not actively used
+        # - Fragment Trends (lines 2617-2682) - Not actively used, had duplicate polarity selector
+        # - Familial Trends (lines 2683-2766) - Not actively used
+        # Tab creation methods and supporting code remain below (commented) for potential future use
 
         layout.addWidget(self.plot_tabs)
         parent_layout.addWidget(group)
@@ -975,26 +1350,279 @@ class ToFSIMSPCAApp(QMainWindow):
             QMessageBox.warning(self, "Warning", f"Default file not found: {default_path}")
     
     def load_data_file(self, file_path):
-        """Load data from file"""
+        """Load data from file with multi-ion support"""
         try:
             self.data_status.setText("Loading data...")
-            
-            # Initialize PCA analyzer
-            self.pca_analyzer = SimpleToFSIMSPCA(file_path)
-            self.pca_analyzer.load_data()
-            
+
+            # Clear user-confirmed assignments when loading new file
+            self.user_confirmed_assignments.clear()
+
+            # Try to load both ion modes
+            negative_success, positive_success = self.multi_ion_manager.load_data_pair(file_path)
+
+            # If only one file loaded, ask user to confirm polarity
+            if (negative_success or positive_success) and not (negative_success and positive_success):
+                # Determine what the system detected
+                detected_polarity = "negative" if negative_success else "positive"
+
+                # Ask user to confirm or correct the polarity
+                polarity_dialog = QMessageBox(self)
+                polarity_dialog.setWindowTitle("Confirm Ion Mode")
+                polarity_dialog.setText(f"The system detected this as <b>{detected_polarity.upper()}</b> ion data.\n\n"
+                                       "Is this correct?")
+                polarity_dialog.setInformativeText("This affects fragment assignment and analysis.\n"
+                                                  "Choose the correct ion mode for your data.")
+                polarity_dialog.setIcon(QMessageBox.Question)
+
+                # Add custom buttons
+                correct_btn = polarity_dialog.addButton("Correct", QMessageBox.AcceptRole)
+                negative_btn = polarity_dialog.addButton("Use Negative", QMessageBox.ActionRole)
+                positive_btn = polarity_dialog.addButton("Use Positive", QMessageBox.ActionRole)
+                polarity_dialog.setDefaultButton(correct_btn)
+
+                polarity_dialog.exec()
+                clicked_button = polarity_dialog.clickedButton()
+
+                # Determine user's choice
+                if clicked_button == negative_btn:
+                    user_polarity = "negative"
+                elif clicked_button == positive_btn:
+                    user_polarity = "positive"
+                else:  # Correct button
+                    user_polarity = detected_polarity
+
+                print(f"🔍 Polarity confirmation: detected={detected_polarity}, user_choice={user_polarity}")
+
+                # If user chose different polarity than detected, we need to reload
+                if user_polarity != detected_polarity:
+                    print(f"🔄 User specified {user_polarity} ion mode (detected: {detected_polarity})")
+                    # Force load as the specified polarity (store only in multi_ion_manager)
+                    if user_polarity == "negative":
+                        analyzer = SimpleToFSIMSPCA(file_path)
+                        analyzer.load_data()
+                        self.multi_ion_manager.negative_analyzer = analyzer
+                        self.multi_ion_manager.negative_loaded = True
+                        negative_success = True
+                        positive_success = False
+                    else:
+                        analyzer = SimpleToFSIMSPCA(file_path)
+                        analyzer.load_data()
+                        self.multi_ion_manager.positive_analyzer = analyzer
+                        self.multi_ion_manager.positive_loaded = True
+                        positive_success = True
+                        negative_success = False
+                else:
+                    # User confirmed detection is correct - ensure success flags match
+                    print(f"✅ User confirmed {user_polarity} ion mode")
+                    if user_polarity == "negative":
+                        negative_success = True
+                        positive_success = False
+                    else:
+                        positive_success = True
+                        negative_success = False
+
+
+            if negative_success or positive_success:
+                # Enable dual-ion mode if both are loaded
+                self.dual_ion_mode = negative_success and positive_success
+
+                if self.dual_ion_mode:
+                    # Both ion modes available - enable switching
+                    self.polarity_combo.setEnabled(True)
+                    available_polarities = self.multi_ion_manager.get_available_polarities()
+                    print(f"🔄 Dual-ion mode enabled: {available_polarities}")
+
+                    # Set initial active analyzer (prefer negative)
+                    if "negative" in available_polarities:
+                        self.multi_ion_manager.set_active_polarity("negative")
+                        self.polarity_combo.setCurrentIndex(0)
+                    else:
+                        self.multi_ion_manager.set_active_polarity("positive")
+                        self.polarity_combo.setCurrentIndex(1)
+                else:
+                    # Single ion mode - disable combo and show informative text
+                    self.polarity_combo.setEnabled(False)
+                    if negative_success:
+                        self.multi_ion_manager.set_active_polarity("negative")
+                        self.polarity_combo.setCurrentIndex(0)
+                        self.polarity_combo.setToolTip("Single-ion mode: Negative ion data loaded\n(Positive companion file not found)")
+                        print(f"📊 Single-ion mode: Negative ion data loaded")
+                    else:
+                        self.multi_ion_manager.set_active_polarity("positive")
+                        self.polarity_combo.setCurrentIndex(1)
+                        self.polarity_combo.setToolTip("Single-ion mode: Positive ion data loaded\n(Negative companion file not found)")
+                        print(f"📊 Single-ion mode: Positive ion data loaded")
+
+                    # Debug: verify combo state
+
+                # Get the active analyzer
+                self.pca_analyzer = self.multi_ion_manager.get_active_analyzer()
+
+                # Final verification: ensure UI matches active polarity
+                actual_polarity = self.multi_ion_manager.active_polarity
+                if (actual_polarity == "negative" and self.polarity_combo.currentIndex() != 0) or \
+                   (actual_polarity == "positive" and self.polarity_combo.currentIndex() != 1):
+                    print(f"⚠️  WARNING: Combo box mismatch! Correcting...")
+                    self.polarity_combo.setCurrentIndex(0 if actual_polarity == "negative" else 1)
+            else:
+                # Fallback to single-file loading
+                print("⚠️ Multi-ion loading failed, falling back to single-file mode")
+                self.pca_analyzer = SimpleToFSIMSPCA(file_path)
+                self.pca_analyzer.load_data()
+                self.dual_ion_mode = False
+                self.polarity_combo.setEnabled(False)
+
+            # Prompt for custom dose values if doses are detected
+            if 'dose_id' in self.pca_analyzer.sample_metadata.columns:
+                dose_ids = sorted(self.pca_analyzer.sample_metadata['dose_id'].unique())
+
+                # Try to load existing metadata first
+                saved_metadata = self.pca_analyzer.load_metadata(file_path)
+
+                if saved_metadata and 'metadata' in saved_metadata and 'custom_dose_values' in saved_metadata:
+                    # Metadata found - apply it automatically
+                    print(f"📄 Found saved metadata for this file")
+
+                    # Apply metadata to analyzer
+                    self.pca_analyzer.apply_metadata(saved_metadata)
+                    self.pca_analyzer.set_custom_dose_values(saved_metadata['custom_dose_values'])
+
+                    status_msg = f"✅ Loaded: {len(self.pca_analyzer.mass_values)} masses, {len(self.pca_analyzer.raw_data.columns)} samples (metadata loaded)"
+                    self.data_status.setText(status_msg)
+
+                    # Show info that metadata was loaded, with option to reconfigure
+                    reply = QMessageBox.question(
+                        self,
+                        "Metadata Loaded",
+                        f"Found saved dose configuration for this file.\n\n"
+                        f"Last modified: {saved_metadata.get('last_modified', 'Unknown')}\n"
+                        f"{len(dose_ids)} dose levels configured\n\n"
+                        "Would you like to reconfigure the dose assignments?",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                        QMessageBox.StandardButton.No
+                    )
+
+                    if reply == QMessageBox.StandardButton.Yes:
+                        # User wants to reconfigure - show dialog with saved values
+                        print(f"🔧 Opening dose dialog with saved metadata for reconfiguration")
+                        dose_dialog = CustomDoseDialog(self, dose_ids, saved_metadata=saved_metadata)
+                        if dose_dialog.exec() == QDialog.DialogCode.Accepted:
+                            # Get configured metadata
+                            dose_metadata = dose_dialog.get_sample_metadata()
+                            dose_values = dose_dialog.dose_values
+
+                            # Create sample-level metadata dictionary
+                            sample_metadata_dict = {}
+                            for sample_name in self.pca_analyzer.sample_metadata['sample_name']:
+                                # Extract dose_id from sample metadata
+                                sample_mask = self.pca_analyzer.sample_metadata['sample_name'] == sample_name
+                                dose_id = self.pca_analyzer.sample_metadata.loc[sample_mask, 'dose_id'].iloc[0]
+
+                                if dose_id in dose_metadata:
+                                    sample_metadata_dict[sample_name] = dose_metadata[dose_id].copy()
+                                    sample_metadata_dict[sample_name]['square_id'] = sample_name
+
+                            # Apply metadata to analyzer
+                            self.pca_analyzer.set_custom_dose_values(dose_values)
+
+                            # Create metadata structure and apply it
+                            metadata = {
+                                'metadata': sample_metadata_dict,
+                                'custom_dose_values': dose_values
+                            }
+                            self.pca_analyzer.apply_metadata(metadata)
+
+                            # Save updated metadata to file
+                            success = self.pca_analyzer.save_metadata(file_path, sample_metadata_dict, dose_values)
+
+                            status_msg = f"✅ Loaded: {len(self.pca_analyzer.mass_values)} masses, {len(self.pca_analyzer.raw_data.columns)} samples"
+                            if success:
+                                status_msg += " (metadata updated)"
+                            else:
+                                status_msg += " (metadata not saved)"
+                            self.data_status.setText(status_msg)
+                else:
+                    # No saved metadata - show dialog for first-time configuration
+                    reply = QMessageBox.question(
+                        self,
+                        "Custom Dose Values",
+                        f"Detected {len(dose_ids)} dose levels: {dose_ids}\n\n"
+                        "Would you like to set custom E-beam dose values (μC/cm²) "
+                        "for dose-response analysis?\n\n"
+                        "Your configuration will be saved for future use.",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                        QMessageBox.StandardButton.Yes
+                    )
+
+                    if reply == QMessageBox.StandardButton.Yes:
+                        dose_dialog = CustomDoseDialog(self, dose_ids)
+                        if dose_dialog.exec() == QDialog.DialogCode.Accepted:
+                            # Get configured metadata
+                            dose_metadata = dose_dialog.get_sample_metadata()
+                            dose_values = dose_dialog.dose_values
+
+                            # Create sample-level metadata dictionary
+                            sample_metadata_dict = {}
+                            for sample_name in self.pca_analyzer.sample_metadata['sample_name']:
+                                # Extract dose_id from sample metadata
+                                sample_mask = self.pca_analyzer.sample_metadata['sample_name'] == sample_name
+                                dose_id = self.pca_analyzer.sample_metadata.loc[sample_mask, 'dose_id'].iloc[0]
+
+                                if dose_id in dose_metadata:
+                                    sample_metadata_dict[sample_name] = dose_metadata[dose_id].copy()
+                                    sample_metadata_dict[sample_name]['square_id'] = sample_name
+
+                            # Apply metadata to analyzer
+                            self.pca_analyzer.set_custom_dose_values(dose_values)
+
+                            # Create metadata structure and apply it
+                            metadata = {
+                                'metadata': sample_metadata_dict,
+                                'custom_dose_values': dose_values
+                            }
+                            self.pca_analyzer.apply_metadata(metadata)
+
+                            # Save metadata to file
+                            success = self.pca_analyzer.save_metadata(file_path, sample_metadata_dict, dose_values)
+
+                            status_msg = f"✅ Loaded: {len(self.pca_analyzer.mass_values)} masses, {len(self.pca_analyzer.raw_data.columns)} samples"
+                            if success:
+                                status_msg += " (metadata saved)"
+                            else:
+                                status_msg += " (metadata not saved)"
+                            self.data_status.setText(status_msg)
+                        else:
+                            self.data_status.setText(
+                                f"✅ Loaded: {len(self.pca_analyzer.mass_values)} masses, "
+                                f"{len(self.pca_analyzer.raw_data.columns)} samples (default configuration)"
+                            )
+                    else:
+                        self.data_status.setText(
+                            f"✅ Loaded: {len(self.pca_analyzer.mass_values)} masses, "
+                            f"{len(self.pca_analyzer.raw_data.columns)} samples"
+                        )
+            else:
+                # No dose information detected
+                self.data_status.setText(
+                    f"✅ Loaded: {len(self.pca_analyzer.mass_values)} masses, "
+                    f"{len(self.pca_analyzer.raw_data.columns)} samples"
+                )
+
             # Update UI
             self.file_label.setText(os.path.basename(file_path))
-            self.data_status.setText(f"✅ Loaded: {len(self.pca_analyzer.mass_values)} masses, {len(self.pca_analyzer.raw_data.columns)} samples")
             self.run_button.setEnabled(True)
             self.pca_completed = False
-            
+
             # Add to recent files
             self.add_recent_file(file_path)
-            
+
             # Populate sample management table
             self.populate_sample_table()
-            
+
+            # Update group analysis if in dual-ion mode
+            if self.dual_ion_mode and hasattr(self, 'group_combo'):
+                self.update_group_analysis()
+
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to load data: {e}")
             self.data_status.setText("❌ Failed to load data")
@@ -1007,10 +1635,8 @@ class ToFSIMSPCAApp(QMainWindow):
         # Get preprocessing options
         preprocessing_options = {
             'sqrt_transform': self.sqrt_checkbox.isChecked(),
-            'mean_center': self.mean_checkbox.isChecked(),
             'pareto_scale': self.pareto_checkbox.isChecked(),
-            'filter_cl_peaks': self.filter_cl_checkbox.isChecked(),
-            'filter_si_peaks': self.filter_si_checkbox.isChecked()
+            'filter_contamination_peaks': self.filter_contamination_checkbox.isChecked()
         }
 
         # Apply sample selection using proper masking
@@ -1069,9 +1695,13 @@ class ToFSIMSPCAApp(QMainWindow):
         self.export_excel_button.setEnabled(True)
         self.export_plots_button.setEnabled(True)
         self.pca_completed = True
-        
+
         # Display results
         self.display_results()
+
+        # Refresh fragment assignments with new PCA loadings
+        if hasattr(self, 'assignment_table'):
+            self.refresh_assignment_table()
     
     def pca_error(self, error_message):
         """Handle PCA error"""
@@ -1097,11 +1727,12 @@ class ToFSIMSPCAApp(QMainWindow):
         """Update summary text display"""
         summary = self.pca_analyzer.get_results_summary()
         variance_ratios = self.pca_analyzer.explained_variance_ratio * 100
-        
+
         # Get scores and loadings
         scores_df = self.pca_analyzer.get_scores_dataframe()
         loadings_df = self.pca_analyzer.get_loadings_dataframe()
         top_loadings = loadings_df['PC1'].abs().sort_values(ascending=False).head(10)
+
         
         text_summary = f"""ToF-SIMS PCA Analysis Results
 {'=' * 50}
@@ -1240,7 +1871,7 @@ Export: Use export buttons to save data and plots
                             f"{variance_ratios[0]:.2f}",
                             f"{variance_ratios[1]:.2f}" if len(variance_ratios) > 1 else "N/A",
                             f"{variance_ratios[2]:.2f}" if len(variance_ratios) > 2 else "N/A",
-                            f"√Transform: {self.sqrt_checkbox.isChecked()}, Mean Center: {self.mean_checkbox.isChecked()}, Pareto Scale: {self.pareto_checkbox.isChecked()}"
+                            f"√Transform: {self.sqrt_checkbox.isChecked()}, Pareto Scale: {self.pareto_checkbox.isChecked()}"
                         ]
                     }
                     
@@ -1486,10 +2117,54 @@ Export: Use export buttons to save data and plots
             self.update_analysis_button.setStyleSheet("QPushButton { font-weight: bold; color: #d62728; }")
 
     def on_polarity_changed(self):
-        """Handle changes in polarity selection - refresh assignments"""
-        if hasattr(self, 'assignment_table') and self.assignment_table.rowCount() > 0:
-            # If there are assignments shown, refresh them with new polarity
-            self.refresh_assignment_table()
+        """Handle changes in polarity selection for multi-ion mode"""
+        if not self.dual_ion_mode:
+            return  # No action needed in single-ion mode
+
+        # Get the selected polarity
+        selected_polarity = self.polarity_combo.currentData()
+
+        if self.multi_ion_manager.set_active_polarity(selected_polarity):
+            # Successfully switched polarity
+            self.pca_analyzer = self.multi_ion_manager.get_active_analyzer()
+
+            if self.pca_analyzer:
+                # Update UI to reflect the new active analyzer
+                self.update_sample_management()
+
+                # Reset PCA completion status since we switched datasets
+                self.pca_completed = False
+
+                # Update export buttons
+                self.export_excel_button.setEnabled(False)
+                self.export_plots_button.setEnabled(False)
+
+                # Clear any existing plots
+                if hasattr(self, 'plot_canvas'):
+                    self.plot_canvas.figure.clear()
+                    self.plot_canvas.draw()
+
+                # Refresh fragment assignments if PCA has been run
+                if hasattr(self, 'assignment_table') and self.pca_completed:
+                    self.refresh_assignment_table()
+
+                # Update group analysis
+                if hasattr(self, 'group_combo'):
+                    self.update_group_analysis()
+
+                # Update status
+                polarity_label = "Negative" if selected_polarity == "negative" else "Positive"
+                self.data_status.setText(f"✅ Switched to {polarity_label} Ion Mode")
+
+                print(f"🔄 Switched to {polarity_label} ion mode")
+            else:
+                QMessageBox.warning(self, "Switch Failed",
+                                  f"No data available for {selected_polarity} ion mode")
+        else:
+            # Failed to switch - revert combo box to previous selection
+            current_polarity = self.multi_ion_manager.active_polarity
+            index = 0 if current_polarity == "negative" else 1
+            self.polarity_combo.setCurrentIndex(index)
     
     def select_all_samples(self):
         """Select all groups"""
@@ -1568,16 +2243,24 @@ Export: Use export buttons to save data and plots
 
         # Original data is preserved in pca_analyzer.raw_data (immutable)
 
-        # Get sample names from data columns (excluding first column which is masses)
-        sample_names = list(self.pca_analyzer.raw_data.columns)
-        
+        # Get non-excluded samples only
+        if hasattr(self.pca_analyzer, 'get_non_excluded_samples'):
+            non_excluded_samples = self.pca_analyzer.get_non_excluded_samples()
+            sample_names = non_excluded_samples['sample_name'].tolist()
+        else:
+            # Fallback to all samples if no metadata
+            sample_names = list(self.pca_analyzer.raw_data.columns)
+
         # Create pattern and square selection checkboxes
         self.create_pattern_square_checkboxes(sample_names)
-        
-        # Start with all groups selected
+
+        # Start with all non-excluded groups selected
         self.selected_patterns = set(self.pattern_checkboxes.keys())
         self.selected_squares = set(self.square_checkboxes.keys())
-        
+
+        # Update info labels to show exclusions
+        self.update_sample_info_labels()
+
         # Initialize display names to original names
         for pattern in self.pattern_checkboxes.keys():
             if pattern not in self.pattern_names:
@@ -1592,7 +2275,45 @@ Export: Use export buttons to save data and plots
         # Show sample management section
         self.sample_group.setVisible(True)
         self.update_analysis_button.setEnabled(True)
-    
+
+    def update_sample_info_labels(self):
+        """Update info labels to show sample counts and exclusion status"""
+        if not self.pca_analyzer:
+            return
+
+        try:
+            # Get non-excluded samples
+            non_excluded_data = self.pca_analyzer.get_non_excluded_samples()
+            total_samples = len(self.pca_analyzer.sample_metadata)
+            included_samples = len(non_excluded_data)
+            excluded_samples = total_samples - included_samples
+
+            # Update pattern info
+            patterns = set()
+            squares = set()
+            for _, row in non_excluded_data.iterrows():
+                sample_name = row['sample_name']
+                pattern, square = self.parse_sample_name(sample_name)
+                patterns.add(pattern)
+                squares.add(square)
+
+            # Update labels with exclusion info
+            pattern_text = f"Replicates: {len(patterns)} types"
+            if excluded_samples > 0:
+                pattern_text += f" ({excluded_samples} samples excluded)"
+            self.patterns_info.setText(pattern_text)
+
+            square_text = f"Doses: {len(squares)} levels"
+            if excluded_samples > 0:
+                square_text += f" (Total: {included_samples}/{total_samples} samples)"
+            self.squares_info.setText(square_text)
+
+        except Exception as e:
+            print(f"Warning: Could not update sample info labels: {e}")
+            # Fallback to basic labels
+            self.patterns_info.setText("Replicates: Loading...")
+            self.squares_info.setText("Doses: Loading...")
+
     def get_selected_samples(self):
         """Get list of selected samples based on group selection"""
         if not self.pca_analyzer:
@@ -1745,17 +2466,15 @@ Export: Use export buttons to save data and plots
         header.setStyleSheet("font-size: 14px; font-weight: bold; margin: 10px;")
         layout.addWidget(header)
 
-        # Polarity selection
+        # Ion mode info (read-only display - uses main selector)
         polarity_layout = QHBoxLayout()
         polarity_label = QLabel("Ion Mode:")
         polarity_label.setStyleSheet("font-weight: bold;")
         polarity_layout.addWidget(polarity_label)
 
-        self.assignment_polarity_combo = QComboBox()
-        self.assignment_polarity_combo.addItems(["negative", "positive"])
-        self.assignment_polarity_combo.setCurrentText("negative")  # Default to negative ion mode
-        self.assignment_polarity_combo.currentTextChanged.connect(self.on_polarity_changed)
-        polarity_layout.addWidget(self.assignment_polarity_combo)
+        self.assignment_polarity_display = QLabel("(Use main Ion Mode selector above)")
+        self.assignment_polarity_display.setStyleSheet("color: #666; font-style: italic;")
+        polarity_layout.addWidget(self.assignment_polarity_display)
 
         polarity_layout.addStretch()
         layout.addLayout(polarity_layout)
@@ -1774,6 +2493,11 @@ Export: Use export buttons to save data and plots
         save_btn = QPushButton("💾 Save Database")
         save_btn.clicked.connect(self.save_assignments_database)
         button_layout.addWidget(save_btn)
+
+        export_btn = QPushButton("📤 Export Table")
+        export_btn.clicked.connect(self.export_assignment_table)
+        export_btn.setToolTip("Export assignment table to CSV file")
+        button_layout.addWidget(export_btn)
 
         button_layout.addStretch()
         layout.addLayout(button_layout)
@@ -1800,6 +2524,108 @@ Export: Use export buttons to save data and plots
 
         return widget
 
+    def create_group_analysis_tab(self):
+        """Create Individual Group Analysis tab"""
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+
+        # Header
+        header = QLabel("🔬 Individual Group Analysis")
+        header.setStyleSheet("font-size: 14px; font-weight: bold; margin: 10px;")
+        layout.addWidget(header)
+
+        # Description
+        description = QLabel("Analyze fragments in individual sample groups to correlate with FTIR and XPS data")
+        description.setStyleSheet("color: #666; font-style: italic; margin-bottom: 10px;")
+        layout.addWidget(description)
+
+        # Controls section
+        controls_group = QGroupBox("Analysis Controls")
+        controls_layout = QHBoxLayout(controls_group)
+
+        # Sample group selection
+        group_label = QLabel("Sample Group:")
+        self.group_combo = QComboBox()
+        self.group_combo.setMinimumWidth(200)
+        self.group_combo.currentTextChanged.connect(self.update_group_analysis)
+        controls_layout.addWidget(group_label)
+        controls_layout.addWidget(self.group_combo)
+
+        controls_layout.addStretch()
+
+        # Analysis button
+        analyze_btn = QPushButton("🧬 Analyze Group")
+        analyze_btn.clicked.connect(self.run_group_analysis)
+        controls_layout.addWidget(analyze_btn)
+
+        # Export button
+        export_btn = QPushButton("📊 Export Results")
+        export_btn.clicked.connect(self.export_group_analysis)
+        controls_layout.addWidget(export_btn)
+
+        layout.addWidget(controls_group)
+
+        # Results section with side-by-side tables
+        results_group = QGroupBox("Top Fragment Intensities")
+        results_layout = QHBoxLayout(results_group)
+
+        # Negative ion table
+        neg_group = QGroupBox("Negative Ion Mode")
+        neg_layout = QVBoxLayout(neg_group)
+
+        self.neg_group_table = QTableWidget()
+        self.neg_group_table.setColumnCount(4)
+        self.neg_group_table.setHorizontalHeaderLabels(['m/z', 'Mean Intensity', 'Std Dev', 'Assignment'])
+        self.neg_group_table.horizontalHeader().setStretchLastSection(True)
+        self.neg_group_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.neg_group_table.setAlternatingRowColors(True)
+        self.neg_group_table.setSortingEnabled(True)
+        neg_layout.addWidget(self.neg_group_table)
+
+        # Positive ion table
+        pos_group = QGroupBox("Positive Ion Mode")
+        pos_layout = QVBoxLayout(pos_group)
+
+        self.pos_group_table = QTableWidget()
+        self.pos_group_table.setColumnCount(4)
+        self.pos_group_table.setHorizontalHeaderLabels(['m/z', 'Mean Intensity', 'Std Dev', 'Assignment'])
+        self.pos_group_table.horizontalHeader().setStretchLastSection(True)
+        self.pos_group_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.pos_group_table.setAlternatingRowColors(True)
+        self.pos_group_table.setSortingEnabled(True)
+        pos_layout.addWidget(self.pos_group_table)
+
+        # Add tables to results layout
+        results_layout.addWidget(neg_group)
+        results_layout.addWidget(pos_group)
+
+        layout.addWidget(results_group)
+
+        # Statistics summary
+        self.group_stats_text = QTextEdit()
+        self.group_stats_text.setMaximumHeight(120)
+        self.group_stats_text.setReadOnly(True)
+        layout.addWidget(QLabel("Group Statistics:"))
+        layout.addWidget(self.group_stats_text)
+
+        # Visualization section
+        viz_group = QGroupBox("Top Peaks Visualization")
+        viz_layout = QVBoxLayout(viz_group)
+
+        # Create matplotlib plot for group analysis
+        from matplotlib.backends.qt_compat import QtWidgets
+        from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+        from matplotlib.figure import Figure
+
+        self.group_plot_figure = Figure(figsize=(10, 4))
+        self.group_plot_canvas = FigureCanvas(self.group_plot_figure)
+        self.group_plot_canvas.setMaximumHeight(300)
+
+        viz_layout.addWidget(self.group_plot_canvas)
+        layout.addWidget(viz_group)
+
+        return widget
+
     def create_individual_fragment_trends_tab(self):
         """Create Individual Fragment Trends tab"""
         widget = QWidget()
@@ -1819,10 +2645,10 @@ Export: Use export buttons to save data and plots
         self.mz_input.setPlaceholderText("Enter m/z value (e.g., 19.023)")
         input_layout.addRow("m/z Value:", self.mz_input)
 
-        # Polarity selection
-        self.polarity_combo = QComboBox()
-        self.polarity_combo.addItems(["Negative", "Positive"])
-        input_layout.addRow("Ion Mode:", self.polarity_combo)
+        # Polarity selection (for fragment trends analysis)
+        self.fragment_trends_polarity_combo = QComboBox()
+        self.fragment_trends_polarity_combo.addItems(["Negative", "Positive"])
+        input_layout.addRow("Ion Mode:", self.fragment_trends_polarity_combo)
 
         # Element constraints
         elements_group = QGroupBox("Element Constraints")
@@ -1918,6 +2744,24 @@ Export: Use export buttons to save data and plots
 
         button_layout.addStretch()
         layout.addLayout(button_layout)
+
+        # Plot options
+        options_layout = QHBoxLayout()
+
+        # As-Deposited inclusion checkbox
+        self.include_as_deposited_checkbox = QCheckBox("Include As-Deposited samples")
+        self.include_as_deposited_checkbox.setChecked(True)  # Default to include
+        self.include_as_deposited_checkbox.setToolTip("Include As-Deposited (0 dose) samples in dose response plots")
+        options_layout.addWidget(self.include_as_deposited_checkbox)
+
+        # Curve fitting checkbox
+        self.fit_curve_checkbox = QCheckBox("Fit dose response curve")
+        self.fit_curve_checkbox.setChecked(False)  # Default to simple line plot
+        self.fit_curve_checkbox.setToolTip("Fit exponential/sigmoidal curves instead of linear connections")
+        options_layout.addWidget(self.fit_curve_checkbox)
+
+        options_layout.addStretch()
+        layout.addLayout(options_layout)
 
         # Plotting area
         self.familial_trends_canvas = PCAPlotCanvas(widget, width=10, height=8)
@@ -2168,7 +3012,7 @@ Export: Use export buttons to save data and plots
             ax.set_xlabel("Dose Level", fontsize=12)
             ax.set_ylabel("Intensity", fontsize=12)
             ax.set_title("Fragment Intensity Trends", fontsize=14, fontweight='bold')
-            ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+            ax.legend(loc='best', framealpha=0.9)
             ax.grid(True, alpha=0.3)
 
             # Use viridis colormap
@@ -2195,7 +3039,7 @@ Export: Use export buttons to save data and plots
                 return
 
             target_mz = float(mz_text)
-            polarity = self.polarity_combo.currentText()
+            polarity = self.fragment_trends_polarity_combo.currentText()
 
             # Get selected elements
             elements = []
@@ -2275,6 +3119,84 @@ Export: Use export buttons to save data and plots
 
     # New method implementations for the redesigned tabs
 
+    def calculate_fragment_mass(self, formula: str) -> float:
+        """Calculate theoretical mass from molecular formula"""
+        # Atomic masses (most common isotopes)
+        atomic_masses = {
+            'H': 1.007825, 'C': 12.000000, 'N': 14.003074, 'O': 15.994915,
+            'F': 18.998403, 'Na': 22.989769, 'Mg': 23.985042, 'Al': 26.981539,
+            'Si': 27.976927, 'P': 30.973762, 'S': 31.972071, 'Cl': 34.968853,
+            'K': 38.963707, 'Ca': 39.962591, 'Ti': 47.947947, 'Cr': 51.940512,
+            'Mn': 54.938045, 'Fe': 55.934942, 'Ni': 57.935348, 'Cu': 62.929601,
+            'Zn': 63.929147, 'Br': 78.918338, 'I': 126.904468
+        }
+
+        import re
+        total_mass = 0.0
+
+        # Parse formula like "CHAl", "C2H4O", etc.
+        pattern = r'([A-Z][a-z]?)([0-9]*|₀₁₂₃₄₅₆₇₈₉)'
+        matches = re.findall(pattern, formula)
+
+        for element, count_str in matches:
+            if element in atomic_masses:
+                # Handle subscript numbers and regular numbers
+                if count_str == '' or count_str in '₀₁₂₃₄₅₆₇₈₉':
+                    if count_str == '':
+                        count = 1
+                    else:
+                        # Convert subscript to regular number
+                        subscript_map = {'₀':0,'₁':1,'₂':2,'₃':3,'₄':4,'₅':5,'₆':6,'₇':7,'₈':8,'₉':9}
+                        count = sum(subscript_map.get(c, 0) for c in count_str) or 1
+                else:
+                    count = int(count_str) if count_str.isdigit() else 1
+
+                total_mass += atomic_masses[element] * count
+
+        return total_mass
+
+    def validate_database_masses(self) -> dict:
+        """Validate that database masses match calculated masses"""
+        if not hasattr(self, 'fragment_database') or not self.fragment_database:
+            return {'status': 'error', 'message': 'No database loaded'}
+
+        validation_results = {'valid': [], 'invalid': [], 'errors': []}
+
+        for i, fragment in enumerate(self.fragment_database['fragments']):
+            try:
+                db_mass = fragment['mass']
+                formulas = fragment.get('formulas', [fragment.get('formula', '')])
+
+                for formula in formulas:
+                    if formula and formula != 'Unknown':
+                        calculated_mass = self.calculate_fragment_mass(formula)
+                        mass_error_ppm = abs(db_mass - calculated_mass) / db_mass * 1e6
+
+                        if mass_error_ppm > 5.0:  # More than 5 ppm error
+                            validation_results['invalid'].append({
+                                'index': i,
+                                'mass': db_mass,
+                                'formula': formula,
+                                'calculated': calculated_mass,
+                                'error_ppm': mass_error_ppm,
+                                'assignment': fragment.get('assignments', [''])[0]
+                            })
+                        else:
+                            validation_results['valid'].append({
+                                'mass': db_mass,
+                                'formula': formula,
+                                'error_ppm': mass_error_ppm
+                            })
+                        break  # Only check first formula
+            except Exception as e:
+                validation_results['errors'].append({
+                    'index': i,
+                    'error': str(e),
+                    'fragment': fragment
+                })
+
+        return validation_results
+
     def load_fragment_database(self):
         """Load fragment assignment database from JSON file"""
         try:
@@ -2285,6 +3207,17 @@ Export: Use export buttons to save data and plots
                 self.fragment_database = json.load(f)
 
             print(f"✅ Loaded fragment database with {len(self.fragment_database['fragments'])} fragments")
+
+            # Build mass index for fast lookups (group by integer mass)
+            self.fragment_mass_index = {}
+            for fragment in self.fragment_database['fragments']:
+                mass_key = int(fragment['mass'])  # Index by integer part
+                if mass_key not in self.fragment_mass_index:
+                    self.fragment_mass_index[mass_key] = []
+                self.fragment_mass_index[mass_key].append(fragment)
+
+            print(f"📇 Indexed {len(self.fragment_database['fragments'])} fragments into {len(self.fragment_mass_index)} mass buckets")
+
             return True
 
         except Exception as e:
@@ -2293,13 +3226,13 @@ Export: Use export buttons to save data and plots
             return False
 
 
-    def find_multiple_fragment_assignments(self, target_mass: float, tolerance: float = 0.01, polarity: str = None, max_matches: int = 4):
+    def find_multiple_fragment_assignments(self, target_mass: float, tolerance_ppm: float = 55.0, polarity: str = None, max_matches: int = 4):
         """
         Find multiple fragment assignments for a given mass within tolerance
 
         Args:
             target_mass: The target mass to find assignments for
-            tolerance: Mass tolerance in Da
+            tolerance_ppm: Mass tolerance in ppm (default 55 ppm)
             polarity: Ion polarity ('positive' or 'negative')
             max_matches: Maximum number of assignments to return
 
@@ -2309,19 +3242,37 @@ Export: Use export buttons to save data and plots
         if not hasattr(self, 'fragment_database') or not self.fragment_database:
             return []
 
-        # Get polarity from UI if not specified
-        if polarity is None and hasattr(self, 'assignment_polarity_combo'):
-            polarity = self.assignment_polarity_combo.currentText()
+        # Get polarity from single source of truth if not specified
+        if polarity is None:
+            polarity = self.multi_ion_manager.active_polarity
 
         matches = []
 
-        for fragment in self.fragment_database['fragments']:
+        # Convert ppm tolerance to Da tolerance for this specific mass
+        tolerance_da = (tolerance_ppm * target_mass) / 1e6
+
+        # Use mass index for faster lookups (search only nearby mass buckets)
+        target_mass_int = int(target_mass)
+        # Check ±2 Da range to account for tolerance
+        mass_buckets_to_search = [target_mass_int - 1, target_mass_int, target_mass_int + 1]
+
+        fragments_to_check = []
+        if hasattr(self, 'fragment_mass_index') and self.fragment_mass_index:
+            # Fast path: use index
+            for bucket in mass_buckets_to_search:
+                if bucket in self.fragment_mass_index:
+                    fragments_to_check.extend(self.fragment_mass_index[bucket])
+        else:
+            # Fallback: search all fragments
+            fragments_to_check = self.fragment_database['fragments']
+
+        for fragment in fragments_to_check:
             # Filter by polarity if specified
             if polarity and fragment['polarity'] != polarity:
                 continue
 
             mass_error = abs(fragment['mass'] - target_mass)
-            if mass_error <= tolerance:
+            if mass_error <= tolerance_da:
                 # Handle both old (single assignment) and new (multiple assignments) database formats
                 assignments = fragment.get('assignments', [fragment.get('assignment', '')])
                 formulas = fragment.get('formulas', [fragment.get('formula', '')])
@@ -2420,6 +3371,7 @@ Export: Use export buttons to save data and plots
         try:
             # Get top 25 loadings from PCA
             loadings_df = self.pca_analyzer.get_loadings_dataframe()
+
             top_loadings = loadings_df['PC1'].abs().sort_values(ascending=False).head(25)
 
             # Clear and populate table
@@ -2428,8 +3380,15 @@ Export: Use export buttons to save data and plots
             for i, (mass, abs_loading) in enumerate(top_loadings.items()):
                 original_loading = loadings_df.loc[mass, 'PC1']
 
-                # m/z value
-                self.assignment_table.setItem(i, 0, QTableWidgetItem(f"{mass:.4f}"))
+                # m/z value - ensure mass is numeric
+                try:
+                    mass_float = float(mass)
+                    mass_str = f"{mass_float:.4f}"
+                except (ValueError, TypeError) as e:
+                    print(f"❌ Error converting mass to float: {mass} (type={type(mass)}), error={e}")
+                    mass_str = str(mass)
+
+                self.assignment_table.setItem(i, 0, QTableWidgetItem(mass_str))
 
                 # PC1 loading value
                 loading_item = QTableWidgetItem(f"{original_loading:+.6f}")
@@ -2439,51 +3398,78 @@ Export: Use export buttons to save data and plots
                     loading_item.setBackground(QColor(255, 200, 200))  # Light red for negative
                 self.assignment_table.setItem(i, 1, loading_item)
 
-                # Look up ALL possible assignments in database
-                fragment_matches = self.find_multiple_fragment_assignments(mass, tolerance=0.01, max_matches=10)
+                # Check if user has confirmed an assignment for this m/z
+                user_assignment = None
+                for confirmed_mass, assignment in self.user_confirmed_assignments.items():
+                    if abs(confirmed_mass - mass) < 0.0001:  # Match within 0.1 mDa
+                        user_assignment = assignment
+                        break
 
-                if fragment_matches:
-                    num_matches = len(fragment_matches)
-                    if num_matches == 1:
-                        # Single match - show it normally
-                        primary = fragment_matches[0]
-                        assignment_text = f"{primary['assignment']} ({primary['formula']})"
-                        confidence = primary.get('confidence', 'Medium')
-                        notes = f"{primary['family']}, {primary['mass_error_ppm']:.0f}ppm"
-                    else:
-                        # Multiple matches - indicate ambiguity
-                        assignment_text = f"[{num_matches} MATCHES] Click to review"
-                        confidence = "AMBIGUOUS"
-                        notes = f"{num_matches} possible assignments - requires review"
+                if user_assignment:
+                    # Use the user-confirmed assignment
+                    assignment_text = f"{user_assignment['assignment']} ({user_assignment['formula']})"
+                    confidence = user_assignment.get('confidence', 'User Confirmed')
+                    notes = "User confirmed"
 
-                    # Set items with appropriate styling
+                    # Set items with green highlight for confirmed assignments
                     assignment_item = QTableWidgetItem(assignment_text)
+                    assignment_item.setBackground(QColor(200, 255, 200))  # Green for confirmed
                     confidence_item = QTableWidgetItem(confidence)
-
-                    # Highlight ambiguous assignments
-                    if num_matches > 1:
-                        assignment_item.setBackground(QColor(255, 255, 150))  # Yellow for multiple matches
-                        confidence_item.setBackground(QColor(255, 255, 150))
-                        assignment_item.setToolTip(f"Multiple possible assignments found for m/z {mass:.4f}")
+                    confidence_item.setBackground(QColor(200, 255, 200))
 
                     self.assignment_table.setItem(i, 2, assignment_item)
                     self.assignment_table.setItem(i, 3, confidence_item)
-                else:
-                    self.assignment_table.setItem(i, 2, QTableWidgetItem("[Unassigned]"))
-                    self.assignment_table.setItem(i, 3, QTableWidgetItem(""))
-                    notes = f"Rank #{i+1} loading - no database matches"
 
-                # Action button for detailed assignment
-                if fragment_matches and len(fragment_matches) > 1:
-                    assign_btn = QPushButton(f"Review {len(fragment_matches)}")
-                    assign_btn.setToolTip(f"Review {len(fragment_matches)} possible assignments for m/z {mass:.4f}")
-                    assign_btn.setStyleSheet("background-color: #FFE66D; font-weight: bold;")  # Yellow highlight
-                elif fragment_matches:
-                    assign_btn = QPushButton("Confirm")
-                    assign_btn.setToolTip("Confirm single assignment or explore alternatives")
+                    # Button to edit/review the confirmed assignment
+                    assign_btn = QPushButton("✓ Confirmed")
+                    assign_btn.setToolTip("User-confirmed assignment (click to modify)")
+                    assign_btn.setStyleSheet("background-color: #90EE90; font-weight: bold;")  # Light green
                 else:
-                    assign_btn = QPushButton("Assign")
-                    assign_btn.setToolTip("Manually assign this unidentified fragment")
+                    # Look up ALL possible assignments in database with 55 ppm tolerance
+                    fragment_matches = self.find_multiple_fragment_assignments(mass, tolerance_ppm=55.0, max_matches=10)
+
+                    if fragment_matches:
+                        num_matches = len(fragment_matches)
+                        if num_matches == 1:
+                            # Single match - show it normally
+                            primary = fragment_matches[0]
+                            assignment_text = f"{primary['assignment']} ({primary['formula']})"
+                            confidence = primary.get('confidence', 'Medium')
+                            notes = f"{primary['family']}, {primary['mass_error_ppm']:.0f}ppm"
+                        else:
+                            # Multiple matches - indicate ambiguity
+                            assignment_text = f"[{num_matches} MATCHES] Click to review"
+                            confidence = "AMBIGUOUS"
+                            notes = f"{num_matches} possible assignments - requires review"
+
+                        # Set items with appropriate styling
+                        assignment_item = QTableWidgetItem(assignment_text)
+                        confidence_item = QTableWidgetItem(confidence)
+
+                        # Highlight ambiguous assignments
+                        if num_matches > 1:
+                            assignment_item.setBackground(QColor(255, 255, 150))  # Yellow for multiple matches
+                            confidence_item.setBackground(QColor(255, 255, 150))
+                            assignment_item.setToolTip(f"Multiple possible assignments found for m/z {mass:.4f}")
+
+                        self.assignment_table.setItem(i, 2, assignment_item)
+                        self.assignment_table.setItem(i, 3, confidence_item)
+                    else:
+                        self.assignment_table.setItem(i, 2, QTableWidgetItem("[Unassigned]"))
+                        self.assignment_table.setItem(i, 3, QTableWidgetItem(""))
+                        notes = f"Rank #{i+1} loading - no database matches"
+
+                    # Action button for detailed assignment
+                    if fragment_matches and len(fragment_matches) > 1:
+                        assign_btn = QPushButton(f"Review {len(fragment_matches)}")
+                        assign_btn.setToolTip(f"Review {len(fragment_matches)} possible assignments for m/z {mass:.4f}")
+                        assign_btn.setStyleSheet("background-color: #FFE66D; font-weight: bold;")  # Yellow highlight
+                    elif fragment_matches:
+                        assign_btn = QPushButton("Confirm")
+                        assign_btn.setToolTip("Confirm single assignment or explore alternatives")
+                    else:
+                        assign_btn = QPushButton("Assign")
+                        assign_btn.setToolTip("Manually assign this unidentified fragment")
 
                 # Store mass and row in button properties
                 assign_btn.setProperty("mass", mass)
@@ -2495,11 +3481,13 @@ Export: Use export buttons to save data and plots
                 # Notes
                 self.assignment_table.setItem(i, 5, QTableWidgetItem(notes))
 
-            # Count assigned vs unassigned (already computed above)
+            # Count assigned vs unassigned
             assigned_count = sum(1 for i in range(len(top_loadings))
                                if self.assignment_table.item(i, 2).text() != "[Unassigned]")
+            confirmed_count = len([m for m in top_loadings.keys()
+                                  if any(abs(m - cm) < 0.0001 for cm in self.user_confirmed_assignments.keys())])
 
-            print(f"✅ Loaded {len(top_loadings)} top loadings: {assigned_count} assigned, {len(top_loadings)-assigned_count} unassigned")
+            print(f"✅ Loaded {len(top_loadings)} top loadings: {assigned_count} assigned ({confirmed_count} user-confirmed), {len(top_loadings)-assigned_count} unassigned")
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to refresh assignments: {e}")
@@ -2519,6 +3507,13 @@ Export: Use export buttons to save data and plots
             assignment_text = f"{assignment_info['assignment']} ({assignment_info['formula']})"
             confidence = assignment_info.get('confidence', 'User Assigned')
 
+            # Get the m/z value for this row
+            mz_text = self.assignment_table.item(row_index, 0).text()
+            mz_value = float(mz_text)
+
+            # Store the user-confirmed assignment for this m/z
+            self.user_confirmed_assignments[mz_value] = assignment_info.copy()
+
             self.assignment_table.setItem(row_index, 2, QTableWidgetItem(assignment_text))
             self.assignment_table.setItem(row_index, 3, QTableWidgetItem(confidence))
 
@@ -2526,10 +3521,10 @@ Export: Use export buttons to save data and plots
             if 'mass_error_ppm' in assignment_info:
                 notes = f"{assignment_info.get('family', 'Unknown')}, {assignment_info['mass_error_ppm']:.0f}ppm"
             else:
-                notes = "User assigned"
+                notes = "User confirmed"
             self.assignment_table.setItem(row_index, 5, QTableWidgetItem(notes))
 
-            print(f"✅ Updated assignment: m/z {self.assignment_table.item(row_index, 0).text()} → {assignment_text}")
+            print(f"✅ Updated and saved assignment: m/z {mz_text} → {assignment_text}")
 
         except Exception as e:
             QMessageBox.warning(self, "Update Error", f"Failed to update assignment: {e}")
@@ -2630,6 +3625,70 @@ Export: Use export buttons to save data and plots
         except Exception as e:
             QMessageBox.critical(self, "Save Error", f"Failed to save assignments: {e}")
 
+    def export_assignment_table(self):
+        """Export assignment table to CSV file"""
+        try:
+            from PySide6.QtWidgets import QFileDialog
+            import csv
+            import os
+            from datetime import datetime
+
+            if not hasattr(self, 'assignment_table') or self.assignment_table.rowCount() == 0:
+                QMessageBox.information(self, "No Data", "No assignment data to export. Please run PCA and refresh assignments first.")
+                return
+
+            # Get export filename
+            default_filename = f"fragment_assignments_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            filename, _ = QFileDialog.getSaveFileName(
+                self,
+                "Export Assignment Table",
+                os.path.join("outputs", default_filename),
+                "CSV Files (*.csv);;All Files (*)"
+            )
+
+            if not filename:
+                return
+
+            # Create outputs directory if it doesn't exist
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+            # Export table data
+            with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+                writer = csv.writer(csvfile)
+
+                # Write header
+                headers = []
+                for col in range(self.assignment_table.columnCount()):
+                    headers.append(self.assignment_table.horizontalHeaderItem(col).text())
+                writer.writerow(headers)
+
+                # Write data rows
+                for row in range(self.assignment_table.rowCount()):
+                    row_data = []
+                    for col in range(self.assignment_table.columnCount()):
+                        item = self.assignment_table.item(row, col)
+                        if item:
+                            # Skip the Action column (buttons)
+                            if col == 4:  # Action column
+                                widget = self.assignment_table.cellWidget(row, col)
+                                if widget and hasattr(widget, 'text'):
+                                    row_data.append(widget.text())
+                                else:
+                                    row_data.append("Review")
+                            else:
+                                row_data.append(item.text())
+                        else:
+                            row_data.append("")
+                    writer.writerow(row_data)
+
+            QMessageBox.information(self, "Export Successful",
+                                  f"Assignment table exported to:\n{filename}\n\n"
+                                  f"Exported {self.assignment_table.rowCount()} assignments.")
+            print(f"✅ Exported assignment table to {filename}")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Export Error", f"Failed to export assignment table: {e}")
+
     def refresh_fragment_trends_list(self):
         """Refresh the fragment trends list with assigned fragments from database and table"""
         # Clear list
@@ -2710,11 +3769,41 @@ Export: Use export buttons to save data and plots
             working_data, working_metadata = self.pca_analyzer.get_active_data()
             data_subset = working_data.T  # Transpose to get masses as rows, samples as columns
 
-            # Extract dose information from working metadata
+            # Extract dose information from working metadata using new metadata system
             sample_names = list(working_data.columns)
             dose_data = {}
+            dose_labels = {}
+
             for i, sample in enumerate(sample_names):
-                dose_data[sample] = working_metadata.iloc[i]['dose_id'] if 'dose_id' in working_metadata.columns else i
+                sample_row = working_metadata.iloc[i]
+
+                # Get sample type and dose from metadata
+                if hasattr(self.pca_analyzer, 'sample_metadata') and 'sample_type' in self.pca_analyzer.sample_metadata.columns:
+                    # Find the metadata for this sample
+                    sample_mask = self.pca_analyzer.sample_metadata['sample_name'] == sample
+                    if sample_mask.any():
+                        sample_meta = self.pca_analyzer.sample_metadata.loc[sample_mask].iloc[0]
+                        sample_type = sample_meta.get('sample_type', 'E-beam Exposed')
+
+                        if sample_type == 'As-Deposited':
+                            dose_data[sample] = 0  # Assign 0 for sorting
+                            dose_labels[sample] = 'As-Deposited'
+                        elif sample_type == 'E-beam Exposed':
+                            # Use actual dose value if available
+                            dose_val = sample_meta.get('actual_dose', sample_row.get('dose_id', i))
+                            dose_data[sample] = dose_val
+                            dose_labels[sample] = f'{dose_val} μC/cm²'
+                        else:  # Excluded samples shouldn't reach here due to masking
+                            dose_data[sample] = sample_row.get('dose_id', i)
+                            dose_labels[sample] = str(dose_data[sample])
+                    else:
+                        # Fallback to original behavior
+                        dose_data[sample] = sample_row.get('dose_id', i)
+                        dose_labels[sample] = str(dose_data[sample])
+                else:
+                    # Fallback to original behavior
+                    dose_data[sample] = sample_row.get('dose_id', i)
+                    dose_labels[sample] = str(dose_data[sample])
 
             # Create plot
             self.individual_trends_canvas.figure.clear()
@@ -2741,14 +3830,58 @@ Export: Use export buttons to save data and plots
                 if mz in data_subset.index:
                     intensities = data_subset.loc[mz]
                     doses = [dose_data[sample] for sample in sample_names]
+                    labels = [dose_labels[sample] for sample in sample_names]
 
-                    # Sort by dose for plotting
-                    dose_intensity_pairs = list(zip(doses, intensities))
-                    dose_intensity_pairs.sort()
-                    sorted_doses, sorted_intensities = zip(*dose_intensity_pairs)
+                    # Sort by dose for plotting with proper labeling
+                    dose_intensity_pairs = list(zip(doses, intensities, labels, sample_names))
 
-                    ax.plot(sorted_doses, sorted_intensities, 'o-', linewidth=2, markersize=6)
-                    ax.set_xlabel('Dose (arbitrary units)')
+                    # Filter As-Deposited samples if checkbox is unchecked (use familial trends checkbox)
+                    if hasattr(self, 'include_as_deposited_checkbox') and not self.include_as_deposited_checkbox.isChecked():
+                        dose_intensity_pairs = [(d, i, l, s) for d, i, l, s in dose_intensity_pairs if d > 0]
+
+                    if not dose_intensity_pairs:
+                        continue  # Skip this fragment if no data points remain
+
+                    dose_intensity_pairs.sort()  # Sort by dose value
+                    sorted_doses, sorted_intensities, sorted_labels, sorted_samples = zip(*dose_intensity_pairs)
+
+                    # Create x-positions for plotting (0, 1, 2, etc.) but use custom labels
+                    x_positions = list(range(len(sorted_doses)))
+
+                    # Plot data points
+                    ax.scatter(x_positions, sorted_intensities, s=50, alpha=0.8, zorder=3)
+
+                    # Add curve fitting if checkbox is checked (use familial trends checkbox)
+                    if hasattr(self, 'fit_curve_checkbox') and self.fit_curve_checkbox.isChecked() and len(x_positions) >= 3:
+                        try:
+                            import numpy as np
+                            from scipy.optimize import curve_fit
+
+                            # Define exponential saturation model
+                            def exponential_saturation(x, a, b, c):
+                                return a * (1 - np.exp(-b * np.array(x))) + c
+
+                            # Try curve fitting
+                            try:
+                                popt, _ = curve_fit(exponential_saturation, x_positions, sorted_intensities,
+                                                   maxfev=1000, bounds=([-np.inf, 0, -np.inf], [np.inf, np.inf, np.inf]))
+                                x_fit = np.linspace(min(x_positions), max(x_positions), 100)
+                                y_fit = exponential_saturation(x_fit, *popt)
+                                ax.plot(x_fit, y_fit, '--', linewidth=2, alpha=0.8)
+                            except:
+                                # Fallback to linear connection
+                                ax.plot(x_positions, sorted_intensities, '-', linewidth=2, alpha=0.6)
+                        except ImportError:
+                            # scipy not available, fall back to linear
+                            ax.plot(x_positions, sorted_intensities, '-', linewidth=2, alpha=0.6)
+                    else:
+                        # Simple linear connection
+                        ax.plot(x_positions, sorted_intensities, '-', linewidth=2, alpha=0.6)
+
+                    # Set custom x-axis labels
+                    ax.set_xticks(x_positions)
+                    ax.set_xticklabels(sorted_labels, rotation=45, ha='right')
+                    ax.set_xlabel('Electron Beam Dose')
                     ax.set_ylabel('Intensity')
                     ax.set_title(fragment_name, fontsize=10)
                     ax.grid(True, alpha=0.3)
@@ -2841,11 +3974,41 @@ Export: Use export buttons to save data and plots
             working_data, working_metadata = self.pca_analyzer.get_active_data()
             data_subset = working_data.T  # Transpose to get masses as rows, samples as columns
 
-            # Extract dose information from working metadata
+            # Extract dose information from working metadata using new metadata system
             sample_names = list(working_data.columns)
             dose_data = {}
+            dose_labels = {}
+
             for i, sample in enumerate(sample_names):
-                dose_data[sample] = working_metadata.iloc[i]['dose_id'] if 'dose_id' in working_metadata.columns else i
+                sample_row = working_metadata.iloc[i]
+
+                # Get sample type and dose from metadata
+                if hasattr(self.pca_analyzer, 'sample_metadata') and 'sample_type' in self.pca_analyzer.sample_metadata.columns:
+                    # Find the metadata for this sample
+                    sample_mask = self.pca_analyzer.sample_metadata['sample_name'] == sample
+                    if sample_mask.any():
+                        sample_meta = self.pca_analyzer.sample_metadata.loc[sample_mask].iloc[0]
+                        sample_type = sample_meta.get('sample_type', 'E-beam Exposed')
+
+                        if sample_type == 'As-Deposited':
+                            dose_data[sample] = 0  # Assign 0 for sorting
+                            dose_labels[sample] = 'As-Deposited'
+                        elif sample_type == 'E-beam Exposed':
+                            # Use actual dose value if available
+                            dose_val = sample_meta.get('actual_dose', sample_row.get('dose_id', i))
+                            dose_data[sample] = dose_val
+                            dose_labels[sample] = f'{dose_val} μC/cm²'
+                        else:  # Excluded samples shouldn't reach here due to masking
+                            dose_data[sample] = sample_row.get('dose_id', i)
+                            dose_labels[sample] = str(dose_data[sample])
+                    else:
+                        # Fallback to original behavior
+                        dose_data[sample] = sample_row.get('dose_id', i)
+                        dose_labels[sample] = str(dose_data[sample])
+                else:
+                    # Fallback to original behavior
+                    dose_data[sample] = sample_row.get('dose_id', i)
+                    dose_labels[sample] = str(dose_data[sample])
 
             # Create plot
             self.familial_trends_canvas.figure.clear()
@@ -2868,22 +4031,94 @@ Export: Use export buttons to save data and plots
                         else:
                             family_intensities.append(0)
 
-                    # Get doses and sort
+                    # Get doses and sort with proper labeling
                     doses = [dose_data[sample] for sample in sample_names]
-                    dose_intensity_pairs = list(zip(doses, family_intensities))
-                    dose_intensity_pairs.sort()
-                    sorted_doses, sorted_intensities = zip(*dose_intensity_pairs)
+                    labels = [dose_labels[sample] for sample in sample_names]
+                    dose_intensity_pairs = list(zip(doses, family_intensities, labels, sample_names))
 
-                    # Plot with family color
+                    # Filter As-Deposited samples if checkbox is unchecked
+                    if not self.include_as_deposited_checkbox.isChecked():
+                        dose_intensity_pairs = [(d, i, l, s) for d, i, l, s in dose_intensity_pairs if d > 0]
+
+                    if not dose_intensity_pairs:
+                        continue  # Skip this family if no data points remain
+
+                    dose_intensity_pairs.sort()  # Sort by dose value
+                    sorted_doses, sorted_intensities, sorted_labels, sorted_samples = zip(*dose_intensity_pairs)
+
+                    # Plot with family color using proper x-axis positions
                     color = self.chemical_families[family]["color"]
-                    ax.plot(sorted_doses, sorted_intensities, 'o-',
-                           color=color, linewidth=2, markersize=6,
-                           label=f"{family} (n={len(fragments)})")
 
-            ax.set_xlabel('Dose (arbitrary units)')
+                    # Create x-positions for plotting (0, 1, 2, etc.) but use custom labels
+                    x_positions = list(range(len(sorted_doses)))
+
+                    # Plot data points
+                    ax.scatter(x_positions, sorted_intensities, color=color, s=50, alpha=0.8, zorder=3)
+
+                    # Add curve fitting if checkbox is checked
+                    if self.fit_curve_checkbox.isChecked() and len(x_positions) >= 3:
+                        try:
+                            import numpy as np
+                            from scipy.optimize import curve_fit
+
+                            # Define different curve models
+                            def exponential_saturation(x, a, b, c):
+                                """Exponential saturation: y = a * (1 - exp(-b*x)) + c"""
+                                return a * (1 - np.exp(-b * np.array(x))) + c
+
+                            def sigmoidal(x, a, b, c, d):
+                                """Sigmoidal: y = a / (1 + exp(-b*(x-c))) + d"""
+                                return a / (1 + np.exp(-b * (np.array(x) - c))) + d
+
+                            # Try exponential saturation first
+                            try:
+                                popt_exp, _ = curve_fit(exponential_saturation, x_positions, sorted_intensities,
+                                                       maxfev=1000, bounds=([-np.inf, 0, -np.inf], [np.inf, np.inf, np.inf]))
+                                x_fit = np.linspace(min(x_positions), max(x_positions), 100)
+                                y_fit_exp = exponential_saturation(x_fit, *popt_exp)
+                                ax.plot(x_fit, y_fit_exp, '--', color=color, linewidth=2, alpha=0.8,
+                                       label=f"{family} fit (n={len(fragments)})")
+                                print(f"   📈 Fitted exponential saturation for {family}")
+                            except:
+                                # Fallback to sigmoidal
+                                try:
+                                    popt_sig, _ = curve_fit(sigmoidal, x_positions, sorted_intensities, maxfev=1000)
+                                    x_fit = np.linspace(min(x_positions), max(x_positions), 100)
+                                    y_fit_sig = sigmoidal(x_fit, *popt_sig)
+                                    ax.plot(x_fit, y_fit_sig, '--', color=color, linewidth=2, alpha=0.8,
+                                           label=f"{family} fit (n={len(fragments)})")
+                                    print(f"   📈 Fitted sigmoidal for {family}")
+                                except:
+                                    # Fallback to linear connection
+                                    ax.plot(x_positions, sorted_intensities, '-', color=color, linewidth=2, alpha=0.6,
+                                           label=f"{family} (n={len(fragments)})")
+                                    print(f"   📊 Linear connection for {family} (curve fitting failed)")
+                        except ImportError:
+                            # scipy not available, fall back to linear
+                            ax.plot(x_positions, sorted_intensities, '-', color=color, linewidth=2, alpha=0.6,
+                                   label=f"{family} (n={len(fragments)})")
+                            print(f"   📊 Linear connection for {family} (scipy not available)")
+                    else:
+                        # Simple linear connection
+                        ax.plot(x_positions, sorted_intensities, '-', color=color, linewidth=2, alpha=0.6,
+                               label=f"{family} (n={len(fragments)})")
+
+                    # Store the labels for x-axis formatting
+                    if not hasattr(ax, '_dose_labels'):
+                        ax._dose_labels = sorted_labels
+                        ax._x_positions = x_positions
+
+            # Set custom x-axis labels if available
+            if hasattr(ax, '_dose_labels') and hasattr(ax, '_x_positions'):
+                ax.set_xticks(ax._x_positions)
+                ax.set_xticklabels(ax._dose_labels, rotation=45, ha='right')
+                ax.set_xlabel('Electron Beam Dose')
+            else:
+                ax.set_xlabel('Dose (arbitrary units)')
+
             ax.set_ylabel('Average Family Intensity')
             ax.set_title('Chemical Family Dose-Response Trends')
-            ax.legend()
+            ax.legend(loc='best', framealpha=0.9)
             ax.grid(True, alpha=0.3)
 
             self.familial_trends_canvas.draw()
@@ -2969,8 +4204,8 @@ Export: Use export buttons to save data and plots
         else:
             results["Mass Range"] = f"✅ Mass {mass} is within typical range"
 
-        # Check for existing assignments
-        existing = self.find_multiple_fragment_assignments(mass, tolerance=0.001, max_matches=5)
+        # Check for existing assignments with tight tolerance
+        existing = self.find_multiple_fragment_assignments(mass, tolerance_ppm=5.0, max_matches=5)
         if existing:
             results["Existing Assignments"] = f"⚠️ {len(existing)} similar assignments found"
             for ex in existing[:3]:
@@ -3451,19 +4686,264 @@ Export: Use export buttons to save data and plots
         except OSError:
             pass  # Ignore permission errors
 
+    def update_group_analysis(self):
+        """Update group analysis when selection changes"""
+        if not self.dual_ion_mode or not hasattr(self, 'group_combo'):
+            return
+
+        # Update available groups in combo box
+        groups = self.multi_ion_manager.get_sample_groups()
+
+        current_text = self.group_combo.currentText()
+        self.group_combo.clear()
+
+        if groups:
+            self.group_combo.addItems(groups)
+            # Try to restore previous selection
+            index = self.group_combo.findText(current_text)
+            if index >= 0:
+                self.group_combo.setCurrentIndex(index)
+
+    def run_group_analysis(self):
+        """Run analysis for the selected group"""
+        if not self.dual_ion_mode:
+            QMessageBox.warning(self, "Warning", "Dual ion mode not available. Please load data files first.")
+            return
+
+        selected_group = self.group_combo.currentText()
+        if not selected_group:
+            QMessageBox.warning(self, "Warning", "Please select a sample group to analyze.")
+            return
+
+        try:
+            # Update progress
+            self.progress_bar.setValue(10)
+            QApplication.processEvents()
+
+            # Get data for both polarities
+            neg_data = self.multi_ion_manager.get_group_intensity_data(selected_group, "negative")
+            pos_data = self.multi_ion_manager.get_group_intensity_data(selected_group, "positive")
+
+            self.progress_bar.setValue(50)
+            QApplication.processEvents()
+
+            # Update negative ion table
+            if neg_data is not None:
+                self.populate_group_table(self.neg_group_table, neg_data.head(30))
+            else:
+                self.clear_group_table(self.neg_group_table)
+
+            self.progress_bar.setValue(75)
+            QApplication.processEvents()
+
+            # Update positive ion table
+            if pos_data is not None:
+                self.populate_group_table(self.pos_group_table, pos_data.head(30))
+            else:
+                self.clear_group_table(self.pos_group_table)
+
+            # Update statistics
+            summary = self.multi_ion_manager.get_comparison_summary(selected_group)
+            self.update_group_statistics(summary)
+
+            # Update visualization
+            self.update_group_visualization(neg_data, pos_data, selected_group)
+
+            self.progress_bar.setValue(100)
+            QApplication.processEvents()
+
+            # Reset progress bar after delay
+            QTimer.singleShot(1000, lambda: self.progress_bar.setValue(0))
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to analyze group: {str(e)}")
+            self.progress_bar.setValue(0)
+
+    def populate_group_table(self, table, data):
+        """Populate a group analysis table with data"""
+        if data is None or data.empty:
+            self.clear_group_table(table)
+            return
+
+        table.setRowCount(len(data))
+
+        for row, (_, row_data) in enumerate(data.iterrows()):
+            # m/z
+            mz_item = QTableWidgetItem(f"{row_data['mass']:.5f}")
+            mz_item.setTextAlignment(Qt.AlignCenter)
+            table.setItem(row, 0, mz_item)
+
+            # Mean intensity
+            intensity_item = QTableWidgetItem(f"{row_data['mean_intensity']:.2e}")
+            intensity_item.setTextAlignment(Qt.AlignCenter)
+            table.setItem(row, 1, intensity_item)
+
+            # Standard deviation
+            std_item = QTableWidgetItem(f"{row_data['std_intensity']:.2e}")
+            std_item.setTextAlignment(Qt.AlignCenter)
+            table.setItem(row, 2, std_item)
+
+            # Assignment
+            assignment = row_data.get('assignment', 'Unknown')
+            if assignment == 'Unknown' and hasattr(self, 'analyzer') and self.analyzer:
+                # Try to get assignment from existing database
+                assignment = self.analyzer.get_assignment_from_database(row_data['mass'])
+
+            assignment_item = QTableWidgetItem(str(assignment))
+            table.setItem(row, 3, assignment_item)
+
+    def clear_group_table(self, table):
+        """Clear a group analysis table"""
+        table.setRowCount(0)
+
+    def update_group_statistics(self, summary):
+        """Update the group statistics text area"""
+        if not summary:
+            self.group_stats_text.clear()
+            return
+
+        stats_text = f"📊 Analysis Results for: {summary['group_name']}\n\n"
+
+        if summary['negative_peaks'] > 0:
+            stats_text += f"🔵 Negative Ion Mode:\n"
+            stats_text += f"   • Total peaks: {summary['negative_peaks']}\n"
+            stats_text += f"   • Total intensity: {summary['total_negative_intensity']:.2e}\n"
+            if summary['top_negative_peaks']:
+                top_neg = summary['top_negative_peaks'][0]
+                stats_text += f"   • Strongest peak: {top_neg['mass']:.5f} m/z ({top_neg['mean_intensity']:.2e})\n"
+
+        if summary['positive_peaks'] > 0:
+            stats_text += f"\n🔴 Positive Ion Mode:\n"
+            stats_text += f"   • Total peaks: {summary['positive_peaks']}\n"
+            stats_text += f"   • Total intensity: {summary['total_positive_intensity']:.2e}\n"
+            if summary['top_positive_peaks']:
+                top_pos = summary['top_positive_peaks'][0]
+                stats_text += f"   • Strongest peak: {top_pos['mass']:.5f} m/z ({top_pos['mean_intensity']:.2e})\n"
+
+        if summary['negative_peaks'] > 0 and summary['positive_peaks'] > 0:
+            ratio = summary['total_negative_intensity'] / summary['total_positive_intensity']
+            stats_text += f"\n📈 Intensity Ratio (Neg/Pos): {ratio:.2f}"
+
+        self.group_stats_text.setText(stats_text)
+
+    def update_group_visualization(self, neg_data, pos_data, group_name):
+        """Update the group analysis visualization"""
+        if not hasattr(self, 'group_plot_figure'):
+            return
+
+        # Clear previous plot
+        self.group_plot_figure.clear()
+
+        # Create subplot
+        ax = self.group_plot_figure.add_subplot(111)
+
+        # Get top 10 peaks for visualization
+        top_n = 10
+
+        if neg_data is not None and not neg_data.empty:
+            top_neg = neg_data.head(top_n)
+
+            # Create bar plot
+            x_pos = range(len(top_neg))
+            bars = ax.bar(x_pos, top_neg['mean_intensity'],
+                         color='steelblue', alpha=0.7, label='Negative Ion')
+
+            # Add m/z labels
+            ax.set_xticks(x_pos)
+            ax.set_xticklabels([f"{mass:.3f}" for mass in top_neg['mass']],
+                              rotation=45, ha='right')
+
+            # Add intensity values on bars
+            for i, (bar, intensity) in enumerate(zip(bars, top_neg['mean_intensity'])):
+                height = bar.get_height()
+                ax.text(bar.get_x() + bar.get_width()/2., height + height*0.01,
+                       f'{intensity:.1e}', ha='center', va='bottom', fontsize=8)
+
+        ax.set_xlabel('m/z')
+        ax.set_ylabel('Mean Intensity')
+        ax.set_title(f'Top {top_n} Fragment Peaks - {group_name}')
+        ax.grid(True, alpha=0.3)
+
+        # Format y-axis for scientific notation
+        ax.ticklabel_format(style='scientific', axis='y', scilimits=(0,0))
+
+        # Adjust layout
+        self.group_plot_figure.tight_layout()
+
+        # Refresh canvas
+        if hasattr(self, 'group_plot_canvas'):
+            self.group_plot_canvas.draw()
+
+    def export_group_analysis(self):
+        """Export group analysis results to Excel"""
+        selected_group = self.group_combo.currentText()
+        if not selected_group or not self.dual_ion_mode:
+            QMessageBox.warning(self, "Warning", "No group analysis to export.")
+            return
+
+        # Get file path for export
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Export Group Analysis",
+            f"group_analysis_{selected_group.replace(' ', '_').replace('/', '_')}.xlsx",
+            "Excel Files (*.xlsx);;CSV Files (*.csv)"
+        )
+
+        if not file_path:
+            return
+
+        try:
+            # Get data for both polarities
+            neg_data = self.multi_ion_manager.get_group_intensity_data(selected_group, "negative")
+            pos_data = self.multi_ion_manager.get_group_intensity_data(selected_group, "positive")
+
+            if file_path.endswith('.xlsx'):
+                # Export to Excel with multiple sheets
+                with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+                    if neg_data is not None:
+                        neg_data.to_excel(writer, sheet_name='Negative_Ions', index=False)
+                    if pos_data is not None:
+                        pos_data.to_excel(writer, sheet_name='Positive_Ions', index=False)
+
+                    # Add summary sheet
+                    summary = self.multi_ion_manager.get_comparison_summary(selected_group)
+                    summary_df = pd.DataFrame([summary])
+                    summary_df.to_excel(writer, sheet_name='Summary', index=False)
+
+            elif file_path.endswith('.csv'):
+                # Export negative ion data only for CSV
+                if neg_data is not None:
+                    neg_data.to_csv(file_path, index=False)
+                else:
+                    QMessageBox.warning(self, "Warning", "No negative ion data to export.")
+                    return
+
+            QMessageBox.information(self, "Success", f"Group analysis exported to:\n{file_path}")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to export group analysis: {str(e)}")
+
 
 def main():
     """Main application entry point"""
     # Set Qt platform if not already set
     if 'QT_QPA_PLATFORM' not in os.environ:
         os.environ['QT_QPA_PLATFORM'] = 'xcb'
-    
-    # Enable high DPI support
-    QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-    os.environ['QT_ENABLE_HIGHDPI_SCALING'] = '1'
-    os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
-    
-    app = QApplication(sys.argv)
+
+    # Ensure only one instance of QApplication
+    if QApplication.instance() is not None:
+        print("⚠️ QApplication instance already exists. Using existing instance.")
+        app = QApplication.instance()
+    else:
+        # Enable high DPI support BEFORE creating QApplication
+        QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+        os.environ['QT_ENABLE_HIGHDPI_SCALING'] = '1'
+        os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
+
+        app = QApplication(sys.argv)
+
+        # Ensure proper cleanup on exit
+        app.setAttribute(Qt.AA_DontCreateNativeWidgetSiblings, True)
+        app.setAttribute(Qt.AA_DontUseNativeMenuBar, True)
     
     # Set application properties
     app.setApplicationName("ToF-SIMS PCA Analysis (Matplotlib)")
@@ -3530,9 +5010,16 @@ def main():
     print(f"📐 Window size: {adjusted_width}x{adjusted_height} (scale factor: {scale_factor:.2f})")
     
     window.show()
-    
-    # Run application
-    sys.exit(app.exec())
+
+    # Run application with proper cleanup
+    try:
+        exit_code = app.exec()
+    finally:
+        # Force cleanup of the application
+        window.deleteLater()
+        app.deleteLater()
+
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":

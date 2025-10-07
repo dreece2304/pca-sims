@@ -5,6 +5,11 @@ Educational implementation with detailed mathematical explanations
 
 import numpy as np
 import pandas as pd
+import json
+import hashlib
+import os
+from pathlib import Path
+from datetime import datetime
 from sklearn.decomposition import PCA
 from typing import Dict, List, Optional, Tuple
 import matplotlib.pyplot as plt
@@ -39,6 +44,7 @@ class SimpleToFSIMSPCA:
         # Preprocessed data containers
         self.preprocessed_data = None
         self.preprocessing_steps = []
+        self.custom_dose_values = {}  # Custom dose values for plotting (dose_id -> actual_dose)
         
         # PCA results
         self.pca_model = None
@@ -74,10 +80,15 @@ class SimpleToFSIMSPCA:
             # Parse sample names (P#_SQ# format)
             self._parse_sample_metadata()
 
-            # Initialize working data to full dataset
-            self.working_data = self.raw_data.copy()
-            self.working_metadata = self.sample_metadata.copy()
-            self.sample_mask = np.ones(len(self.sample_metadata), dtype=bool)
+            # Check for and load existing metadata
+            metadata = self.load_metadata(self.data_file)
+            if metadata:
+                self.apply_metadata(metadata)
+            else:
+                # Initialize working data to full dataset (no metadata available)
+                self.working_data = self.raw_data.copy()
+                self.working_metadata = self.sample_metadata.copy()
+                self.sample_mask = np.ones(len(self.sample_metadata), dtype=bool)
 
             print(f"   Successfully parsed {len(self.raw_data.columns)} samples")
             print("   ✅ Data loading complete")
@@ -162,7 +173,30 @@ class SimpleToFSIMSPCA:
         self.working_data = self.raw_data[selected_samples].copy()
         self.working_metadata = self.sample_metadata[sample_mask].reset_index(drop=True)
 
-        print(f"🎯 Selected {len(selected_samples)} / {len(self.sample_metadata)} samples using mask")
+        included_count = sample_mask.sum()
+        excluded_count = len(self.sample_metadata) - included_count
+        print(f"🎯 Selected {included_count} / {len(self.sample_metadata)} samples using mask")
+        if excluded_count > 0:
+            print(f"   🚫 Excluded {excluded_count} samples")
+
+    def get_inclusion_mask(self) -> np.ndarray:
+        """Get current inclusion mask based on metadata"""
+        if 'include' in self.sample_metadata.columns:
+            return self.sample_metadata['include'].values
+        else:
+            return np.ones(len(self.sample_metadata), dtype=bool)
+
+    def get_sample_type_mask(self, sample_type: str) -> np.ndarray:
+        """Get mask for specific sample type"""
+        if 'sample_type' in self.sample_metadata.columns:
+            return self.sample_metadata['sample_type'] == sample_type
+        else:
+            return np.zeros(len(self.sample_metadata), dtype=bool)
+
+    def get_non_excluded_samples(self) -> pd.DataFrame:
+        """Get sample metadata for non-excluded samples only"""
+        inclusion_mask = self.get_inclusion_mask()
+        return self.sample_metadata[inclusion_mask]
 
     def select_samples_by_names(self, sample_names: List[str]) -> None:
         """
@@ -178,6 +212,7 @@ class SimpleToFSIMSPCA:
     def select_doses(self, dose_ids: List[int]) -> None:
         """
         Select which doses to include in analysis (preserves original data)
+        Respects inclusion/exclusion flags from metadata
 
         Args:
             dose_ids: List of dose IDs (e.g., [0, 1, 2, 3, 4, 5])
@@ -186,9 +221,209 @@ class SimpleToFSIMSPCA:
 
         # Create mask based on selected doses
         dose_mask = self.sample_metadata['dose_id'].isin(dose_ids)
-        self.select_samples_by_mask(dose_mask)
 
-        print(f"   Doses included: {sorted(dose_ids)}")
+        # Also respect inclusion flags from metadata
+        inclusion_mask = self.get_inclusion_mask()
+
+        # Combine dose selection with inclusion mask
+        combined_mask = dose_mask & inclusion_mask
+
+        self.select_samples_by_mask(combined_mask)
+
+    def set_custom_dose_values(self, dose_mapping: dict) -> None:
+        """
+        Set custom dose values for plotting (e.g., actual electron beam doses)
+
+        Args:
+            dose_mapping: Dictionary mapping dose_id to actual dose value
+                         e.g., {0: 0.0, 1: 5.2, 2: 10.4, 3: 15.6, 4: 20.8, 5: 26.0}
+        """
+        # Convert numpy/pandas types to native Python types for JSON serialization
+        self.custom_dose_values = self.convert_to_json_serializable(dose_mapping)
+        print(f"📊 Set custom dose values: {self.custom_dose_values}")
+
+    def get_metadata_path(self, data_file_path: str) -> str:
+        """Generate metadata file path from data file path"""
+        data_path = Path(data_file_path)
+        filename_without_ext = data_path.stem
+        metadata_dir = Path("data/project_assignments")
+        metadata_dir.mkdir(exist_ok=True)
+        return str(metadata_dir / f"{filename_without_ext}_metadata.json")
+
+    def calculate_file_checksum(self, file_path: str) -> str:
+        """Calculate MD5 checksum of data file to detect changes"""
+        hash_md5 = hashlib.md5()
+        try:
+            with open(file_path, "rb") as f:
+                for chunk in iter(lambda: f.read(4096), b""):
+                    hash_md5.update(chunk)
+            return hash_md5.hexdigest()
+        except Exception as e:
+            print(f"Warning: Could not calculate checksum for {file_path}: {e}")
+            return ""
+
+    def load_metadata(self, data_file_path: str) -> Optional[dict]:
+        """Load metadata from JSON file if it exists"""
+        metadata_path = self.get_metadata_path(data_file_path)
+
+        try:
+            if os.path.exists(metadata_path):
+                with open(metadata_path, 'r') as f:
+                    metadata = json.load(f)
+
+                # Verify data file hasn't changed
+                current_checksum = self.calculate_file_checksum(data_file_path)
+                stored_checksum = metadata.get('data_checksum', '')
+
+                if current_checksum and stored_checksum and current_checksum != stored_checksum:
+                    print(f"⚠️ Warning: Data file has changed since metadata was saved")
+                    print(f"   Metadata may be outdated for {data_file_path}")
+
+                print(f"📄 Loaded metadata from {metadata_path}")
+                return metadata
+            else:
+                print(f"📄 No metadata found for {data_file_path}")
+                return None
+
+        except Exception as e:
+            print(f"❌ Error loading metadata from {metadata_path}: {e}")
+            return None
+
+    def convert_to_json_serializable(self, obj):
+        """Convert numpy/pandas data types to JSON-serializable Python types"""
+        import numpy as np
+        import pandas as pd
+
+        if isinstance(obj, dict):
+            # Convert both keys and values
+            return {self.convert_to_json_serializable(key): self.convert_to_json_serializable(value) for key, value in obj.items()}
+        elif isinstance(obj, list):
+            return [self.convert_to_json_serializable(item) for item in obj]
+        elif isinstance(obj, np.integer):  # This covers np.int64, np.int32, etc.
+            return int(obj)
+        elif isinstance(obj, np.floating):  # This covers np.float64, np.float32, etc.
+            return float(obj)
+        elif isinstance(obj, np.bool_):
+            return bool(obj)
+        elif isinstance(obj, (np.ndarray, pd.Series)):
+            return obj.tolist()
+        elif hasattr(obj, 'item'):  # Fallback for numpy scalars
+            return obj.item()
+        else:
+            return obj
+
+    def save_metadata(self, data_file_path: str, sample_metadata_dict: dict, custom_doses: dict = None):
+        """Save metadata to JSON file"""
+        metadata_path = self.get_metadata_path(data_file_path)
+
+        try:
+            # Convert data types to JSON-serializable format
+            clean_metadata_dict = self.convert_to_json_serializable(sample_metadata_dict)
+            clean_custom_doses = self.convert_to_json_serializable(custom_doses) if custom_doses else {}
+
+            # Create metadata structure
+            metadata = {
+                "metadata": clean_metadata_dict,
+                "created": datetime.now().isoformat(),
+                "last_modified": datetime.now().isoformat(),
+                "data_file": os.path.abspath(data_file_path),
+                "data_checksum": self.calculate_file_checksum(data_file_path),
+                "custom_dose_values": clean_custom_doses
+            }
+
+            # Save to file
+            with open(metadata_path, 'w') as f:
+                json.dump(metadata, f, indent=2)
+
+            print(f"💾 Saved metadata to {metadata_path}")
+            return True
+
+        except Exception as e:
+            print(f"❌ Error saving metadata to {metadata_path}: {e}")
+            return False
+
+    def apply_metadata(self, metadata: dict):
+        """Apply loaded metadata to sample_metadata DataFrame"""
+        if not metadata or 'metadata' not in metadata:
+            return
+
+        sample_meta = metadata['metadata']
+
+        # Add new columns to sample_metadata if they don't exist
+        for col in ['sample_type', 'actual_dose', 'dose_units', 'include', 'notes']:
+            if col not in self.sample_metadata.columns:
+                if col == 'include':
+                    self.sample_metadata[col] = True  # Default to include
+                elif col == 'sample_type':
+                    self.sample_metadata[col] = 'E-Beam Exposed'  # Default type
+                elif col == 'actual_dose':
+                    self.sample_metadata[col] = 0.0  # Default dose
+                elif col == 'dose_units':
+                    self.sample_metadata[col] = 'μC/cm²'  # Default units
+                else:
+                    self.sample_metadata[col] = ''  # Default empty string
+
+        # Apply metadata to each sample
+        for sample_name in self.sample_metadata['sample_name']:
+            if sample_name in sample_meta:
+                sample_info = sample_meta[sample_name]
+                mask = self.sample_metadata['sample_name'] == sample_name
+
+                # Update sample metadata
+                self.sample_metadata.loc[mask, 'sample_type'] = sample_info.get('sample_type', 'E-Beam Exposed')
+                self.sample_metadata.loc[mask, 'actual_dose'] = sample_info.get('dose', 0.0)
+                self.sample_metadata.loc[mask, 'dose_units'] = sample_info.get('dose_units', 'μC/cm²')
+                self.sample_metadata.loc[mask, 'include'] = sample_info.get('include', True)
+                self.sample_metadata.loc[mask, 'notes'] = sample_info.get('notes', '')
+
+        # Apply custom dose values if available
+        if 'custom_dose_values' in metadata:
+            self.custom_dose_values = self.convert_to_json_serializable(metadata['custom_dose_values'])
+            print(f"📊 Applied custom dose values: {self.custom_dose_values}")
+
+        # Update working data to respect inclusions/exclusions
+        self.update_working_data_from_metadata()
+
+        print(f"✅ Applied metadata to {len(self.sample_metadata)} samples")
+
+    def update_working_data_from_metadata(self):
+        """Update working data to respect include/exclude flags from metadata"""
+        if 'include' in self.sample_metadata.columns:
+            # Create mask based on include flag
+            include_mask = self.sample_metadata['include'].values
+            self.select_samples_by_mask(include_mask)
+
+            # Samples already excluded via select_samples_by_mask above
+
+    def _load_contamination_peaks_from_database(self, polarity: str = "positive") -> List[float]:
+        """
+        Load contamination peak masses from the fragment database
+
+        Args:
+            polarity: "positive" or "negative" to match the data type
+
+        Returns:
+            List of contamination peak masses for filtering
+        """
+        contamination_masses = []
+        database_path = "data/FragmentDatabase/alucone_fragments_complete.json"
+
+        try:
+            with open(database_path, 'r') as f:
+                database = json.load(f)
+
+            for fragment in database.get('fragments', []):
+                if (fragment.get('polarity') == polarity and
+                    'Contamination' in fragment.get('families', [])):
+                    contamination_masses.append(fragment['mass'])
+
+            print(f"   📋 Loaded {len(contamination_masses)} contamination peaks from database")
+            return sorted(contamination_masses)
+
+        except Exception as e:
+            print(f"   ⚠️ Could not load contamination database: {e}")
+            print(f"   📋 Falling back to hardcoded contamination values")
+            return []
 
     def get_active_data(self):
         """
@@ -204,30 +439,27 @@ class SimpleToFSIMSPCA:
     
     def preprocess_data(self,
                        sqrt_transform: bool = True,
-                       mean_center: bool = True,
+                       mean_center: bool = False,  # Redundant: sklearn PCA auto-centers
                        pareto_scale: bool = True,
-                       filter_cl_peaks: bool = False,
-                       filter_si_peaks: bool = False) -> None:
+                       filter_contamination_peaks: bool = False) -> None:
         """
         Preprocess data for PCA with clear mathematical explanations
 
         Args:
             sqrt_transform: Apply √(x) transformation
-            mean_center: Subtract column means
+            mean_center: Subtract column means (REDUNDANT: sklearn PCA auto-centers)
             pareto_scale: Divide by √(std) per mass
-            filter_cl_peaks: Remove Cl- peaks (m/z 34.971 and 36.968) before analysis
-            filter_si_peaks: Remove Si+ peaks (m/z 27.984 and related) before analysis
+            filter_contamination_peaks: Remove contamination peaks from database before analysis
 
         Mathematical Steps:
-        0. Contamination filtering: Remove contamination peaks from dataset
-           - Cl peaks: m/z 34.971 (³⁵Cl⁻) and 36.968 (³⁷Cl⁻)
-           - Si peaks: m/z 27.984 (²⁸Si⁺) and related silicon fragments
+        0. Contamination filtering: Remove peaks marked as "Contamination" in fragment database
 
         1. √ transform: Stabilizes variance for count data (Poisson-like)
            X_new = √(X_old)
 
-        2. Mean centering: Required for covariance-based PCA
-           X_centered = X - mean(X) for each mass
+        2. Mean centering: REDUNDANT - sklearn PCA automatically centers data
+           Note: Manual centering is skipped since sklearn.decomposition.PCA
+           automatically subtracts column means before SVD decomposition
 
         3. Pareto scaling: Compromise between no scaling and unit variance
            X_pareto = X_centered / √(std(X)) for each mass
@@ -240,75 +472,53 @@ class SimpleToFSIMSPCA:
         data = active_data.copy()
         print(f"   Starting data shape: {data.shape} (masses × samples)")
 
-        # Step 0: Cl peak filtering (if requested) - use masking instead of permanent removal
+        # All contamination filtering now handled by database-based system
         mask_indices = None
-        if filter_cl_peaks:
-            print("   🧹 Step 0: Cl peak filtering")
+
+        # Step 0: Contamination peak filtering (if requested) - use database
+        if filter_contamination_peaks:
+            print("   🧹 Step 0: Contamination peak filtering")
             print("      Purpose: Mask contamination peaks during analysis")
-            print("      Targets: m/z 34.971 (³⁵Cl⁻) and 36.968 (³⁷Cl⁻)")
+            print("      Source: Fragment database (Contamination family)")
 
-            # Define Cl peak masses with tolerance
-            cl35_mass = 34.971
-            cl37_mass = 36.968
-            tolerance = 0.01  # 10 mDa tolerance
+            # Load contamination peaks from database
+            # Determine polarity from data file path
+            polarity = "positive" if "Pos" in self.data_file else "negative"
+            print(f"      Detected polarity: {polarity}")
 
-            # Create mask for peaks to exclude
-            mass_indices = data.index
-            cl_mask = np.ones(len(mass_indices), dtype=bool)  # Start with all True (keep all)
-            cl_peaks_found = 0
-
-            for i, mass in enumerate(mass_indices):
-                if (abs(mass - cl35_mass) <= tolerance or
-                    abs(mass - cl37_mass) <= tolerance):
-                    cl_mask[i] = False  # Mark for exclusion
-                    cl_peaks_found += 1
-                    print(f"      Found Cl peak at m/z {mass:.6f} (masked)")
-
-            if cl_peaks_found > 0:
-                # Apply mask to data
-                data = data.iloc[cl_mask]
-                mask_indices = cl_mask
-                print(f"      Masked {cl_peaks_found} Cl peaks")
-                print(f"      New data shape: {data.shape} (masses × samples)")
-                self.preprocessing_steps.append("filter_cl_peaks")
-            else:
-                print("      No Cl peaks found in current dataset")
-
-        # Step 0b: Si peak filtering (if requested) - use masking
-        if filter_si_peaks:
-            print("   🧹 Step 0b: Si peak filtering")
-            print("      Purpose: Mask silicon contamination peaks during analysis")
-            print("      Targets: m/z 27.984 (²⁸Si⁺) and related silicon fragments")
-
-            # Define Si peak masses with tolerance
-            si28_mass = 27.984  # ²⁸Si⁺
-            si29_mass = 28.976  # ²⁹Si⁺
-            si30_mass = 29.974  # ³⁰Si⁺
-            sih_mass = 28.991   # SiH⁺
+            contamination_masses = self._load_contamination_peaks_from_database(polarity)
             tolerance = 0.01    # 10 mDa tolerance
 
-            # Create mask for peaks to exclude
-            mass_indices = data.index
-            si_mask = np.ones(len(mass_indices), dtype=bool)  # Start with all True (keep all)
-            si_peaks_found = 0
+            if contamination_masses:
+                # Create mask for peaks to exclude
+                mass_indices = data.index
+                contam_mask = np.ones(len(mass_indices), dtype=bool)  # Start with all True (keep all)
+                contam_peaks_found = 0
 
-            for i, mass in enumerate(mass_indices):
-                if (abs(mass - si28_mass) <= tolerance or
-                    abs(mass - si29_mass) <= tolerance or
-                    abs(mass - si30_mass) <= tolerance or
-                    abs(mass - sih_mass) <= tolerance):
-                    si_mask[i] = False  # Mark for exclusion
-                    si_peaks_found += 1
-                    print(f"      Found Si peak at m/z {mass:.6f} (masked)")
+                for i, mass in enumerate(mass_indices):
+                    for contam_mass in contamination_masses:
+                        if abs(mass - contam_mass) <= tolerance:
+                            contam_mask[i] = False  # Mark for exclusion
+                            contam_peaks_found += 1
+                            print(f"      Found contamination peak at m/z {mass:.6f} (database match: {contam_mass:.6f})")
+                            break  # Only need one match per mass
 
-            if si_peaks_found > 0:
-                # Apply mask to data
-                data = data.iloc[si_mask]
-                print(f"      Masked {si_peaks_found} Si peaks")
-                print(f"      New data shape: {data.shape} (masses × samples)")
-                self.preprocessing_steps.append("filter_si_peaks")
+                if contam_peaks_found > 0:
+                    # Apply mask to data
+                    data = data.iloc[contam_mask]
+                    # Update mask tracking for mass values
+                    if mask_indices is not None:
+                        # Combine with previous mask (Cl filtering)
+                        mask_indices = mask_indices & contam_mask
+                    else:
+                        mask_indices = contam_mask
+                    print(f"      Masked {contam_peaks_found} contamination peaks")
+                    print(f"      New data shape: {data.shape} (masses × samples)")
+                    self.preprocessing_steps.append("filter_contamination_peaks")
+                else:
+                    print("      No contamination peaks found in current dataset")
             else:
-                print("      No Si peaks found in current dataset")
+                print("      No contamination peaks available from database")
 
         # Step 1: Square root transformation
         if sqrt_transform:
@@ -329,18 +539,23 @@ class SimpleToFSIMSPCA:
         data = data.T
         print(f"   Transposed data shape: {data.shape} (samples × masses)")
         
-        # Step 2: Mean centering
+        # Step 2: Mean centering (SKIPPED - sklearn PCA auto-centers)
         if mean_center:
             print("   📊 Step 2: Mean centering")
-            print("      Mathematical purpose: Required for covariance-based PCA")
+            print("      ⚠️  WARNING: Manual mean centering is REDUNDANT!")
+            print("      sklearn PCA automatically centers data before SVD")
             print("      Formula: X_centered = X - mean(X) for each mass")
-            
+
             column_means = data.mean(axis=0)
             print(f"      Mean range: {column_means.min():.6f} to {column_means.max():.6f}")
-            
+
             data = data - column_means
             self.preprocessing_steps.append("mean_center")
-            print("      ✅ Mean centering applied")
+            print("      ⚠️  Applied redundant mean centering (consider disabling)")
+        else:
+            print("   📊 Step 2: Mean centering")
+            print("      ✅ Skipped - sklearn PCA automatically centers data")
+            print("      This is the recommended setting for sklearn PCA")
         
         # Step 3: Pareto scaling
         if pareto_scale:
@@ -553,8 +768,269 @@ class SimpleToFSIMSPCA:
         
         print(f"🔍 Filtered loadings: {len(filtered_loadings)} / {len(loadings_df)} masses")
         print(f"   Retention rate: {len(filtered_loadings)/len(loadings_df)*100:.1f}%")
-        
+
         return filtered_loadings
+
+    def get_polarity(self) -> str:
+        """
+        Determine the polarity of the dataset based on filename
+
+        Returns:
+            "negative" or "positive"
+        """
+        if "neg" in self.data_file.lower() or "negative" in self.data_file.lower():
+            return "negative"
+        elif "pos" in self.data_file.lower() or "positive" in self.data_file.lower():
+            return "positive"
+        else:
+            # Default assumption or could raise an error
+            return "negative"
+
+    def get_sample_groups(self) -> List[str]:
+        """
+        Get available sample groups for individual analysis
+
+        Returns:
+            List of group names (e.g., ["As-Deposited", "2000 μC/cm²", ...])
+        """
+        groups = []
+
+        if 'sample_type' in self.sample_metadata.columns:
+            # Use metadata-based grouping
+            for _, row in self.sample_metadata.iterrows():
+                sample_type = row.get('sample_type', 'Unknown')
+                include = row.get('include', True)
+
+                if not include:  # Skip excluded samples
+                    continue
+
+                if sample_type == 'As-Deposited':
+                    if 'As-Deposited' not in groups:
+                        groups.append('As-Deposited')
+                elif sample_type == 'E-Beam Exposed':
+                    dose = row.get('actual_dose', row.get('dose', 'Unknown'))
+                    if isinstance(dose, (int, float)):
+                        dose_label = f"{int(dose)} μC/cm²"
+                        if dose_label not in groups:
+                            groups.append(dose_label)
+        else:
+            # Fallback to dose_id grouping
+            dose_ids = sorted(self.sample_metadata['dose_id'].unique())
+            for dose_id in dose_ids:
+                if dose_id == 0:
+                    groups.append('As-Deposited (SQ0)')
+                else:
+                    groups.append(f'Dose Level {dose_id}')
+
+        return sorted(groups)
+
+    def get_group_intensity_analysis(self, group_name: str, top_n: int = 30) -> pd.DataFrame:
+        """
+        Get detailed intensity analysis for a specific sample group
+
+        Args:
+            group_name: Name of the sample group
+            top_n: Number of top peaks to return
+
+        Returns:
+            DataFrame with intensity statistics and fragment assignments
+        """
+        # Get samples belonging to this group
+        group_samples = self._get_group_sample_names(group_name)
+
+        if not group_samples:
+            print(f"⚠️ No samples found for group: {group_name}")
+            return pd.DataFrame()
+
+        print(f"📊 Analyzing group '{group_name}' with {len(group_samples)} samples")
+
+        # Extract intensity data for these samples
+        group_data = self.raw_data[group_samples]
+
+        # Calculate comprehensive statistics
+        intensity_stats = pd.DataFrame({
+            'mass': group_data.index,
+            'mean_intensity': group_data.mean(axis=1),
+            'std_intensity': group_data.std(axis=1),
+            'max_intensity': group_data.max(axis=1),
+            'min_intensity': group_data.min(axis=1),
+            'median_intensity': group_data.median(axis=1),
+            'cv_percent': (group_data.std(axis=1) / group_data.mean(axis=1)) * 100,
+            'n_samples': len(group_samples)
+        })
+
+        # Calculate percentage of total intensity
+        total_intensity = intensity_stats['mean_intensity'].sum()
+        intensity_stats['percent_of_total'] = (intensity_stats['mean_intensity'] / total_intensity) * 100
+
+        # Add fragment assignments (placeholder for now - will integrate with fragment database)
+        intensity_stats['assignment'] = 'Unknown'
+        intensity_stats['chemical_family'] = 'Unknown'
+        intensity_stats['confidence'] = 'Low'
+
+        # Sort by mean intensity (descending) and get top peaks
+        intensity_stats = intensity_stats.sort_values('mean_intensity', ascending=False)
+        top_peaks = intensity_stats.head(top_n).copy()
+
+        # Add ranking
+        top_peaks.insert(0, 'rank', range(1, len(top_peaks) + 1))
+
+        return top_peaks
+
+    def _get_group_sample_names(self, group_name: str) -> List[str]:
+        """
+        Get list of sample names belonging to a specific group
+
+        Args:
+            group_name: Name of the sample group
+
+        Returns:
+            List of sample names
+        """
+        samples = []
+
+        # Handle different group name formats
+        if group_name == 'As-Deposited' or 'SQ0' in group_name:
+            # Find As-Deposited samples
+            if 'sample_type' in self.sample_metadata.columns:
+                mask = (self.sample_metadata['sample_type'] == 'As-Deposited') & \
+                       (self.sample_metadata.get('include', True) == True)
+            else:
+                # Fallback to dose_id = 0
+                mask = self.sample_metadata['dose_id'] == 0
+            samples = self.sample_metadata.loc[mask, 'sample_name'].tolist()
+
+        elif 'μC/cm²' in group_name:
+            # Extract dose value from group name (e.g., "2000 μC/cm²" -> 2000)
+            try:
+                dose_val = float(group_name.split()[0])
+                if 'actual_dose' in self.sample_metadata.columns:
+                    mask = (self.sample_metadata['actual_dose'] == dose_val) & \
+                           (self.sample_metadata.get('include', True) == True)
+                    samples = self.sample_metadata.loc[mask, 'sample_name'].tolist()
+                else:
+                    # Try to map to dose_id
+                    dose_mapping = {0: 0, 1000: 1, 2000: 2, 5000: 3, 10000: 4, 15000: 5}
+                    if dose_val in dose_mapping:
+                        dose_id = dose_mapping[dose_val]
+                        mask = self.sample_metadata['dose_id'] == dose_id
+                        samples = self.sample_metadata.loc[mask, 'sample_name'].tolist()
+            except (ValueError, IndexError):
+                print(f"⚠️ Could not parse dose value from group name: {group_name}")
+
+        elif 'Dose Level' in group_name:
+            # Handle fallback dose_id format
+            try:
+                dose_id = int(group_name.split()[-1])
+                mask = self.sample_metadata['dose_id'] == dose_id
+                samples = self.sample_metadata.loc[mask, 'sample_name'].tolist()
+            except (ValueError, IndexError):
+                print(f"⚠️ Could not parse dose ID from group name: {group_name}")
+
+        return samples
+
+    def get_group_comparison_stats(self, group_names: List[str]) -> pd.DataFrame:
+        """
+        Get comparative statistics between multiple groups
+
+        Args:
+            group_names: List of group names to compare
+
+        Returns:
+            DataFrame with comparative statistics
+        """
+        comparison_data = []
+
+        for group_name in group_names:
+            group_analysis = self.get_group_intensity_analysis(group_name, top_n=100)
+
+            if not group_analysis.empty:
+                stats = {
+                    'group_name': group_name,
+                    'total_peaks': len(group_analysis),
+                    'total_intensity': group_analysis['mean_intensity'].sum(),
+                    'top_peak_intensity': group_analysis['mean_intensity'].iloc[0] if len(group_analysis) > 0 else 0,
+                    'top_peak_mass': group_analysis['mass'].iloc[0] if len(group_analysis) > 0 else 0,
+                    'median_intensity': group_analysis['mean_intensity'].median(),
+                    'intensity_range': group_analysis['mean_intensity'].max() - group_analysis['mean_intensity'].min(),
+                    'n_samples': group_analysis['n_samples'].iloc[0] if len(group_analysis) > 0 else 0
+                }
+                comparison_data.append(stats)
+
+        return pd.DataFrame(comparison_data)
+
+    def export_group_analysis(self, group_name: str, output_path: str) -> bool:
+        """
+        Export detailed group analysis to Excel file
+
+        Args:
+            group_name: Name of the group to analyze
+            output_path: Path for output Excel file
+
+        Returns:
+            True if export successful, False otherwise
+        """
+        try:
+            import pandas as pd
+            from datetime import datetime
+            import os
+
+            # Get group analysis data
+            group_data = self.get_group_intensity_analysis(group_name, top_n=50)
+            group_samples = self._get_group_sample_names(group_name)
+
+            if group_data.empty:
+                print(f"❌ No data found for group: {group_name}")
+                return False
+
+            # Create Excel writer
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+            with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
+                # Main analysis sheet
+                group_data.to_excel(writer, sheet_name='Top_Peaks_Analysis', index=False)
+
+                # Sample information sheet
+                sample_info = self.sample_metadata[
+                    self.sample_metadata['sample_name'].isin(group_samples)
+                ].copy()
+                sample_info.to_excel(writer, sheet_name='Sample_Information', index=False)
+
+                # Raw intensity data for the group
+                raw_group_data = self.raw_data[group_samples]
+                raw_group_data.to_excel(writer, sheet_name='Raw_Intensities')
+
+                # Summary statistics
+                summary_stats = pd.DataFrame({
+                    'Statistic': [
+                        'Group Name',
+                        'Number of Samples',
+                        'Number of Masses',
+                        'Total Ion Intensity',
+                        'Mean Intensity per Mass',
+                        'Analysis Date',
+                        'Data File',
+                        'Polarity'
+                    ],
+                    'Value': [
+                        group_name,
+                        len(group_samples),
+                        len(group_data),
+                        f"{group_data['mean_intensity'].sum():.2e}",
+                        f"{group_data['mean_intensity'].mean():.2e}",
+                        datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                        os.path.basename(self.data_file),
+                        self.get_polarity()
+                    ]
+                })
+                summary_stats.to_excel(writer, sheet_name='Summary', index=False)
+
+            print(f"✅ Group analysis exported to: {output_path}")
+            return True
+
+        except Exception as e:
+            print(f"❌ Failed to export group analysis: {e}")
+            return False
 
 
 if __name__ == "__main__":
@@ -562,7 +1038,7 @@ if __name__ == "__main__":
     pca = SimpleToFSIMSPCA("/home/dreece23/pca-sims/data/NegativeIon/NegIonTIC.txt")
     pca.load_data()
     pca.select_doses([1, 2, 3, 4, 5])  # Exclude SQ0 for now
-    pca.preprocess_data(sqrt_transform=True, mean_center=True, pareto_scale=True)
+    pca.preprocess_data(sqrt_transform=True, mean_center=False, pareto_scale=True)
     pca.run_pca(n_components=8)
     
     print("\n" + "="*50)

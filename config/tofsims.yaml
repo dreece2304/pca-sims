@@ -1,0 +1,214 @@
+# ToF-SIMS Multi-Ion Analysis Configuration
+
+# ===== Root Directories =====
+root: "outputs"  # Note: actual folder is "outputs" (with 's')
+
+# ===== Excel Sheet Names (consistent across all PCA files) =====
+sheets:
+  scores: "PCA Scores"
+  loadings: "PCA Loadings"
+  explained: "Variance Explained"
+  summary: "Analysis Summary"
+  toplist: "Top 20 Loadings"
+
+# ===== Analysis Type Glob Patterns =====
+# All glob patterns point to the same pca_analysis.xlsx file (multi-sheet Excel)
+# Assignments are co-located CSV files with each PCA run
+
+analyses:
+  pairwise:
+    positive:
+      scores_glob: "outputs/Pairwise/Positive/*/pca_analysis.xlsx"
+      loadings_glob: "outputs/Pairwise/Positive/*/pca_analysis.xlsx"
+      explained_glob: "outputs/Pairwise/Positive/*/pca_analysis.xlsx"
+      summary_glob: "outputs/Pairwise/Positive/*/pca_analysis.xlsx"
+      toplist_glob: "outputs/Pairwise/Positive/*/pca_analysis.xlsx"
+      assignments_glob: "outputs/Pairwise/Positive/*/fragment_assignments.csv"
+    negative:
+      scores_glob: "outputs/Pairwise/Negative/*/pca_analysis.xlsx"
+      loadings_glob: "outputs/Pairwise/Negative/*/pca_analysis.xlsx"
+      explained_glob: "outputs/Pairwise/Negative/*/pca_analysis.xlsx"
+      summary_glob: "outputs/Pairwise/Negative/*/pca_analysis.xlsx"
+      toplist_glob: "outputs/Pairwise/Negative/*/pca_analysis.xlsx"
+      assignments_glob: "outputs/Pairwise/Negative/*/fragment_assignments.csv"
+
+  dose_trajectory:
+    positive:
+      scores_glob: "outputs/Dose-Trajectory/Positive/pca_analysis.xlsx"
+      loadings_glob: "outputs/Dose-Trajectory/Positive/pca_analysis.xlsx"
+      explained_glob: "outputs/Dose-Trajectory/Positive/pca_analysis.xlsx"
+      summary_glob: "outputs/Dose-Trajectory/Positive/pca_analysis.xlsx"
+      toplist_glob: "outputs/Dose-Trajectory/Positive/pca_analysis.xlsx"
+      assignments_glob: "outputs/Dose-Trajectory/Positive/fragment_assignments.csv"
+    negative:
+      scores_glob: "outputs/Dose-Trajectory/Negative/pca_analysis.xlsx"
+      loadings_glob: "outputs/Dose-Trajectory/Negative/pca_analysis.xlsx"
+      explained_glob: "outputs/Dose-Trajectory/Negative/pca_analysis.xlsx"
+      summary_glob: "outputs/Dose-Trajectory/Negative/pca_analysis.xlsx"
+      toplist_glob: "outputs/Dose-Trajectory/Negative/pca_analysis.xlsx"
+      assignments_glob: "outputs/Dose-Trajectory/Negative/fragment_assignments.csv"
+
+  dose_dependent:
+    positive:
+      scores_glob: "outputs/Dose-Dependant/Positive/pca_analysis.xlsx"
+      loadings_glob: "outputs/Dose-Dependant/Positive/pca_analysis.xlsx"
+      explained_glob: "outputs/Dose-Dependant/Positive/pca_analysis.xlsx"
+      summary_glob: "outputs/Dose-Dependant/Positive/pca_analysis.xlsx"
+      toplist_glob: "outputs/Dose-Dependant/Positive/pca_analysis.xlsx"
+      assignments_glob: "outputs/Dose-Dependant/Positive/fragment_assignments.csv"
+    negative:
+      scores_glob: "outputs/Dose-Dependant/Negative/pca_analysis.xlsx"
+      loadings_glob: "outputs/Dose-Dependant/Negative/pca_analysis.xlsx"
+      explained_glob: "outputs/Dose-Dependant/Negative/pca_analysis.xlsx"
+      summary_glob: "outputs/Dose-Dependant/Negative/pca_analysis.xlsx"
+      toplist_glob: "outputs/Dose-Dependant/Negative/pca_analysis.xlsx"
+      assignments_glob: "outputs/Dose-Dependant/Negative/fragment_assignments.csv"
+
+  # Optional: global_binary (not yet present in outputs/)
+  # global_binary:
+  #   positive:
+  #     scores_glob: "outputs/global_binary/Positive/pca_analysis.xlsx"
+  #     ...
+  #   negative:
+  #     scores_glob: "outputs/global_binary/Negative/pca_analysis.xlsx"
+  #     ...
+
+# ===== Results Output Directories (write here, NOT in outputs/) =====
+results:
+  base_dir: "results"
+  figures_dir: "results/figures"        # results/figures/{analysis_type}/{polarity}/{analysis_id}/
+  tables_dir: "results/tables"          # results/tables/{analysis_type}/{polarity}/{analysis_id}/
+  cache_dir: "results/cache"            # Merged parquet files
+
+# ===== Dose Mapping (dose_label → numeric dose in µC/cm²) =====
+# TODO: User to fill this mapping
+dose_mapping: {}
+  # "2000": 2000.0
+  # "5000": 5000.0
+  # "10000": 10000.0
+  # "15000": 15000.0
+
+# ===== Raw Intensities Configuration (optional for now) =====
+intensities:
+  enabled: true
+  pos_dir: "data/pos"
+  neg_dir: "data/neg"
+
+  # TODO: User to confirm file patterns
+  file_glob: "**/*"                     # Placeholder; waiting for pattern confirmation
+
+  # TODO: User to provide mapping CSV
+  # Maps raw filenames → sample_id, dose_label, dose_uC_cm2, replicate, polarity
+  mapping_csv: ""                       # Placeholder; waiting for mapping file
+
+  # Expected schema after mapping
+  schema_hint: "sample_id:str,dose_label:str,dose_uC_cm2:float,replicate:int,polarity:str,mz:float,intensity:float"
+
+# ===== Plotting Utils Integration =====
+# TODO: User to confirm if migrating to Paper2 project or keeping local
+plotting_utils:
+  module: ""                            # e.g., "utils.plotting" or "paper2.plotting"
+  savefig: ""                           # Function name, e.g., "savefig"
+  apply_theme: ""                       # Function name, e.g., "apply_theme"
+
+# ===== Data Validation & Preprocessing =====
+preprocessing:
+  # Polarity normalization
+  polarity_mapping:
+    "Positive": "positive"
+    "Negative": "negative"
+
+  # Expected replicates per condition
+  expected_replicates: 3
+
+  # Fragment assignment merge tolerance (ppm)
+  assignment_ppm_tolerance: 10.0
+
+  # Handle conflicts when multiple assignments match
+  assignment_conflict_handling: "flag"  # Options: "flag", "keep_first", "keep_best"
+
+# ===== Required Schemas (minimum columns) =====
+schemas:
+  scores:
+    required:
+      - "analysis_id"
+      - "analysis_type"
+      - "polarity"
+      - "replicate"
+      - "sample_id"
+      - "PC1"
+      - "PC2"
+    optional:
+      - "dose_label"
+      - "dose_uC_cm2"
+      - "PC3"
+      - "PC4"
+      - "PC5"
+
+  loadings:
+    required:
+      - "analysis_id"
+      - "analysis_type"
+      - "polarity"
+      - "mz"
+      - "loading_PC1"
+      - "loading_PC2"
+    optional:
+      - "loading_PC3"
+      - "loading_PC4"
+      - "loading_PC5"
+      - "rank"
+
+  explained:
+    required:
+      - "analysis_id"
+      - "component"
+      - "variance_ratio"
+      - "cumulative_variance"
+
+  assignments:
+    required:
+      - "mz"
+      - "assignment"
+    optional:
+      - "formula"
+      - "ppm_error"
+      - "polarity"
+      - "confidence"
+
+# ===== Edge Case Handling =====
+edge_cases:
+  # If assignment file missing, proceed without assignments
+  missing_assignments: "warn_and_continue"
+
+  # Allow extra columns in Excel sheets (don't crash)
+  allow_extra_columns: true
+
+  # Never write to outputs/ directory
+  outputs_read_only: true
+
+# ===== Logging & Verbosity =====
+logging:
+  level: "INFO"                         # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s [%(levelname)s] %(message)s"
+
+# ===== TODOs for User =====
+# 1. Confirm intensities file patterns & formats in data/pos and data/neg
+#    - Are they CSV or Parquet?
+#    - What are the column names (m/z, intensity, sample identifiers)?
+#
+# 2. Provide intensities mapping CSV
+#    - Maps filename → sample_id, dose_label, dose_uC_cm2, replicate, polarity
+#    - Expected location: config/intensities_mapping.csv
+#
+# 3. Confirm plotting utils import path
+#    - Module name (e.g., "utils.plotting" or import from Paper2 project)
+#    - Function names: apply_theme, savefig
+#
+# 4. Provide dose_mapping dictionary
+#    - Map dose_label strings to numeric values in µC/cm²
+#    - Example: {"2000": 2000.0, "5000": 5000.0, ...}
+#
+# 5. Confirm dose variable treatment
+#    - Use as continuous variable in regression/correlation? (yes/no)
+#    - Use as categorical factor in ANOVA? (yes/no)

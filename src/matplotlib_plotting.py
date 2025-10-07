@@ -231,39 +231,45 @@ class PCAPlotCanvas(FigureCanvas):
             unique_doses = sorted(scores_df['dose_id'].unique())
             colors = ['#440154', '#3B528B', '#21908C', '#5DC863', '#FDE725',
                      '#DCE319', '#B8DE29', '#73D055', '#1F968B', '#414487']
-            
+
             for i, dose in enumerate(unique_doses):
                 mask = scores_df['dose_id'] == dose
                 color = colors[i % len(colors)]
-                
+
                 # Plot data points
                 dose_data = scores_df.loc[mask]
-                ax2.scatter(dose_data['PC1'], dose_data['PC2'], 
+
+                # Create proper label using metadata if available
+                if hasattr(pca_analyzer, 'sample_metadata') and 'sample_type' in pca_analyzer.sample_metadata.columns:
+                    # Find a representative sample for this dose to get the proper label
+                    dose_sample = dose_data.iloc[0] if len(dose_data) > 0 else None
+                    if dose_sample is not None and 'sample_name' in dose_sample:
+                        sample_name = dose_sample['sample_name']
+                        sample_mask = pca_analyzer.sample_metadata['sample_name'] == sample_name
+                        if sample_mask.any():
+                            sample_meta = pca_analyzer.sample_metadata.loc[sample_mask].iloc[0]
+                            sample_type = sample_meta.get('sample_type', 'E-beam Exposed')
+
+                            if sample_type == 'As-Deposited':
+                                dose_label = 'As-Deposited'
+                            elif sample_type == 'E-Beam Exposed':
+                                actual_dose = sample_meta.get('actual_dose', dose)
+                                dose_label = f'{actual_dose} μC/cm²'
+                            else:
+                                dose_label = f'Dose {dose}'
+                        else:
+                            dose_label = f'Dose {dose}'
+                    else:
+                        dose_label = f'Dose {dose}'
+                else:
+                    dose_label = f'Dose {dose}'
+
+                ax2.scatter(dose_data['PC1'], dose_data['PC2'],
                            alpha=0.8, s=60, color=color, edgecolors='black', linewidth=0.5,
-                           label=f'Dose {dose}')
+                           label=dose_label)
                 
-                # Add 95% confidence ellipse if we have enough points
-                if len(dose_data) >= 3:
-                    try:
-                        center, width, height, angle, sample_info = calculate_confidence_ellipse(
-                            dose_data['PC1'], dose_data['PC2'], confidence=0.95)
-                        
-                        ellipse = Ellipse(center, width, height, angle=angle,
-                                        facecolor='none', edgecolor=color, 
-                                        linestyle='--', linewidth=1.5, alpha=0.6)
-                        ax2.add_patch(ellipse)
-                        
-                        # Add ellipse info to legend only for first dose
-                        if i == 0:
-                            # Create invisible line for legend entry
-                            ax2.plot([], [], color='gray', linestyle='--', linewidth=1.5, 
-                                   label=f'95% CI per dose ({sample_info})')
-                    except Exception as e:
-                        # Skip ellipse if calculation fails
-                        print(f"Warning: Could not calculate ellipse for dose {dose}: {e}")
-                        pass
             
-            # Add legend instead of colorbar
+            # Add legend outside plot area to avoid overlap
             ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=9)
         else:
             # No dose information available - use viridis mid-tone
@@ -288,7 +294,12 @@ class PCAPlotCanvas(FigureCanvas):
         # 3. PC1 loadings (highest at top)
         ax3 = self.fig.add_subplot(gs[1, 0])
         loadings_df = pca_analyzer.get_loadings_dataframe()
-        pc1_loadings = loadings_df['PC1'].abs().sort_values(ascending=True).head(15)  # ascending=True puts highest at top
+
+        # Get top 15 loadings (highest absolute values)
+        pc1_loadings = loadings_df['PC1'].abs().sort_values(ascending=False).head(15)
+
+        # Reverse order so highest appears at top of plot
+        pc1_loadings = pc1_loadings.iloc[::-1]
 
         y_pos = np.arange(len(pc1_loadings))
         bars = ax3.barh(y_pos, pc1_loadings.values, alpha=0.8, color='#21908C')  # viridis mid-tone
@@ -306,11 +317,43 @@ class PCAPlotCanvas(FigureCanvas):
         ax4 = self.fig.add_subplot(gs[1, 1])
         
         if 'dose_id' in scores_df.columns:
-            # PC1 vs dose correlation with viridis styling
-            dose_groups = scores_df.groupby('dose_id')['PC1'].mean()
-            ax4.plot(dose_groups.index, dose_groups.values, 'o-', linewidth=2.5, markersize=8,
-                    color='#440154', markerfacecolor='#FDE725', markeredgecolor='#440154')
-            ax4.set_xlabel('Dose ID', fontweight='bold')
+            # PC1 vs dose correlation with error bars
+
+            # Check if we have actual dose values in metadata
+            if 'actual_dose' in scores_df.columns:
+                # Use actual dose from metadata (e-beam dose in μC/cm²)
+                dose_groups = scores_df.groupby('actual_dose')['PC1']
+                dose_groups_mean = dose_groups.mean().sort_index()
+                dose_groups_std = dose_groups.std().sort_index()
+                x_values = dose_groups_mean.index.tolist()
+                xlabel = 'E-beam Dose (μC/cm²)'
+            elif 'dose' in scores_df.columns:
+                # Alternative column name
+                dose_groups = scores_df.groupby('dose')['PC1']
+                dose_groups_mean = dose_groups.mean().sort_index()
+                dose_groups_std = dose_groups.std().sort_index()
+                x_values = dose_groups_mean.index.tolist()
+                xlabel = 'E-beam Dose (μC/cm²)'
+            elif hasattr(pca_analyzer, 'custom_dose_values') and pca_analyzer.custom_dose_values:
+                # Fallback to custom dose values mapping
+                dose_groups_mean = scores_df.groupby('dose_id')['PC1'].mean()
+                dose_groups_std = scores_df.groupby('dose_id')['PC1'].std()
+                x_values = [pca_analyzer.custom_dose_values.get(str(dose_id), dose_id) for dose_id in dose_groups_mean.index]
+                xlabel = 'E-beam Dose (μC/cm²)'
+            else:
+                # Last resort: use dose_id
+                dose_groups_mean = scores_df.groupby('dose_id')['PC1'].mean()
+                dose_groups_std = scores_df.groupby('dose_id')['PC1'].std()
+                x_values = dose_groups_mean.index.tolist()
+                xlabel = 'Dose Level'
+
+            # Plot with error bars
+            ax4.errorbar(x_values, dose_groups_mean.values, yerr=dose_groups_std.values,
+                        fmt='o-', linewidth=2.5, markersize=8, capsize=5, capthick=2,
+                        color='#440154', markerfacecolor='#FDE725', markeredgecolor='#440154',
+                        ecolor='#440154')
+
+            ax4.set_xlabel(xlabel, fontweight='bold')
             ax4.set_ylabel('PC1 Score', fontweight='bold')
             ax4.set_title('D) Dose Response', fontweight='bold', loc='left')
             ax4.grid(True, alpha=0.3)
@@ -319,8 +362,8 @@ class PCAPlotCanvas(FigureCanvas):
             ax4.spines['top'].set_visible(False)
             ax4.spines['right'].set_visible(False)
 
-            # Calculate correlation
-            corr = np.corrcoef(dose_groups.index, dose_groups.values)[0, 1]
+            # Calculate correlation using the custom dose values
+            corr = np.corrcoef(x_values, dose_groups_mean.values)[0, 1]
             ax4.text(0.05, 0.95, f'r = {corr:.3f}', transform=ax4.transAxes,
                     bbox=dict(boxstyle='round', facecolor='white', alpha=0.8), fontweight='bold')
         else:
@@ -422,13 +465,52 @@ class InteractivePCAPlots:
         scores_df = pca_analyzer.get_scores_dataframe()
         variance_ratios = pca_analyzer.explained_variance_ratio * 100
         
-        # Create scatter plot
+        # Create scatter plot with metadata-aware coloring
         if 'dose_id' in scores_df.columns:
-            scatter = ax.scatter(scores_df['PC1'], scores_df['PC2'], 
-                               c=scores_df['dose_id'], cmap='viridis', 
-                               alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
-            cbar = plt.colorbar(scatter, ax=ax)
-            cbar.set_label('Dose ID', fontsize=12)
+            # Check if we have sample type metadata
+            sample_types = []
+            actual_doses = []
+            colormap_values = []
+
+            if hasattr(pca_analyzer, 'sample_metadata') and 'sample_type' in pca_analyzer.sample_metadata.columns:
+                # Use new metadata system for coloring
+                for idx, row in scores_df.iterrows():
+                    sample_name = row.get('sample_name', f'Sample_{idx}')
+                    sample_mask = pca_analyzer.sample_metadata['sample_name'] == sample_name
+
+                    if sample_mask.any():
+                        sample_meta = pca_analyzer.sample_metadata.loc[sample_mask].iloc[0]
+                        sample_type = sample_meta.get('sample_type', 'E-beam Exposed')
+                        sample_types.append(sample_type)
+
+                        if sample_type == 'As-Deposited':
+                            actual_doses.append(0)
+                            colormap_values.append(0)  # Assign 0 for coloring
+                        elif sample_type == 'E-beam Exposed':
+                            dose_val = sample_meta.get('actual_dose', row['dose_id'])
+                            actual_doses.append(dose_val)
+                            colormap_values.append(dose_val)
+                        else:  # Should not reach here for excluded samples
+                            actual_doses.append(row['dose_id'])
+                            colormap_values.append(row['dose_id'])
+                    else:
+                        # Fallback
+                        sample_types.append('E-beam Exposed')
+                        actual_doses.append(row['dose_id'])
+                        colormap_values.append(row['dose_id'])
+
+                scatter = ax.scatter(scores_df['PC1'], scores_df['PC2'],
+                                   c=colormap_values, cmap='viridis',
+                                   alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
+                cbar = plt.colorbar(scatter, ax=ax)
+                cbar.set_label('Electron Beam Dose (μC/cm²)', fontsize=12)
+            else:
+                # Fallback to original behavior
+                scatter = ax.scatter(scores_df['PC1'], scores_df['PC2'],
+                                   c=scores_df['dose_id'], cmap='viridis',
+                                   alpha=0.7, s=60, edgecolors='black', linewidth=0.5)
+                cbar = plt.colorbar(scatter, ax=ax)
+                cbar.set_label('Dose ID', fontsize=12)
         else:
             ax.scatter(scores_df['PC1'], scores_df['PC2'], alpha=0.7, s=60)
         
