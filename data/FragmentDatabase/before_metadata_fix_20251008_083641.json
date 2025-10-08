@@ -4,7 +4,7 @@
     "description": "Fragment assignments created from user-provided Excel files",
     "version": "6.0",
     "created": "2025-09-16",
-    "total_fragments": 289,
+    "total_fragments": 235,
     "negative_fragments": 110,
     "positive_fragments": 125,
     "chemical_families": [
@@ -17,8 +17,7 @@
       "Contamination",
       "Unknown"
     ],
-    "notes": "Database created from NegFragmentsList.xlsx and PosFragmentsList.xlsx",
-    "last_modified": "2025-10-08 08:36:41"
+    "notes": "Database created from NegFragmentsList.xlsx and PosFragmentsList.xlsx"
   },
   "fragments": [
     {
