@@ -3109,6 +3109,49 @@ Export: Use export buttons to save data and plots
 
         filters_layout.addLayout(pca_loadings_layout)
 
+        # Filter 5: Statistical significance (Stage 7)
+        statistical_layout = QHBoxLayout()
+        self.statistical_filter_enabled = QCheckBox("Statistical:")
+        self.statistical_filter_enabled.setChecked(False)
+        self.statistical_filter_enabled.stateChanged.connect(self.apply_stick_filters)
+        statistical_layout.addWidget(self.statistical_filter_enabled)
+
+        statistical_layout.addWidget(QLabel("Mean >"))
+        self.statistical_dropdown = QComboBox()
+        self.statistical_dropdown.addItems(["1×SD", "2×SD", "3×SD"])
+        self.statistical_dropdown.setCurrentText("3×SD")
+        self.statistical_dropdown.currentTextChanged.connect(self.apply_stick_filters)
+        statistical_layout.addWidget(self.statistical_dropdown)
+
+        statistical_layout.addWidget(QLabel("(filters unreliable peaks)"))
+        statistical_layout.addStretch()
+
+        filters_layout.addLayout(statistical_layout)
+
+        # Filter 6: Assignment status (Stage 7)
+        assignment_layout = QHBoxLayout()
+        self.assignment_filter_enabled = QCheckBox("Assignment:")
+        self.assignment_filter_enabled.setChecked(False)
+        self.assignment_filter_enabled.stateChanged.connect(self.apply_stick_filters)
+        assignment_layout.addWidget(self.assignment_filter_enabled)
+
+        self.assignment_radio_all = QRadioButton("All")
+        self.assignment_radio_all.setChecked(True)
+        self.assignment_radio_all.toggled.connect(self.apply_stick_filters)
+        assignment_layout.addWidget(self.assignment_radio_all)
+
+        self.assignment_radio_assigned = QRadioButton("Assigned Only")
+        self.assignment_radio_assigned.toggled.connect(self.apply_stick_filters)
+        assignment_layout.addWidget(self.assignment_radio_assigned)
+
+        self.assignment_radio_unassigned = QRadioButton("Unassigned Only")
+        self.assignment_radio_unassigned.toggled.connect(self.apply_stick_filters)
+        assignment_layout.addWidget(self.assignment_radio_unassigned)
+
+        assignment_layout.addStretch()
+
+        filters_layout.addLayout(assignment_layout)
+
         layout.addWidget(filters_group)
 
         # Plotting area
@@ -3337,6 +3380,7 @@ Export: Use export buttons to save data and plots
         Stage 4: Top N peaks filter
         Stage 5: m/z range filter
         Stage 6: PCA loadings filter
+        Stage 7: Statistical significance and assignment status filters
         """
         if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
             return
@@ -3452,6 +3496,46 @@ Export: Use export buttons to save data and plots
                 # PCA not run
                 self.pca_loadings_status.setText("(PCA not run)")
                 self.pca_loadings_status.setStyleSheet("color: gray;")
+
+        # Filter 5: Statistical significance (Stage 7)
+        if self.statistical_filter_enabled.isChecked():
+            # Get statistical criterion
+            stat_text = self.statistical_dropdown.currentText()
+
+            # Extract multiplier (1, 2, or 3)
+            multiplier = int(stat_text[0])  # "1×SD" -> 1, "2×SD" -> 2, "3×SD" -> 3
+
+            # Filter: keep peaks where mean > multiplier × std_dev
+            statistical_mask = mean_intensities > (multiplier * std_devs)
+            mask &= statistical_mask
+
+            print(f"   Statistical filter: {mask.sum()}/{len(mask)} peaks with mean > {multiplier}×SD")
+
+        # Filter 6: Assignment status (Stage 7)
+        if self.assignment_filter_enabled.isChecked():
+            # Check if we have fragment assignments
+            if hasattr(self, 'current_fragment_assignments'):
+                assignment_mask = np.ones(len(mz_values), dtype=bool)
+
+                if self.assignment_radio_assigned.isChecked():
+                    # Keep only assigned peaks
+                    for i, assignment in enumerate(self.current_fragment_assignments):
+                        if assignment['assignment'] == "Unassigned":
+                            assignment_mask[i] = False
+
+                    mask &= assignment_mask
+                    print(f"   Assignment filter: {mask.sum()}/{len(mask)} assigned peaks")
+
+                elif self.assignment_radio_unassigned.isChecked():
+                    # Keep only unassigned peaks
+                    for i, assignment in enumerate(self.current_fragment_assignments):
+                        if assignment['assignment'] != "Unassigned":
+                            assignment_mask[i] = False
+
+                    mask &= assignment_mask
+                    print(f"   Assignment filter: {mask.sum()}/{len(mask)} unassigned peaks")
+
+                # If "All" is checked, no filtering needed
 
         # Apply mask to data
         filtered_mz = mz_values[mask]
