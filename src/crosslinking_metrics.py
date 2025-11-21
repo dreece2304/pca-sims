@@ -41,9 +41,6 @@ class SampleMetrics:
     aromatic_count: int = 0
     h_deficient_count: int = 0
 
-    # Interpretation notes
-    interpretation: str = ""
-
     def to_dict(self):
         """Convert to dictionary for JSON export"""
         return asdict(self)
@@ -128,38 +125,7 @@ class CrosslinkingAnalyzer:
         else:
             metrics.total_fragments = len(fragment_data)
 
-        # 4. Interpret results
-        metrics.interpretation = self._interpret_metrics(metrics)
-
         return metrics
-
-    def _interpret_metrics(self, metrics: SampleMetrics) -> str:
-        """
-        Provide interpretation of crosslinking metrics
-
-        Based on literature:
-        - Higher C6H-/C4H- ratio → increased crosslinking (PMMA)
-        - Higher H-deficient fraction → more aromatic/unsaturated
-        """
-        interpretations = []
-
-        if metrics.c6h_to_c4h_ratio is not None:
-            if metrics.c6h_to_c4h_ratio > 0.7:
-                interpretations.append("High C6H-/C4H- ratio suggests increased crosslinking")
-            elif metrics.c6h_to_c4h_ratio > 0.5:
-                interpretations.append("Moderate crosslinking indicated")
-            else:
-                interpretations.append("Low crosslinking indicated")
-
-        if metrics.h_deficient_fraction is not None:
-            if metrics.h_deficient_fraction > 0.6:
-                interpretations.append("Highly H-deficient (aromatic-rich)")
-            elif metrics.h_deficient_fraction > 0.4:
-                interpretations.append("Moderate H-deficiency")
-            else:
-                interpretations.append("H-rich fragmentation pattern")
-
-        return "; ".join(interpretations) if interpretations else "Insufficient data"
 
     def add_sample(self, metrics: SampleMetrics):
         """Add sample metrics to collection"""
@@ -181,8 +147,7 @@ class CrosslinkingAnalyzer:
                 'h_deficient_fraction': metrics.h_deficient_fraction,
                 'total_fragments': metrics.total_fragments,
                 'aromatic_count': metrics.aromatic_count,
-                'h_deficient_count': metrics.h_deficient_count,
-                'interpretation': metrics.interpretation
+                'h_deficient_count': metrics.h_deficient_count
             })
 
         return pd.DataFrame(data)
@@ -318,7 +283,6 @@ if __name__ == "__main__":
         print(f"\n{sample['name']}:")
         print(f"  C6H-/C4H- ratio: {metrics.c6h_to_c4h_ratio:.3f}")
         print(f"  H-deficient fraction: {metrics.h_deficient_fraction:.3f}")
-        print(f"  Interpretation: {metrics.interpretation}")
 
     # Get trends
     print("\n" + "=" * 70)
