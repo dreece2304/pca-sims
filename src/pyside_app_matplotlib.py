@@ -39,6 +39,29 @@ sys.path.append(str(Path(__file__).parent))
 from simple_tof_sims_pca import SimpleToFSIMSPCA
 from matplotlib_plotting import PCAPlotCanvas, InteractivePCAPlots
 from stick_spectrum_plotting import StickSpectrumCanvas
+from fragment_analysis_tab import FragmentAnalysisTab
+
+# ===== CUSTOM WIDGETS =====
+class NumericTableWidgetItem(QTableWidgetItem):
+    """Custom QTableWidgetItem that sorts numerically instead of lexicographically"""
+
+    def __lt__(self, other):
+        """Override less-than comparison for proper numeric sorting"""
+        try:
+            # Get numeric values from UserRole data
+            self_value = self.data(Qt.UserRole)
+            other_value = other.data(Qt.UserRole)
+
+            # Compare numerically if both are numbers
+            if self_value is not None and other_value is not None:
+                return float(self_value) < float(other_value)
+            else:
+                # Fall back to string comparison
+                return super().__lt__(other)
+        except (ValueError, TypeError):
+            # Fall back to string comparison if conversion fails
+            return super().__lt__(other)
+
 
 # ===== APPLICATION CONSTANTS =====
 class Polarity:
@@ -1586,6 +1609,15 @@ class ToFSIMSPCAApp(QMainWindow):
         self.database_mgmt_widget = self.create_database_management_tab()
         self.plot_tabs.addTab(self.database_mgmt_widget, "🗃️ Database Management")
 
+        # Fragment Analysis tab (NEW - activates after PCA)
+        self.fragment_analysis_widget = FragmentAnalysisTab()
+        self.fragment_analysis_tab_index = self.plot_tabs.addTab(
+            self.fragment_analysis_widget,
+            "🧬 Fragment Analysis"
+        )
+        # Disable until PCA completes
+        self.plot_tabs.setTabEnabled(self.fragment_analysis_tab_index, False)
+
         # ===== REMOVED UNUSED TABS =====
         # The following tabs were removed to reduce code complexity:
         # - Group Analysis (lines 2515-2616) - Not actively used
@@ -2081,6 +2113,12 @@ class ToFSIMSPCAApp(QMainWindow):
         # Refresh fragment assignments with new PCA loadings
         if hasattr(self, 'assignment_table'):
             self.refresh_assignment_table()
+
+        # Populate Fragment Analysis tab
+        self._populate_fragment_analysis()
+
+        # Enable Fragment Analysis tab
+        self.plot_tabs.setTabEnabled(self.fragment_analysis_tab_index, True)
     
     def pca_error(self, error_message):
         """Handle PCA error"""
@@ -3368,12 +3406,25 @@ Export: Use export buttons to save data and plots
         self.show_sd_checkbox.stateChanged.connect(self.update_stick_spectrum_display)
         options_layout.addWidget(self.show_sd_checkbox)
 
+        # Use full raw data checkbox (all m/z from file)
+        self.use_full_data_checkbox = QCheckBox("Use Complete Raw Data")
+        self.use_full_data_checkbox.setChecked(False)
+        self.use_full_data_checkbox.setToolTip("Plot all m/z values from loaded file (beyond PCA-selected peaks)\nFilters out noise and limits to m/z < 300")
+        self.use_full_data_checkbox.stateChanged.connect(self.plot_stick_spectrum)
+        options_layout.addWidget(self.use_full_data_checkbox)
+
         options_layout.addStretch()
 
         # Fragment table button (Stage 2)
         view_table_btn = QPushButton("📋 View Fragment Table")
         view_table_btn.clicked.connect(self.show_fragment_table_dialog)
         options_layout.addWidget(view_table_btn)
+
+        # Excel export button
+        export_excel_btn = QPushButton("📊 Export to Excel")
+        export_excel_btn.clicked.connect(self.export_stick_spectrum_excel)
+        export_excel_btn.setToolTip("Export spectrum data to multi-sheet Excel file")
+        options_layout.addWidget(export_excel_btn)
 
         layout.addWidget(options_group)
 
@@ -3382,6 +3433,9 @@ Export: Use export buttons to save data and plots
         filters_group.setCheckable(True)
         filters_group.setChecked(False)  # Collapsed by default
         filters_layout = QVBoxLayout(filters_group)
+
+        # Store reference for later
+        self.filters_group = filters_group
 
         # Filter 1: Intensity threshold (Stage 3)
         intensity_filter_layout = QHBoxLayout()
@@ -3526,6 +3580,9 @@ Export: Use export buttons to save data and plots
 
         filters_layout.addLayout(assignment_layout)
 
+        # Connect checkbox to hide/show filter controls
+        filters_group.toggled.connect(self._toggle_filter_visibility)
+
         layout.addWidget(filters_group)
 
         # Plotting area
@@ -3586,18 +3643,57 @@ Export: Use export buttons to save data and plots
             # Extract intensity data for these samples
             dose_data = raw_data[sample_names]
 
-            # Calculate mean and std across replicates
-            mean_intensities = dose_data.mean(axis=1).values
-            std_devs = dose_data.std(axis=1).values
+            # Check if "Use Complete Raw Data" is enabled
+            use_full_data = self.use_full_data_checkbox.isChecked()
 
-            # Get m/z values
-            mz_values = raw_data.index.values
+            if use_full_data:
+                # Apply pre-filtering to reduce noise before plotting
+                # Filter 1: Remove very weak peaks (noise threshold)
+                mean_intensities_all = dose_data.mean(axis=1).values
+                noise_threshold = 1e-4  # Adjustable threshold for noise removal
+                noise_mask = mean_intensities_all >= noise_threshold
+
+                # Filter 2: Apply upper m/z limit
+                mz_values_all = raw_data.index.values
+                mz_upper_limit = 300.0  # Adjustable upper m/z limit
+                mz_mask = mz_values_all <= mz_upper_limit
+
+                # Combine filters
+                combined_mask = noise_mask & mz_mask
+
+                # Apply filters to dose data
+                dose_data = dose_data[combined_mask]
+
+                # Calculate mean and std for filtered data
+                mean_intensities = dose_data.mean(axis=1).values
+                std_devs = dose_data.std(axis=1).values
+                mz_values = dose_data.index.values
+
+                print(f"   Full data mode: {len(mz_values)} peaks after filtering")
+                print(f"   Noise threshold: {noise_threshold:.1e}, m/z limit: {mz_upper_limit:.1f}")
+            else:
+                # Use current behavior (PCA-selected peaks)
+                # Calculate mean and std across replicates
+                mean_intensities = dose_data.mean(axis=1).values
+                std_devs = dose_data.std(axis=1).values
+
+                # Get m/z values
+                mz_values = raw_data.index.values
 
             # Get polarity for title
             polarity_display = Polarity.display_name(self.multi_ion_manager.active_polarity)
 
-            # Create title
-            title = f"{polarity_display} - {dose_text}"
+            # Create simplified title: extract description from dose_text
+            # dose_text format: "SQ0 (As-deposited, 0 µC/cm²)" -> "As-deposited"
+            if '(' in dose_text and ')' in dose_text:
+                # Extract text between parentheses
+                desc_part = dose_text.split('(')[1].split(')')[0]
+                # Take first part before comma (the description)
+                description = desc_part.split(',')[0].strip()
+                title = f"{polarity_display} - {description}"
+            else:
+                # Fallback if format is different
+                title = f"{polarity_display} - {sq_label}"
 
             # Stage 2: Load fragment database and find assignments
             if not hasattr(self, 'fragment_database') or not self.fragment_database:
@@ -3642,7 +3738,8 @@ Export: Use export buttons to save data and plots
                 std_devs=std_devs,
                 labels=labels,  # Empty for now
                 show_sd_plot=show_sd,
-                title=title
+                title=title,
+                fragment_assignments=fragment_assignments  # For hover tooltips
             )
 
             # Store current plot data for replotting when options change
@@ -3651,8 +3748,18 @@ Export: Use export buttons to save data and plots
                 'intensities': mean_intensities,
                 'std_devs': std_devs,
                 'title': title,
-                'labels': labels
+                'labels': labels,
+                # Additional data for Excel export
+                'dose_label': sq_label,
+                'dose_number': dose_num,
+                'dose_text': dose_text,
+                'polarity': self.multi_ion_manager.active_polarity,
+                'replicate_data': dose_data,  # DataFrame with P1, P2, P3 columns
+                'sample_names': sample_names  # List of replicate sample names
             }
+
+            # Store unfiltered assignments for export (before filters applied)
+            self.unfiltered_fragment_assignments = fragment_assignments.copy()
 
             # Count assignments
             assigned_count = sum(1 for a in fragment_assignments if a['assignment'] != "Unassigned")
@@ -3676,12 +3783,29 @@ Export: Use export buttons to save data and plots
         if hasattr(self, 'current_stick_data') and self.current_stick_data:
             show_sd = self.show_sd_checkbox.isChecked()
 
+            # Get array of currently displayed m/z values (may be filtered)
+            displayed_mz_array = self.current_stick_data['mz_values']
+
             # Rebuild labels from fragment assignments based on show_label flags
+            # Only include labels for peaks that are currently displayed
             labels = {}
             if hasattr(self, 'current_fragment_assignments'):
+                print(f"🔍 Checking {len(self.current_fragment_assignments)} assignments for labels...")
                 for assignment in self.current_fragment_assignments:
-                    if assignment['show_label'] and assignment['assignment'] != "Unassigned":
-                        labels[assignment['mz']] = assignment['assignment']
+                    if assignment['show_label']:
+                        print(f"   Assignment m/z {assignment['mz']:.4f}: show_label=True, assignment={assignment['assignment']}")
+                        if assignment['assignment'] != "Unassigned":
+                            # Check if this m/z is in the displayed array (with tolerance)
+                            mz_in_display = any(abs(displayed_mz - assignment['mz']) < 1e-6
+                                               for displayed_mz in displayed_mz_array)
+                            if mz_in_display:
+                                labels[assignment['mz']] = assignment['assignment']
+                                print(f"   ✓ Added to labels dict: {assignment['mz']:.4f} -> {assignment['assignment']}")
+                            else:
+                                print(f"   ✗ m/z {assignment['mz']:.4f} not in displayed array")
+
+            # Debug output
+            print(f"📌 Passing {len(labels)} labels to plot: {list(labels.keys())}")
 
             self.stick_canvas.plot_stick_spectrum(
                 mz_values=self.current_stick_data['mz_values'],
@@ -3689,8 +3813,17 @@ Export: Use export buttons to save data and plots
                 std_devs=self.current_stick_data['std_devs'],
                 labels=labels,
                 show_sd_plot=show_sd,
-                title=self.current_stick_data['title']
+                title=self.current_stick_data['title'],
+                fragment_assignments=self.current_fragment_assignments  # For hover tooltips
             )
+
+    def _toggle_filter_visibility(self, checked):
+        """Hide/show filter controls when checkbox is toggled"""
+        # Hide all filter widgets when unchecked to save space
+        for child in self.filters_group.findChildren(QWidget):
+            # Don't hide the group box itself
+            if child != self.filters_group:
+                child.setVisible(checked)
 
     def validate_mz_range(self):
         """Validate m/z range inputs and apply filter if valid"""
@@ -3937,7 +4070,8 @@ Export: Use export buttons to save data and plots
             std_devs=filtered_std_devs,
             labels=labels,
             show_sd_plot=show_sd,
-            title=self.current_stick_data['title']
+            title=self.current_stick_data['title'],
+            fragment_assignments=self.current_fragment_assignments  # For hover tooltips
         )
 
         # Update statistics
@@ -3986,30 +4120,31 @@ Export: Use export buttons to save data and plots
             "m/z", "Mean Intensity", "Std Dev", "CV%",
             "Assignment", "Confidence", "Show Label"
         ])
-        table.setSortingEnabled(True)
+        # Disable sorting during population for performance and stability
+        table.setSortingEnabled(False)
         table.setEditTriggers(QTableWidget.NoEditTriggers)  # Read-only except for checkboxes
         table.setSelectionBehavior(QTableWidget.SelectRows)
 
         # Populate table
         table.setRowCount(len(self.current_fragment_assignments))
         for row, assignment in enumerate(self.current_fragment_assignments):
-            # m/z (4 decimals)
-            mz_item = QTableWidgetItem(f"{assignment['mz']:.4f}")
+            # m/z (4 decimals) - numeric sorting
+            mz_item = NumericTableWidgetItem(f"{assignment['mz']:.4f}")
             mz_item.setData(Qt.UserRole, assignment['mz'])  # Store numeric value for sorting
             table.setItem(row, 0, mz_item)
 
-            # Mean Intensity (scientific notation)
-            intensity_item = QTableWidgetItem(f"{assignment['mean_intensity']:.3e}")
+            # Mean Intensity (scientific notation) - numeric sorting
+            intensity_item = NumericTableWidgetItem(f"{assignment['mean_intensity']:.3e}")
             intensity_item.setData(Qt.UserRole, assignment['mean_intensity'])
             table.setItem(row, 1, intensity_item)
 
-            # Std Dev (scientific notation)
-            sd_item = QTableWidgetItem(f"{assignment['std_dev']:.3e}")
+            # Std Dev (scientific notation) - numeric sorting
+            sd_item = NumericTableWidgetItem(f"{assignment['std_dev']:.3e}")
             sd_item.setData(Qt.UserRole, assignment['std_dev'])
             table.setItem(row, 2, sd_item)
 
-            # CV% (2 decimals)
-            cv_item = QTableWidgetItem(f"{assignment['cv_percent']:.2f}%")
+            # CV% (2 decimals) - numeric sorting
+            cv_item = NumericTableWidgetItem(f"{assignment['cv_percent']:.2f}%")
             cv_item.setData(Qt.UserRole, assignment['cv_percent'])
             table.setItem(row, 3, cv_item)
 
@@ -4033,13 +4168,17 @@ Export: Use export buttons to save data and plots
             checkbox.setChecked(assignment['show_label'])
             checkbox.setEnabled(assignment['assignment'] != "Unassigned")  # Disable for unassigned
 
-            # Connect checkbox to update function
+            # Connect checkbox to update function (using m/z for sorting-safe operation)
+            mz_value = assignment['mz']
             checkbox.stateChanged.connect(
-                lambda state, r=row: self.toggle_fragment_label(r, state)
+                lambda state, mz=mz_value: self.toggle_fragment_label_by_mz(mz, state)
             )
 
             checkbox_layout.addWidget(checkbox)
             table.setCellWidget(row, 6, checkbox_widget)
+
+        # Enable sorting after population complete
+        table.setSortingEnabled(True)
 
         # Resize columns to content
         table.resizeColumnsToContents()
@@ -4080,17 +4219,43 @@ Export: Use export buttons to save data and plots
 
         layout.addLayout(button_layout)
 
-        # Store table reference for manual assignment
-        dialog.fragment_table = table
-
         dialog.exec()
 
     def toggle_fragment_label(self, row_index, state):
-        """Toggle show_label flag for a fragment and refresh plot"""
+        """
+        Toggle show_label flag for a fragment and refresh plot
+        DEPRECATED: Use toggle_fragment_label_by_mz for sorting-safe operation
+        Kept for backward compatibility only
+        """
         if hasattr(self, 'current_fragment_assignments') and row_index < len(self.current_fragment_assignments):
-            self.current_fragment_assignments[row_index]['show_label'] = (state == Qt.Checked)
+            # Qt6 stateChanged signal emits int: 0=unchecked, 2=checked
+            self.current_fragment_assignments[row_index]['show_label'] = (state == 2)
             # Refresh plot to show/hide label
             self.update_stick_spectrum_display()
+
+    def toggle_fragment_label_by_mz(self, mz_value, state):
+        """
+        Toggle show_label flag by m/z lookup (sorting-safe)
+
+        Args:
+            mz_value: The m/z value to find (unique identifier)
+            state: Qt checkbox state (Qt.Checked or Qt.Unchecked)
+        """
+        if not hasattr(self, 'current_fragment_assignments'):
+            return
+
+        # Find assignment by m/z value (tight tolerance for exact match)
+        for assignment in self.current_fragment_assignments:
+            if abs(assignment['mz'] - mz_value) < 1e-6:
+                # Qt6 stateChanged signal emits int: 0=unchecked, 2=checked
+                assignment['show_label'] = (state == 2)
+                # Debug output
+                print(f"{'✓ Enabled' if state == 2 else '✗ Disabled'} label for m/z {mz_value:.4f} ({assignment['assignment']})")
+                self.update_stick_spectrum_display()
+                return
+
+        # If we get here, lookup failed
+        print(f"⚠️  Warning: Could not find assignment for m/z {mz_value:.4f}")
 
     def open_manual_assignment_dialog(self, table, parent_dialog):
         """Open manual assignment dialog for selected peak"""
@@ -4114,7 +4279,7 @@ Export: Use export buttons to save data and plots
         # Find the corresponding assignment in current_fragment_assignments
         assignment_index = None
         for i, assignment in enumerate(self.current_fragment_assignments):
-            if abs(assignment['mz'] - mz_value) < 0.0001:  # Match within tolerance
+            if abs(assignment['mz'] - mz_value) < 1e-6:  # Tight tolerance for exact match
                 assignment_index = i
                 break
 
@@ -4221,6 +4386,236 @@ Export: Use export buttons to save data and plots
             except Exception as e:
                 QMessageBox.critical(parent_dialog, "Export Error",
                                    f"Failed to export table:\n{str(e)}")
+
+    def export_stick_spectrum_excel(self):
+        """Export stick spectrum data to comprehensive multi-sheet Excel file"""
+        # Check if data is available
+        if not hasattr(self, 'current_stick_data') or not self.current_stick_data:
+            QMessageBox.warning(
+                self,
+                "No Data",
+                "Please plot a stick spectrum first."
+            )
+            return
+
+        # Get save location
+        polarity = Polarity.display_name(self.current_stick_data['polarity']).replace(' ', '_')
+        dose_label = self.current_stick_data['dose_label']
+        default_filename = f"stick_spectrum_{polarity}_{dose_label}.xlsx"
+        default_path = f"/home/dreece23/pca-sims/outputs/{default_filename}"
+
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Stick Spectrum to Excel",
+            default_path,
+            "Excel files (*.xlsx);;All files (*)"
+        )
+
+        if not file_path:
+            return
+
+        try:
+            import pandas as pd
+            from datetime import datetime
+
+            # Create Excel writer
+            with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+
+                # === SHEET 1: Spectrum Summary (Metadata) ===
+                summary_data = {
+                    'Metric': [
+                        'Export Date',
+                        'Polarity',
+                        'Dose Selected',
+                        'Dose Value',
+                        'Number of Replicates',
+                        'Total Peaks (Raw)',
+                        'Total Peaks (After Filters)',
+                        'Assignment Rate',
+                        '',
+                        'Filter Settings:',
+                        'Intensity Threshold',
+                        'Top N Peaks',
+                        'm/z Range',
+                        'PCA Loadings Threshold',
+                        'Statistical Filter',
+                        'Assignment Filter'
+                    ],
+                    'Value': []
+                }
+
+                # Calculate statistics
+                n_replicates = len(self.current_stick_data['sample_names'])
+                n_raw = len(self.unfiltered_fragment_assignments)
+                n_filtered = len(self.current_fragment_assignments)
+                n_assigned_filtered = sum(1 for a in self.current_fragment_assignments if a['assignment'] != "Unassigned")
+                assignment_rate = f"{n_assigned_filtered}/{n_filtered} ({100*n_assigned_filtered/n_filtered:.1f}%)" if n_filtered > 0 else "N/A"
+
+                # Get filter states
+                intensity_status = f"{self.intensity_slider.value()}% (Enabled)" if self.intensity_filter_enabled.isChecked() else "Disabled"
+                topn_status = f"Top {self.topn_dropdown.currentText()} (Enabled)" if self.topn_filter_enabled.isChecked() else "Disabled"
+
+                mz_min = self.mz_min_input.text() if self.mz_min_input.text() else "auto"
+                mz_max = self.mz_max_input.text() if self.mz_max_input.text() else "auto"
+                mz_range_status = f"{mz_min} - {mz_max} (Enabled)" if self.mz_range_enabled.isChecked() else "Disabled"
+
+                pca_status = f"|PC1| > {self.pca_loadings_slider.value()/100:.2f} (Enabled)" if self.pca_loadings_enabled.isChecked() else "Disabled"
+
+                statistical_status = "Disabled"
+                if self.statistical_filter_enabled.isChecked():
+                    stat_text = self.statistical_dropdown.currentText()
+                    statistical_status = f"{stat_text} (Enabled)"
+
+                assignment_status = "All peaks"
+                if self.assignment_radio_assigned.isChecked():
+                    assignment_status = "Assigned Only (Enabled)"
+                elif self.assignment_radio_unassigned.isChecked():
+                    assignment_status = "Unassigned Only (Enabled)"
+
+                # Fill values
+                summary_data['Value'] = [
+                    datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    Polarity.display_name(self.current_stick_data['polarity']),
+                    self.current_stick_data['dose_label'],
+                    self.current_stick_data['dose_text'].split('(')[1].split(')')[0],
+                    n_replicates,
+                    n_raw,
+                    n_filtered,
+                    assignment_rate,
+                    '',
+                    '',
+                    intensity_status,
+                    topn_status,
+                    mz_range_status,
+                    pca_status,
+                    statistical_status,
+                    assignment_status
+                ]
+
+                summary_df = pd.DataFrame(summary_data)
+                summary_df.to_excel(writer, sheet_name='Spectrum Summary', index=False)
+
+                # === SHEET 2: Filtered Data (Currently Displayed) ===
+                filtered_data = []
+                for assignment in self.current_fragment_assignments:
+                    filtered_data.append({
+                        'm/z': f"{assignment['mz']:.4f}",
+                        'Mean_Intensity': assignment['mean_intensity'],
+                        'Std_Dev': assignment['std_dev'],
+                        'CV%': f"{assignment['cv_percent']:.2f}",
+                        'Assignment': assignment['assignment'],
+                        'Formula': assignment['formula'],
+                        'Confidence': assignment['confidence'],
+                        'Show_Label': 'Yes' if assignment['show_label'] else 'No'
+                    })
+
+                filtered_df = pd.DataFrame(filtered_data)
+                filtered_df.to_excel(writer, sheet_name='Filtered Data', index=False)
+
+                # === SHEET 3: Raw Data (All Peaks Before Filtering) ===
+                raw_data = []
+                for assignment in self.unfiltered_fragment_assignments:
+                    # Check if this peak passes current filters
+                    passes_filters = any(
+                        abs(a['mz'] - assignment['mz']) < 1e-6
+                        for a in self.current_fragment_assignments
+                    )
+
+                    raw_data.append({
+                        'm/z': f"{assignment['mz']:.4f}",
+                        'Mean_Intensity': assignment['mean_intensity'],
+                        'Std_Dev': assignment['std_dev'],
+                        'CV%': f"{assignment['cv_percent']:.2f}",
+                        'Assignment': assignment['assignment'],
+                        'Formula': assignment['formula'],
+                        'Confidence': assignment['confidence'],
+                        'Passes_Filters': 'Yes' if passes_filters else 'No'
+                    })
+
+                raw_df = pd.DataFrame(raw_data)
+                raw_df.to_excel(writer, sheet_name='Raw Data (Unfiltered)', index=False)
+
+                # === SHEET 4: Replicate Data (Individual Measurements) ===
+                replicate_data = []
+                replicate_df_raw = self.current_stick_data['replicate_data']
+                sample_names = self.current_stick_data['sample_names']
+
+                for mz in replicate_df_raw.index:
+                    row = {'m/z': f"{mz:.4f}"}
+
+                    # Add individual replicate intensities
+                    for i, sample_name in enumerate(sample_names):
+                        row[f'P{i+1}_Intensity'] = replicate_df_raw.loc[mz, sample_name]
+
+                    # Add statistics
+                    row['Mean'] = replicate_df_raw.loc[mz, sample_names].mean()
+                    row['Std_Dev'] = replicate_df_raw.loc[mz, sample_names].std()
+                    row['CV%'] = f"{(row['Std_Dev'] / row['Mean'] * 100):.2f}" if row['Mean'] > 0 else "0.00"
+
+                    replicate_data.append(row)
+
+                replicate_df = pd.DataFrame(replicate_data)
+                replicate_df.to_excel(writer, sheet_name='Replicate Data', index=False)
+
+                # === SHEET 5: Fragment Database Info (Assignment Details) ===
+                # Only include assigned peaks with additional database information
+                db_data = []
+                for assignment in self.unfiltered_fragment_assignments:
+                    if assignment['assignment'] != "Unassigned":
+                        # Calculate mass error if we have database info
+                        observed_mz = assignment['mz']
+
+                        # Find matching fragment in database
+                        matches = self.find_multiple_fragment_assignments(
+                            target_mass=observed_mz,
+                            tolerance_ppm=100.0,
+                            polarity=self.current_stick_data['polarity'],
+                            max_matches=1
+                        )
+
+                        if matches:
+                            match = matches[0]
+                            theoretical_mass = match['mass']
+                            mass_error_da = observed_mz - theoretical_mass
+                            mass_error_ppm = (mass_error_da / theoretical_mass) * 1e6 if theoretical_mass > 0 else 0
+
+                            db_data.append({
+                                'm/z': f"{observed_mz:.4f}",
+                                'Assignment': assignment['assignment'],
+                                'Formula': assignment['formula'],
+                                'Theoretical_Mass': f"{theoretical_mass:.4f}",
+                                'Mass_Error_ppm': f"{mass_error_ppm:.1f}",
+                                'Mass_Error_Da': f"{mass_error_da:.4f}",
+                                'Family': match.get('families', [''])[0] if match.get('families') else '',
+                                'Confidence': assignment['confidence'],
+                                'Notes': match.get('notes', '')
+                            })
+
+                if db_data:
+                    db_df = pd.DataFrame(db_data)
+                    db_df.to_excel(writer, sheet_name='Fragment Assignments', index=False)
+
+            QMessageBox.information(
+                self,
+                "Export Complete",
+                f"Stick spectrum data exported to:\n{file_path}\n\n"
+                f"5 sheets created:\n"
+                f"  1. Spectrum Summary\n"
+                f"  2. Filtered Data\n"
+                f"  3. Raw Data (Unfiltered)\n"
+                f"  4. Replicate Data\n"
+                f"  5. Fragment Assignments"
+            )
+
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Export Error",
+                f"Failed to export Excel file:\n{str(e)}\n\n"
+                f"Check console for details."
+            )
+            import traceback
+            traceback.print_exc()
 
     def refresh_fragment_list(self):
         """Populate fragment list from current PCA loadings"""
@@ -6348,6 +6743,103 @@ Export: Use export buttons to save data and plots
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to export group analysis: {str(e)}")
+
+    def _populate_fragment_analysis(self):
+        """
+        Populate Fragment Analysis tab with classified fragments and metrics
+
+        Uses PCA results to classify fragments and calculate metrics
+        """
+        try:
+            # Check if PCA has been run
+            if not self.pca_completed or not hasattr(self, 'pca_analyzer'):
+                print("⚠️  PCA not completed - skipping Fragment Analysis population")
+                return
+
+            # Get fragment data from PCA
+            masses = self.pca_analyzer.mass_list
+            sample_names = self.pca_analyzer.sample_names
+
+            # Get current polarity
+            polarity = self.multi_ion_manager.current_polarity
+
+            # Get formulas - try to match from database or use manual assignments
+            formulas = []
+            for mass in masses:
+                formula = self._get_fragment_formula(mass, polarity)
+                formulas.append(formula if formula else f"Unknown_{mass:.4f}")
+
+            # Get intensities for all samples (normalized)
+            intensities = []
+            for i in range(len(sample_names)):
+                sample_intensities = self.pca_analyzer.data_normalized[i, :]
+                intensities.append(sample_intensities)
+
+            # Build fragment data dict
+            fragment_data = {
+                'masses': masses,
+                'formulas': formulas,
+                'intensities': intensities
+            }
+
+            # Get PCA results
+            loadings_df = self.pca_analyzer.get_loadings_dataframe()
+            variance_explained = self.pca_analyzer.explained_variance_ratio
+
+            pca_results = {
+                'loadings': loadings_df,
+                'variance_explained': variance_explained
+            }
+
+            # Populate the tab
+            self.fragment_analysis_widget.set_data(
+                fragment_data,
+                pca_results,
+                sample_names,
+                polarity
+            )
+
+            print(f"✅ Fragment Analysis tab populated: {len(masses)} fragments, {len(sample_names)} samples")
+
+        except Exception as e:
+            print(f"⚠️  Error populating Fragment Analysis: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def _get_fragment_formula(self, mass, polarity):
+        """
+        Get chemical formula for a fragment mass
+
+        Tries (in order):
+        1. User-confirmed manual assignments
+        2. Fragment database matches
+        3. Returns None if no match
+
+        Args:
+            mass: Fragment m/z value
+            polarity: 'negative' or 'positive'
+
+        Returns:
+            Chemical formula string or None
+        """
+        # Check user-confirmed assignments first
+        mass_key = f"{mass:.4f}"
+        if hasattr(self, 'user_confirmed_assignments') and mass_key in self.user_confirmed_assignments:
+            assignment = self.user_confirmed_assignments[mass_key]
+            # Extract formula from assignment (e.g., "C_6H_5+" -> "C6H5")
+            formula = assignment.replace('_', '').replace('+', '').replace('-', '')
+            return formula
+
+        # Check fragment database
+        if hasattr(self, 'fragment_db') and self.fragment_db:
+            matches = self.find_fragment_matches(mass, polarity, tolerance_da=0.01)
+            if matches:
+                # Use first (best) match
+                best_match = matches[0]
+                if 'formulas' in best_match and best_match['formulas']:
+                    return best_match['formulas'][0].replace('_', '')
+
+        return None
 
 
 def main():
