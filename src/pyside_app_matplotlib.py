@@ -2030,6 +2030,9 @@ class ToFSIMSPCAApp(QMainWindow):
             # Populate sample management table
             self.populate_sample_table()
 
+            # Update stick spectrum dose selector with available doses
+            self.update_stick_spectrum_dose_selector()
+
             # Update group analysis if in dual-ion mode
             if self.dual_ion_mode and hasattr(self, 'group_combo'):
                 self.update_group_analysis()
@@ -3378,15 +3381,9 @@ Export: Use export buttons to save data and plots
 
         dose_layout.addWidget(QLabel("Select Dose Level:"))
 
-        # Dose buttons (SQ0, SQ2-SQ5 only - SQ1 is excluded)
+        # Dose buttons - populated dynamically when data is loaded
         self.dose_buttons = QComboBox()
-        self.dose_buttons.addItems([
-            "SQ0 (As-deposited, 0 µC/cm²)",
-            "SQ2 (2000 µC/cm²)",
-            "SQ3 (5000 µC/cm²)",
-            "SQ4 (10000 µC/cm²)",
-            "SQ5 (15000 µC/cm²)"
-        ])
+        self.dose_buttons.setPlaceholderText("Load data first...")
         dose_layout.addWidget(self.dose_buttons)
 
         # Plot button
@@ -6743,6 +6740,64 @@ Export: Use export buttons to save data and plots
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to export group analysis: {str(e)}")
+
+    def update_stick_spectrum_dose_selector(self):
+        """
+        Update stick spectrum dose selector based on loaded data
+
+        Dynamically populates the dose dropdown with available doses from loaded data
+        """
+        try:
+            if not hasattr(self, 'pca_analyzer') or self.pca_analyzer is None:
+                return
+
+            if not hasattr(self, 'dose_buttons'):
+                return
+
+            # Get unique dose IDs from sample metadata
+            if 'dose_id' not in self.pca_analyzer.sample_metadata.columns:
+                return
+
+            dose_ids = sorted(self.pca_analyzer.sample_metadata['dose_id'].unique())
+
+            # Get custom dose values if they exist
+            custom_doses = getattr(self.pca_analyzer, 'custom_dose_values', {})
+
+            # Get sample metadata to find group names
+            sample_metadata = self.pca_analyzer.sample_metadata
+
+            # Clear existing items
+            self.dose_buttons.clear()
+
+            # Build dose selector items
+            for dose_id in dose_ids:
+                # Get dose value
+                dose_value = custom_doses.get(dose_id, dose_id)
+
+                # Get group name for this dose (from first sample in this dose)
+                dose_samples = sample_metadata[sample_metadata['dose_id'] == dose_id]
+                if len(dose_samples) > 0:
+                    first_sample = dose_samples.iloc[0]
+                    group_name = first_sample.get('group', f'SQ{dose_id}')
+                else:
+                    group_name = f'SQ{dose_id}'
+
+                # Format display text
+                if isinstance(dose_value, (int, float)) and dose_value != dose_id:
+                    # Custom dose value exists
+                    display_text = f"SQ{dose_id} ({group_name}, {dose_value:.0f} µC/cm²)"
+                else:
+                    # No custom dose, use group name
+                    display_text = f"SQ{dose_id} ({group_name})"
+
+                self.dose_buttons.addItem(display_text)
+
+            print(f"✅ Updated stick spectrum dose selector: {len(dose_ids)} doses available")
+
+        except Exception as e:
+            print(f"⚠️  Error updating stick spectrum dose selector: {e}")
+            import traceback
+            traceback.print_exc()
 
     def _populate_fragment_analysis(self):
         """
