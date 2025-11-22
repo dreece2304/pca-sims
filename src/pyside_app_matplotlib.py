@@ -6757,7 +6757,7 @@ Export: Use export buttons to save data and plots
                 return
 
             # Get fragment data from PCA
-            masses = self.pca_analyzer.mass_list
+            masses = getattr(self.pca_analyzer, 'current_mass_values', self.pca_analyzer.mass_values)
             sample_names = self.pca_analyzer.sample_names
 
             # Get current polarity
