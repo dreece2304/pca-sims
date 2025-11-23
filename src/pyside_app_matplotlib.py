@@ -1647,12 +1647,7 @@ class ToFSIMSPCAApp(QMainWindow):
         self.update_recent_files_menu()
         
         file_menu.addSeparator()
-        
-        # Load default action
-        default_action = QAction('Load &Default Data', self)
-        default_action.triggered.connect(self.load_default_data)
-        file_menu.addAction(default_action)
-        
+
         file_menu.addSeparator()
         
         # Exit action
