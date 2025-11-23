@@ -1388,11 +1388,6 @@ class ToFSIMSPCAApp(QMainWindow):
 
         layout.addLayout(file_layout)
 
-        # Default file button
-        default_button = QPushButton("Load Default Data")
-        default_button.clicked.connect(self.load_default_data)
-        layout.addWidget(default_button)
-
         # Polarity selection for multi-ion mode
         polarity_layout = QHBoxLayout()
         polarity_layout.addWidget(QLabel("Ion Mode:"))
@@ -1751,14 +1746,6 @@ class ToFSIMSPCAApp(QMainWindow):
             preview_dialog = DataPreviewDialog(file_path, self)
             if preview_dialog.exec() == QDialog.DialogCode.Accepted:
                 self.load_data_file(file_path)
-    
-    def load_default_data(self):
-        """Load default data file"""
-        default_path = "/home/dreece23/pca-sims/data/NegativeIon/NegIonTIC.txt"
-        if os.path.exists(default_path):
-            self.load_data_file(default_path)
-        else:
-            QMessageBox.warning(self, "Warning", f"Default file not found: {default_path}")
     
     def load_data_file(self, file_path):
         """Load data from file with multi-ion support"""
@@ -6813,10 +6800,25 @@ Export: Use export buttons to save data and plots
 
             # Get fragment data from PCA
             masses = getattr(self.pca_analyzer, 'current_mass_values', self.pca_analyzer.mass_values)
-            sample_names = self.pca_analyzer.sample_metadata['sample_name'].tolist()
+
+            # Use working_metadata (filtered samples) not sample_metadata (all samples)
+            sample_names = self.pca_analyzer.working_metadata['sample_name'].tolist()
+
+            # Validate data consistency
+            n_samples = self.pca_analyzer.preprocessed_data.shape[0]
+            n_masses = self.pca_analyzer.preprocessed_data.shape[1]
+
+            if len(sample_names) != n_samples:
+                print(f"⚠️  Sample name mismatch: {len(sample_names)} names != {n_samples} samples")
+                print(f"   Using first {n_samples} sample names")
+                sample_names = sample_names[:n_samples]
+
+            if len(masses) != n_masses:
+                print(f"⚠️  Mass array mismatch: {len(masses)} != {n_masses}")
+                masses = masses[:n_masses]
 
             # Get current polarity
-            polarity = self.multi_ion_manager.current_polarity
+            polarity = self.multi_ion_manager.active_polarity
 
             # Get formulas - try to match from database or use manual assignments
             formulas = []
@@ -6824,17 +6826,18 @@ Export: Use export buttons to save data and plots
                 formula = self._get_fragment_formula(mass, polarity)
                 formulas.append(formula if formula else f"Unknown_{mass:.4f}")
 
-            # Get intensities for all samples (normalized)
+            # Get intensities for all samples (preprocessed data)
             intensities = []
             for i in range(len(sample_names)):
-                sample_intensities = self.pca_analyzer.data_normalized[i, :]
+                sample_intensities = self.pca_analyzer.preprocessed_data.iloc[i, :].values
                 intensities.append(sample_intensities)
 
             # Build fragment data dict
             fragment_data = {
                 'masses': masses,
                 'formulas': formulas,
-                'intensities': intensities
+                'intensities': intensities,
+                'sample_names': sample_names
             }
 
             # Get PCA results
