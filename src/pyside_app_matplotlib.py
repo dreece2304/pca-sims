@@ -40,6 +40,7 @@ from simple_tof_sims_pca import SimpleToFSIMSPCA
 from matplotlib_plotting import PCAPlotCanvas, InteractivePCAPlots
 from stick_spectrum_plotting import StickSpectrumCanvas
 from fragment_analysis_tab import FragmentAnalysisTab
+from tofsims_excel_processor import ToFSIMSExcelProcessor
 
 # ===== CUSTOM WIDGETS =====
 class NumericTableWidgetItem(QTableWidgetItem):
@@ -1379,12 +1380,17 @@ class ToFSIMSPCAApp(QMainWindow):
         # File selection
         file_layout = QHBoxLayout()
         self.file_label = QLabel("No file selected")
-        self.browse_button = QPushButton("Browse...")
+        self.browse_button = QPushButton("Browse .txt/.csv...")
         self.browse_button.clicked.connect(self.browse_file)
+
+        self.import_excel_button = QPushButton("Import Excel")
+        self.import_excel_button.clicked.connect(self.import_excel_file)
+        self.import_excel_button.setToolTip("Import Excel file with fragment assignments and intensities")
 
         file_layout.addWidget(QLabel("Data file:"))
         file_layout.addWidget(self.file_label)
         file_layout.addWidget(self.browse_button)
+        file_layout.addWidget(self.import_excel_button)
 
         layout.addLayout(file_layout)
 
@@ -1736,17 +1742,108 @@ class ToFSIMSPCAApp(QMainWindow):
     def browse_file(self):
         """Browse for data file"""
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "Select ToF-SIMS Data File", 
+            self, "Select ToF-SIMS Data File",
             "/home/dreece23/pca-sims/data",
             "Text files (*.txt *.tsv *.csv)"
         )
-        
+
         if file_path:
             # Show preview dialog
             preview_dialog = DataPreviewDialog(file_path, self)
             if preview_dialog.exec() == QDialog.DialogCode.Accepted:
                 self.load_data_file(file_path)
-    
+
+    def import_excel_file(self):
+        """Import Excel file with fragment assignments and intensities"""
+        # Browse for Excel file
+        excel_path, _ = QFileDialog.getOpenFileName(
+            self, "Select ToF-SIMS Excel File",
+            "/home/dreece23/pca-sims/data",
+            "Excel files (*.xlsx *.xls)"
+        )
+
+        if not excel_path:
+            return
+
+        # Prompt for polarity
+        polarity_dialog = QInputDialog()
+        polarity_options = ["Positive Ion", "Negative Ion"]
+        polarity_text, ok = QInputDialog.getItem(
+            self, "Select Ion Polarity",
+            "Choose ion polarity for this data:",
+            polarity_options, 0, False
+        )
+
+        if not ok:
+            return
+
+        # Convert display text to polarity string
+        polarity = "positive" if "Positive" in polarity_text else "negative"
+
+        try:
+            self.data_status.setText(f"Importing Excel file ({polarity})...")
+            QApplication.processEvents()  # Update UI
+
+            # Initialize Excel processor
+            processor = ToFSIMSExcelProcessor()
+
+            # Process Excel file
+            intensity_df, stats = processor.process_excel_file(excel_path, polarity)
+
+            # Create temporary output file
+            excel_filename = Path(excel_path).stem
+            temp_output_dir = Path("/home/dreece23/pca-sims/data") / "temp"
+            temp_output_dir.mkdir(exist_ok=True)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_path = temp_output_dir / f"{excel_filename}_{polarity}_{timestamp}.txt"
+
+            # Export to tab-delimited format
+            processor.export_to_tab_delimited(intensity_df, str(output_path))
+
+            # Show import summary
+            summary_msg = f"""Excel Import Complete!
+
+File: {Path(excel_path).name}
+Polarity: {polarity_text}
+
+Processing Summary:
+• Original rows: {stats['total_rows']}
+• Unique m/z values: {stats['unique_mz_values']}
+• Duplicates merged: {stats['duplicates_removed']}
+• Fragment database: {stats['new_fragments_added']} new fragments added
+• Samples: {stats['sample_columns']}
+• m/z range: {stats['mz_range'][0]:.4f} - {stats['mz_range'][1]:.4f} Da
+
+Converted to: {output_path.name}
+
+Click OK to load the processed data."""
+
+            reply = QMessageBox.information(
+                self, "Excel Import Successful",
+                summary_msg,
+                QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel
+            )
+
+            if reply == QMessageBox.StandardButton.Ok:
+                # Load the converted file
+                self.load_data_file(str(output_path))
+                self.data_status.setText(f"Loaded from Excel: {Path(excel_path).name}")
+            else:
+                self.data_status.setText("Excel import cancelled")
+
+        except Exception as e:
+            QMessageBox.critical(
+                self, "Excel Import Error",
+                f"Failed to import Excel file:\n\n{str(e)}\n\nPlease check that the file format is correct:\n"
+                "- Column 0: Fragment assignments\n"
+                "- Column 1: Mass (u)\n"
+                "- Columns 2+: Sample intensities"
+            )
+            self.data_status.setText(f"Excel import failed: {str(e)}")
+            import traceback
+            traceback.print_exc()
+
     def load_data_file(self, file_path):
         """Load data from file with multi-ion support"""
         try:

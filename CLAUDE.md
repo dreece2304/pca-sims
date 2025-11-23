@@ -282,12 +282,22 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 📚 **Documentation Consolidation**: Streamlined to core technical docs
 🎯 **Project Scope**: Clear separation of data processing vs interpretation
 
-### **Refactoring Updates (November 2025) - Phase 1 Complete**
+### **Refactoring Updates (November 2025)**
+
+#### **Phase 1 Complete - Codebase Cleanup**
 🧹 **Codebase Cleanup**: Removed 30 unused files (multi_ion_manager, test files, 26 investigation scripts)
 📁 **Scripts Organization**: Moved production scripts to `scripts/production/` directory
 🛠️ **Database Tools**: Consolidated 3 fragment database cleanup scripts into single `manage_fragment_database.py` tool with validate/cleanup/backup/stats subcommands
 🔧 **GUI Cleanup**: Removed broken "Load Default Data" button (missing file reference)
 
+#### **Phase 2 Complete - Excel Import Integration**
+📊 **Direct Excel Import**: Added "Import Excel" button to GUI - no more CLI preprocessing step
+🔄 **Seamless Workflow**: Excel → GUI import → auto-update fragment database → load data
+✅ **Polarity Selection**: Interactive dialog for choosing positive/negative ion mode
+🧬 **Fragment Database**: Uses exact calculated m/z from formulas (not measured values)
+🐛 **Critical Fix**: Corrected duplicate m/z handling - now removes duplicate rows instead of averaging (intensities are identical for same measured peak)
+📈 **Import Summary**: Shows processing statistics including duplicates removed, fragments added, sample count
+
 **Ready for Enhancement**: Add new analysis features, improve visualizations, extend data support.
 
-**Last Updated**: November 2025 - Phase 1 Refactoring (Codebase Cleanup)
+**Last Updated**: November 2025 - Phase 2 Refactoring (Excel Import Integration)
