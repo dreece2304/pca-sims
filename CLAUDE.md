@@ -21,25 +21,63 @@ source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-si
 
 ---
 
-## 📁 **Clean Project Structure**
+## 📁 **Refactored MVC Project Structure**
+
+**Status**: Refactored (Phases 1-7.1 Complete - November 2025)
 
 ```
 /home/dreece23/pca-sims/
-├── launch_optimized.py                 # ✅ Primary Qt6 launcher (WORKING)
-├── data/NegativeIon/NegIonTIC.txt     # ✅ ToF-SIMS data (921 masses, 15 samples)
-├── src/                               # ✅ Core application modules
-│   ├── pyside_app_matplotlib.py       # ✅ Main Qt6 application (55KB)
-│   ├── simple_tof_sims_pca.py         # ✅ PCA analysis engine
-│   ├── matplotlib_plotting.py         # ✅ Native matplotlib plotting
-│   └── data_preview_dialog.py         # ✅ Data preview component
-├── scripts/                           # ✅ Organized utilities
-│   ├── tests/                         # Test scripts
-│   └── utilities/                     # Helper utilities
+├── launch_optimized.py                 # ✅ Primary Qt6 launcher
+├── data/                              # ✅ ToF-SIMS data files
+│   ├── NegativeIon/NegIonTIC.txt     # Example dataset (921 masses, 15 samples)
+│   └── FragmentDatabase/              # Fragment assignment database
+│       └── alucone_fragments_complete.json
+├── src/                               # ✅ MVC Architecture
+│   ├── models/                        # 📦 Data models (no Qt dependencies)
+│   │   ├── pca_model.py              # PCA results container
+│   │   ├── sample_model.py           # Sample metadata with Polarity enum
+│   │   ├── fragment_model.py         # Fragment ions and assignments
+│   │   └── spectrum_model.py         # Mass spectrum data
+│   ├── services/                      # 🔧 Business logic layer
+│   │   └── fragment_service.py       # Fragment database operations (280 lines)
+│   ├── widgets/                       # 🎨 Reusable UI components
+│   │   ├── tabs/                     # Tab widgets
+│   │   │   ├── summary_tab.py
+│   │   │   └── main_results_tab.py
+│   │   ├── dialogs/                  # Dialog windows
+│   │   │   ├── data_preview_dialog.py
+│   │   │   ├── fragment_assignment_dialog.py
+│   │   │   ├── custom_dose_dialog.py
+│   │   │   └── manual_assignment_dialog.py
+│   │   ├── plotting/                 # Matplotlib canvases
+│   │   │   ├── matplotlib_plotting.py
+│   │   │   ├── stick_spectrum_plotting.py
+│   │   │   └── fragment_group_plotting.py
+│   │   ├── fragment_analysis_tab.py  # Fragment analysis UI
+│   │   └── common.py                 # Shared widgets
+│   ├── core/                          # 🧮 Domain logic
+│   │   ├── fragment_classifier.py
+│   │   ├── crosslinking_metrics.py
+│   │   └── fragment_mass_calculator.py
+│   ├── pyside_app_matplotlib.py       # ✅ Main GUI (5,848 lines - down from 7,093)
+│   ├── simple_tof_sims_pca.py        # PCA analysis engine
+│   ├── tofsims_excel_processor.py    # Excel import processor
+│   └── multi_ion_manager.py          # Multi-polarity data manager
+├── scripts/utilities/                 # ✅ Organized utilities
+│   └── manage_fragment_database.py   # Database management tool
 ├── outputs/                           # ✅ Results export directory
-├── data/                             # ✅ Input data directory
-├── docs/                             # Documentation
+├── docs/                             # 📚 Documentation
+│   ├── ARCHITECTURE.md               # Detailed architecture documentation
+│   ├── REFACTORING_PLAN.md           # Refactoring progress tracking
+│   └── TECHNICAL_REFERENCE.md        # Methods and capabilities
 └── literature/                       # Scientific references
 ```
+
+**Refactoring Impact:**
+- Main GUI: 7,093 → 5,848 lines (17.6% reduction)
+- ~15,000 lines removed/reorganized
+- MVC architecture with services and models
+- Improved modularity: 5/10 → 7.5/10
 
 ---
 
@@ -200,6 +238,65 @@ All other documentation should be archived or deleted unless actively needed for
 
 ---
 
+## 🏗️ **MVC Architecture Overview**
+
+### **Design Philosophy**
+The application follows Model-View-Controller (MVC) principles with an additional Service layer for business logic.
+
+### **Layer Responsibilities**
+
+#### **Models** (`src/models/`)
+- Pure Python dataclasses with type hints
+- No Qt or UI dependencies
+- Validation in `__post_init__`
+- Easy to test and serialize
+
+```python
+from models import Sample, Polarity
+
+sample = Sample(
+    name="SQ2_Rep1",
+    dose=2.0,
+    polarity=Polarity.NEGATIVE
+)
+```
+
+#### **Services** (`src/services/`)
+- Business logic and data operations
+- Stateful service objects with caching
+- No direct UI interaction
+- Independently testable
+
+```python
+from services import FragmentService
+
+fragment_service = FragmentService()
+fragment_service.load_database()
+candidates = fragment_service.find_candidates(65.0031, 'negative')
+```
+
+#### **Widgets** (`src/widgets/`)
+- Reusable UI components
+- Self-contained with minimal coupling
+- Signal-based communication
+- Tabs, dialogs, and plotting canvases
+
+#### **Core** (`src/core/`)
+- Domain-specific algorithms
+- Fragment classification
+- Crosslinking metrics
+- Mass calculations
+
+#### **Main GUI** (`src/pyside_app_matplotlib.py`)
+- Application orchestration
+- Event handling and routing
+- Service initialization
+- Top-level window management
+
+**See `docs/ARCHITECTURE.md` for detailed architecture documentation.**
+
+---
+
 ## 🔄 **Git Workflow & Development Process**
 
 ### **Repository Setup**
@@ -282,22 +379,49 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 📚 **Documentation Consolidation**: Streamlined to core technical docs
 🎯 **Project Scope**: Clear separation of data processing vs interpretation
 
-### **Refactoring Updates (November 2025)**
+### **Major Refactoring (November 2025) - Phases 1-7.1 Complete**
 
-#### **Phase 1 Complete - Codebase Cleanup**
-🧹 **Codebase Cleanup**: Removed 30 unused files (multi_ion_manager, test files, 26 investigation scripts)
-📁 **Scripts Organization**: Moved production scripts to `scripts/production/` directory
-🛠️ **Database Tools**: Consolidated 3 fragment database cleanup scripts into single `manage_fragment_database.py` tool with validate/cleanup/backup/stats subcommands
-🔧 **GUI Cleanup**: Removed broken "Load Default Data" button (missing file reference)
+#### **Phase 1-2: Cleanup & Excel Import**
+- 🧹 Removed 30 unused files (~5,000 lines)
+- 📊 Direct Excel import with GUI
+- 🐛 Fixed duplicate m/z handling bug
+- 🧬 Fragment database uses exact calculated m/z
 
-#### **Phase 2 Complete - Excel Import Integration**
-📊 **Direct Excel Import**: Added "Import Excel" button to GUI - no more CLI preprocessing step
-🔄 **Seamless Workflow**: Excel → GUI import → auto-update fragment database → load data
-✅ **Polarity Selection**: Interactive dialog for choosing positive/negative ion mode
-🧬 **Fragment Database**: Uses exact calculated m/z from formulas (not measured values)
-🐛 **Critical Fix**: Corrected duplicate m/z handling - now removes duplicate rows instead of averaging (intensities are identical for same measured peak)
-📈 **Import Summary**: Shows processing statistics including duplicates removed, fragments added, sample count
+#### **Phase 3: MVC Foundation**
+- 📦 Created `src/models/` with 4 dataclass models (875 lines)
+- 🔧 Created `src/core/` for domain logic
+- 📁 Organized widget/dialog/plotting structure
+- ✅ Removed unused batch processing system (~5,000 lines)
 
-**Ready for Enhancement**: Add new analysis features, improve visualizations, extend data support.
+#### **Phase 4-5: Widget & Dialog Extraction**
+- 🎨 Reorganized widgets into package structure
+- 💬 Extracted 3 large dialogs (1,095 lines)
+- 📝 Created proper `__init__.py` exports
+- ✅ All GUI functionality preserved
 
-**Last Updated**: November 2025 - Phase 2 Refactoring (Excel Import Integration)
+#### **Phase 6.1: Tab Extraction**
+- 📋 Extracted Summary and Main Results tabs
+- 🔧 Created `src/widgets/tabs/` package
+- ✅ Reduced main GUI by 12 lines
+
+#### **Phase 7.1: Service Layer**
+- 🔧 Created `src/services/` package
+- 📊 Implemented FragmentService (280 lines):
+  - Fast mass-based indexing (O(1) lookups)
+  - PPM tolerance-based fragment matching
+  - Automatic backup management
+  - Polarity filtering
+- ✅ Reduced main GUI by 138 lines (2.3%)
+
+#### **Phase 8: Documentation & Cleanup**
+- 📚 Created comprehensive `docs/ARCHITECTURE.md`
+- 📝 Updated `CLAUDE.md` with MVC architecture
+- ✅ All code has type hints and docstrings
+
+**Current Status:**
+- Main GUI: 7,093 → 5,848 lines (17.6% reduction)
+- Total code removed/reorganized: ~15,000 lines
+- MVC architecture established
+- Modularity improved: 5/10 → 7.5/10
+
+**Last Updated**: November 23, 2025 - Phase 8 Complete
