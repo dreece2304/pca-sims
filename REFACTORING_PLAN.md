@@ -176,70 +176,61 @@ Created 4 model modules (~830 lines):
 
 ## 🚧 REMAINING PHASES
 
-### Phase 6: Tab Extraction from Main GUI
+### Phase 6: Tab Extraction from Main GUI (IN PROGRESS)
 **Duration**: 7-10 days | **Risk**: MEDIUM-HIGH
-**Status**: READY TO START
+**Status**: Phase 6.1 Complete - Partial Implementation
 
 #### Goals
 Extract tab implementations from main GUI into separate view modules
 
-#### Strategy
-Extract one tab at a time, test after each extraction
+#### Strategy (Revised)
+Extract simple, self-contained tabs first. Complex tabs with many dependencies will be addressed in Phase 7 (Service Layer) to avoid breaking application.
 
-#### Directory Structure to Create
-```
-src/
-├── [EXISTING FILES - KEEP UNCHANGED DURING PHASE 3]
-├── pyside_app_matplotlib.py          # Keep working
-├── simple_tof_sims_pca.py            # Keep until migrated
-│
-├── [NEW ARCHITECTURE]
-├── models/                # Data models (no Qt, no UI)
-│   ├── pca_model.py              # PCA state & results
-│   ├── sample_model.py           # Sample metadata
-│   ├── fragment_model.py         # Fragment assignments
-│   └── spectrum_model.py         # Mass spectrum data
-│
-├── services/              # Shared business logic
-│   ├── data_loader.py            # Unified Excel + txt loading
-│   ├── pca_service.py            # PCA orchestration
-│   ├── fragment_service.py       # Database operations
-│   ├── export_service.py         # Export functionality
-│   └── validation_service.py     # Data validation
-│
-├── core/                  # Domain logic
-│   ├── pca_engine.py             # Pure PCA math
-│   ├── fragment_classifier.py    # [MOVE EXISTING]
-│   ├── crosslinking_metrics.py   # [MOVE EXISTING]
-│   └── fragment_mass_calculator.py # [MOVE EXISTING]
-│
-└── widgets/               # Reusable UI components
-    ├── plotting/
-    │   ├── base_canvas.py
-    │   ├── pca_canvas.py
-    │   ├── spectrum_canvas.py
-    │   └── fragment_canvas.py
-    └── dialogs/
-        ├── data_preview_dialog.py
-        ├── fragment_assignment_dialog.py
-        ├── custom_dose_dialog.py
-        └── manual_assignment_dialog.py
-```
+#### Phase 6.1: Simple Tabs (COMPLETE)
+**Commit**: `bc49bd0` - Phase 6.1: Extract simple tab widgets
 
-#### Tasks
-1. Create model classes (pure Python, no Qt)
-2. Create service layer
-3. Extract core PCA engine
-4. Extract plotting base class
-5. Write unit tests for models and services
+**Accomplishments:**
+- Created `src/widgets/tabs/` package structure
+- Extracted **Summary Tab** to `SummaryTab` widget (36 lines)
+  - Simple text display widget
+  - No external dependencies
+- Extracted **Main Results Tab** to `MainResultsTab` widget (38 lines)
+  - Wraps PCA plot canvas
+  - Minimal dependencies
+- Updated main GUI to use new tab widgets
+- Maintained backward compatibility
 
-#### Deliverables
-- ~15 new Python modules
-- Unit test suite (tests/test_models/, tests/test_services/)
-- Architecture documentation (docs/ARCHITECTURE.md)
-- Old GUI still functional
+**Main GUI Reduction:**
+- Before: 5,998 lines
+- After: 5,986 lines
+- Reduction: 12 lines
 
-**Approval Gate**: Test new components, verify old GUI unchanged
+**Testing:** GUI launches successfully, tabs function correctly
+
+#### Phase 6.2: Complex Tabs Analysis
+
+**Complex Tabs Identified:**
+1. **Fragment Assignment Tab** (68 lines UI + ~400 lines methods)
+   - Depends on: `refresh_assignment_table`, `add_manual_assignment`, `save_assignments_database`, `export_assignment_table`
+   - Requires fragment database service layer
+
+2. **Database Management Tab** (166 lines UI + ~300 lines methods)
+   - Heavy database operations
+   - Requires fragment service layer
+
+3. **Stick Spectrum Tab** (235 lines UI + ~800 lines methods)
+   - Most complex tab with extensive filtering logic
+   - Depends on: dose selection, filters, plotting, export
+   - Requires spectrum service layer
+
+**Decision:** Defer complex tab extraction to Phase 7 after creating service layer. This allows:
+- Proper separation of business logic from UI
+- Avoid breaking tightly-coupled code
+- Create testable service layer first
+- Then extract tabs with clean service dependencies
+
+#### Next Steps
+Skip to Phase 7: Create Service Layer to decouple business logic, then return to complete tab extraction
 
 ---
 
@@ -372,14 +363,15 @@ Final improvements
 
 ## Summary: Before vs After
 
-| Metric | Before | After (Target) | Status |
-|--------|--------|----------------|--------|
-| **Largest file** | 7000 lines | ~800 lines | 🚧 In Progress |
-| **Unused files** | ~30 files | 0 files | ✅ Complete |
-| **Excel import** | CLI only | GUI + CLI | ✅ Complete |
-| **Duplicate handling** | Averaging | Deduplication | ✅ Fixed |
-| **Test coverage** | ~5% | 80%+ | 🚧 Planned |
-| **Modularity** | 5/10 | 9/10 | 🚧 Phases 3-8 |
+| Metric | Before | Current | Target | Status |
+|--------|--------|---------|--------|--------|
+| **Largest file** | 7,093 lines | 5,986 lines | ~800 lines | 🚧 In Progress (16% reduction) |
+| **Unused files** | ~30 files | 0 files | 0 files | ✅ Complete |
+| **Excel import** | CLI only | GUI + CLI | GUI + CLI | ✅ Complete |
+| **Duplicate handling** | Averaging | Deduplication | Deduplication | ✅ Fixed |
+| **Code organization** | Monolithic | MVC structure | MVC structure | 🚧 70% Complete |
+| **Test coverage** | ~5% | ~5% | 80%+ | 🚧 Planned (Phase 9) |
+| **Modularity** | 5/10 | 7/10 | 9/10 | 🚧 Phases 6-8 |
 
 ---
 
@@ -393,18 +385,20 @@ git pull origin refactor/codebase-optimization  # If pushed
 ```
 
 ### Current State
-- ✅ Phase 1 & 2 complete
+- ✅ Phases 1-2 complete (Cleanup + Excel import)
+- ✅ Phase 3 complete (MVC foundation + models)
+- ✅ Phase 4 complete (Widget reorganization)
+- ✅ Phase 5 complete (Dialog extraction)
+- ✅ Phase 6.1 complete (Simple tab extraction)
 - ✅ GUI works correctly
-- ✅ Excel import functional
-- ✅ Critical bugs fixed
-- 🚧 Ready for Phase 3
+- 🚧 Ready for Phase 7 (Service Layer)
 
 ### Next Steps
-1. Review Phase 3 plan above
-2. Create model classes (`src/models/`)
-3. Create service layer (`src/services/`)
-4. Write unit tests as you go
-5. Keep old GUI working in parallel
+1. **Phase 7**: Create service layer to decouple business logic from UI
+2. Extract fragment database operations to `FragmentService`
+3. Extract data loading to `DataLoaderService`
+4. Extract export operations to `ExportService`
+5. Return to Phase 6 to complete complex tab extraction with clean service dependencies
 
 ### Key Principles
 - **Incremental**: One phase at a time
@@ -421,7 +415,11 @@ git pull origin refactor/codebase-optimization  # If pushed
 # View commits
 git log --oneline refactor/codebase-optimization
 
-# Current commits:
+# Recent commits:
+bc49bd0 Phase 6.1: Extract simple tab widgets (Summary, Main Results)
+a74a6e9 Phase 5: Extract dialog classes from main GUI
+[Phase 4 commits - widget reorganization]
+[Phase 3 commits - MVC foundation and models]
 fc8230a Phase 2 Fix: Restore multi_ion_manager with minimal stub
 a307d5a Phase 2: Excel import integration with critical bug fix
 9cb5038 Phase 1: Codebase cleanup and reorganization
@@ -482,9 +480,9 @@ When resuming this work:
 1. Read this document fully
 2. Check git log for any new commits
 3. Test GUI to verify current state
-4. Review Phase 3 plan before starting
-5. Ask questions about architecture decisions
+4. Review Phase 7 plan (Service Layer) before continuing
+5. Complex tab extraction deferred until service layer complete
 
 **Last Updated**: November 23, 2025
 **Branch**: `refactor/codebase-optimization`
-**Status**: Phases 1-2 Complete, Ready for Phase 3
+**Status**: Phases 1-6.1 Complete, Ready for Phase 7 (Service Layer)
