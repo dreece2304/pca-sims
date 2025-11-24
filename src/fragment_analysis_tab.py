@@ -22,8 +22,8 @@ from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as Navigation
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 
-from fragment_classifier import classify_fragment, AROMATIC_MARKERS
-from crosslinking_metrics import CrosslinkingAnalyzer, SampleMetrics
+from core.fragment_classifier import classify_fragment, AROMATIC_MARKERS
+from core.crosslinking_metrics import CrosslinkingAnalyzer, SampleMetrics
 
 
 class FragmentGroupsWidget(QWidget):
@@ -156,11 +156,11 @@ class FragmentGroupsWidget(QWidget):
         threshold = self.threshold_slider.value() / 100.0
 
         # Get loadings for selected PC
-        loadings = self.pca_results['loadings'][:, pc_idx]
+        loadings = self.pca_results['loadings'].iloc[:, pc_idx]
 
         # Filter for high-loading only if checkbox is checked
         if self.high_loading_only.isChecked():
-            high_loading_mask = np.abs(loadings) >= threshold
+            high_loading_mask = (np.abs(loadings) >= threshold).values
             if not np.any(high_loading_mask):
                 self.info_label.setText("No fragments above threshold")
                 return
@@ -176,7 +176,7 @@ class FragmentGroupsWidget(QWidget):
                 for i in range(len(self.fragment_data['masses']))
                 if high_loading_mask[i]
             ]
-            loadings_filtered = loadings[high_loading_mask]
+            loadings_filtered = loadings[high_loading_mask].values
         else:
             # All fragments
             fragments = [
@@ -188,7 +188,7 @@ class FragmentGroupsWidget(QWidget):
                 }
                 for i in range(len(self.fragment_data['masses']))
             ]
-            loadings_filtered = loadings
+            loadings_filtered = loadings.values
 
         # Get sample name
         sample_name = self.sample_combo.currentText() if self.sample_combo.count() > 0 else "Sample"
@@ -259,7 +259,7 @@ class FragmentGroupsWidget(QWidget):
 
             # Add loadings for each PC
             for pc_idx in range(self.pca_results['loadings'].shape[1]):
-                row[f'PC{pc_idx+1}_loading'] = self.pca_results['loadings'][i, pc_idx]
+                row[f'PC{pc_idx+1}_loading'] = self.pca_results['loadings'].iloc[i, pc_idx]
 
             data.append(row)
 
@@ -301,7 +301,7 @@ class FragmentGroupsWidget(QWidget):
             # Add loadings
             for pc_idx in range(self.pca_results['loadings'].shape[1]):
                 frag_data['pca_loadings'][f'PC{pc_idx+1}'] = float(
-                    self.pca_results['loadings'][i, pc_idx]
+                    self.pca_results['loadings'].iloc[i, pc_idx]
                 )
 
             data['fragments'].append(frag_data)

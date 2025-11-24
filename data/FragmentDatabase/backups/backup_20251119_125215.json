@@ -4,7 +4,7 @@
     "description": "Fragment assignments created from user-provided Excel files",
     "version": "6.0",
     "created": "2025-09-16",
-    "total_fragments": 249,
+    "total_fragments": 299,
     "negative_fragments": 110,
     "positive_fragments": 125,
     "chemical_families": [
@@ -18,9 +18,8 @@
       "Unknown"
     ],
     "notes": "Database created from NegFragmentsList.xlsx and PosFragmentsList.xlsx",
-    "last_modified": "2025-11-19 15:13:36",
-    "cleanup_date": "2025-11-19",
-    "comprehensive_cleanup_date": "2025-11-19"
+    "last_modified": "2025-11-19 12:48:55",
+    "cleanup_date": "2025-11-19"
   },
   "fragments": [
     {
@@ -204,9 +203,8 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 34.96940125990907,
+      "mass": 34.96885268,
       "assignments": [
-        "Cl-",
         "Cl- contamination"
       ],
       "formulas": [
@@ -217,7 +215,22 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Cleaned and merged on 2025-11-19"
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 34.96940125990907,
+      "assignments": [
+        "Cl-"
+      ],
+      "formulas": [
+        "Cl"
+      ],
+      "families": [
+        "Contamination"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Mass recalculated on 2025-11-19"
     },
     {
       "mass": 34.96940125990907,
@@ -2200,21 +2213,6 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 54.010016103790925,
-      "assignments": [
-        "C_3H_2O+"
-      ],
-      "formulas": [
-        "C3H2O"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
-    },
-    {
       "mass": 54.04640161251093,
       "assignments": [
         "C_4H_6+"
@@ -2363,21 +2361,6 @@
       "polarity": "positive",
       "confidence": "High",
       "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 58.041316232070926,
-      "assignments": [
-        "C_3H_6O+"
-      ],
-      "formulas": [
-        "C3H6O"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
     },
     {
       "mass": 59.00717,
@@ -2678,21 +2661,6 @@
       "polarity": "positive",
       "confidence": "High",
       "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 70.06244559947093,
-      "assignments": [
-        "CH_10O_3+"
-      ],
-      "formulas": [
-        "CH10O3"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
     },
     {
       "mass": 70.07770174079093,
@@ -3160,21 +3128,6 @@
       "notes": "Mass recalculated on 2025-11-19"
     },
     {
-      "mass": 85.02840581956093,
-      "assignments": [
-        "C_4H_5O_2+"
-      ],
-      "formulas": [
-        "C4H5O2"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
-    },
-    {
       "mass": 85.10117683700093,
       "assignments": [
         "C_6H_13+"
@@ -3398,21 +3351,6 @@
       "polarity": "positive",
       "confidence": "High",
       "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 90.99703403705094,
-      "assignments": [
-        "CH_4O_3Al+"
-      ],
-      "formulas": [
-        "CH4O3Al"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
     },
     {
       "mass": 91.05379,
@@ -3757,6 +3695,492 @@
       ],
       "polarity": "positive",
       "confidence": "High",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.244235",
+      "formula": "C_5H_3+ (C5H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.226668",
+      "formula": "Al+ (Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.211537",
+      "formula": "C_6H_2+ (C6H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.191927",
+      "formula": "C_8H_2+ (C8H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.191034",
+      "formula": "C_7H_3+ (C7H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.186864",
+      "formula": "C_7H_2+ (C7H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.171902",
+      "formula": "C_4H_2+ (C4H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.170943",
+      "formula": "C_3H_7+ (C3H7)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.153172",
+      "formula": "C_4H_3+ (C4H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.134757",
+      "formula": "C_8H_3+ (C8H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.128133",
+      "formula": "[3 MATCHES] Click to review",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.122258",
+      "formula": "C_6H_6+ (C6H6)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.115217",
+      "formula": "C_2H_3+ (C2H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.111487",
+      "formula": "C_2H_2+ (C2H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.109188",
+      "formula": "C_6H_3+ (C6H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.106877",
+      "formula": "Al_2O_2H+ (Al2O2H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.106231",
+      "formula": "C_4H_7+ (C4H7)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.105320",
+      "formula": "C_3H+ (C3H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.105119",
+      "formula": "C_2H_5+ (C2H5)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.105091",
+      "formula": "C_3H_2+ (C3H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.099257",
+      "formula": "C_4H_9+ (C4H9)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.097854",
+      "formula": "C_3H_5+ (C3H5)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.079887",
+      "formula": "C_7H+ (C7H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.077687",
+      "formula": "C_5H_4+ (C5H4)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.396871",
+      "formula": "OH- (OH)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.350008",
+      "formula": "O- (O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.171921",
+      "formula": "C_3HO- (C3HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.158730",
+      "formula": "C_4HO- (C4HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.150133",
+      "formula": "AlO_2- (AlO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.119586",
+      "formula": "AlO- (AlO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.103541",
+      "formula": "C_6H- (C6H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.093662",
+      "formula": "CH_2- (CH2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.093310",
+      "formula": "C- (C)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.091863",
+      "formula": "C_4Al- (C4Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.076509",
+      "formula": "CH_3Al- (CH3Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.073271",
+      "formula": "C_2H- (C2H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.069888",
+      "formula": "O_2- (O2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.068877",
+      "formula": "CHO_2- (CHO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.063322",
+      "formula": "O_5H_9- (O5H9)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.060506",
+      "formula": "C_6H_3O- (C6H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.055985",
+      "formula": "C_8H- (C8H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "+0.055628",
+      "formula": "CHAl- (CHAl)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.055000",
+      "formula": "C_6H_3- (C6H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.054515",
+      "formula": "C_6HO- (C6HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.054403",
+      "formula": "C_4H_2O_2- (C4H2O2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.053691",
+      "formula": "C_3H_3O- (C3H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.119820",
+      "formula": "C_3HO_2- (C3HO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.106382",
+      "formula": "C_2H_3O- (C2H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.104024",
+      "formula": "C_5H- (C5H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.102166",
+      "formula": "C_7H_2- (C7H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.092914",
+      "formula": "C_5H_3- (C5H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.089413",
+      "formula": "C_6- (C6)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.084228",
+      "formula": "C_7H- (C7H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "Mass recalculated on 2025-11-19"
+    },
+    {
+      "mass": 0.0,
+      "assignment": "-0.083940",
+      "formula": "C_4- (C4)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
       "notes": "Mass recalculated on 2025-11-19"
     }
   ]

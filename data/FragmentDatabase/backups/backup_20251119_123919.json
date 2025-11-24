@@ -4,7 +4,7 @@
     "description": "Fragment assignments created from user-provided Excel files",
     "version": "6.0",
     "created": "2025-09-16",
-    "total_fragments": 249,
+    "total_fragments": 289,
     "negative_fragments": 110,
     "positive_fragments": 125,
     "chemical_families": [
@@ -18,9 +18,7 @@
       "Unknown"
     ],
     "notes": "Database created from NegFragmentsList.xlsx and PosFragmentsList.xlsx",
-    "last_modified": "2025-11-19 15:13:36",
-    "cleanup_date": "2025-11-19",
-    "comprehensive_cleanup_date": "2025-11-19"
+    "last_modified": "2025-10-08 08:36:41"
   },
   "fragments": [
     {
@@ -204,10 +202,9 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 34.96940125990907,
+      "mass": 34.97065,
       "assignments": [
-        "Cl-",
-        "Cl- contamination"
+        "Cl-"
       ],
       "formulas": [
         "Cl"
@@ -217,22 +214,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Cleaned and merged on 2025-11-19"
-    },
-    {
-      "mass": 34.96940125990907,
-      "assignments": [
-        "^37Cl-"
-      ],
-      "formulas": [
-        "^37Cl"
-      ],
-      "families": [
-        "Contamination"
-      ],
-      "polarity": "negative",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 36.00077,
@@ -250,7 +232,37 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 39.98991224197907,
+      "mass": 36.96753,
+      "assignments": [
+        "^37Cl-"
+      ],
+      "formulas": [
+        "^37Cl"
+      ],
+      "families": [
+        "Contamination"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 37.00881,
+      "assignments": [
+        "Cl- contamination"
+      ],
+      "formulas": [
+        "Cl"
+      ],
+      "families": [
+        "Contamination"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Chlorine contamination peak - updated from C3H- assignment"
+    },
+    {
+      "mass": 39.99155,
       "assignments": [
         "CHAl-"
       ],
@@ -262,10 +274,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 42.00556230611907,
+      "mass": 42.00394,
       "assignments": [
         "CH_3Al-"
       ],
@@ -277,10 +289,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 42.01111326360907,
+      "mass": 42.01252,
       "assignments": [
         "C_2H_2O-"
       ],
@@ -292,7 +304,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 42.97745,
@@ -325,7 +337,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 43.98482686153907,
+      "mass": 43.98702,
       "assignments": [
         "AlOH-"
       ],
@@ -337,10 +349,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 44.99820285109907,
+      "mass": 44.99941,
       "assignments": [
         "CHO_2-"
       ],
@@ -352,7 +364,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 48.00048,
@@ -370,7 +382,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 49.008373611979074,
+      "mass": 49.0094,
       "assignments": [
         "C_4H-"
       ],
@@ -382,10 +394,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 50.01619864404907,
+      "mass": 50.01472,
       "assignments": [
         "C_4H_2-"
       ],
@@ -397,7 +409,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 50.98303,
@@ -415,7 +427,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 51.02402367611907,
+      "mass": 51.02556,
       "assignments": [
         "C_4H_3-"
       ],
@@ -427,7 +439,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 51.99572,
@@ -445,7 +457,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 53.003288231539074,
+      "mass": 53.00443,
       "assignments": [
         "C_3HO-"
       ],
@@ -457,7 +469,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 54.01106,
@@ -475,7 +487,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 55.01893829567907,
+      "mass": 55.02067,
       "assignments": [
         "C_3H_3O-"
       ],
@@ -487,10 +499,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 57.03458835981907,
+      "mass": 57.03671,
       "assignments": [
         "C_3H_5O-"
       ],
@@ -502,10 +514,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 58.006027883169075,
+      "mass": 58.00753,
       "assignments": [
         "C_2H_2O_2-"
       ],
@@ -517,7 +529,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 58.97279,
@@ -535,7 +547,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 59.01385291523907,
+      "mass": 59.01578,
       "assignments": [
         "C_2H_3O_2-"
       ],
@@ -547,10 +559,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 59.979741481099076,
+      "mass": 59.98191,
       "assignments": [
         "AlO_2H-"
       ],
@@ -562,10 +574,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 60.00054857990907,
+      "mass": 60.00166,
       "assignments": [
         "C_5-"
       ],
@@ -577,10 +589,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 60.98756651316907,
+      "mass": 60.99026,
       "assignments": [
         "AlO_2H_2-"
       ],
@@ -592,10 +604,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 60.99311747065907,
+      "mass": 60.9906,
       "assignments": [
         "CHO_3-"
       ],
@@ -607,10 +619,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 61.008373611979074,
+      "mass": 61.01037,
       "assignments": [
         "C_5H-"
       ],
@@ -622,10 +634,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 62.01619864404907,
+      "mass": 62.0188,
       "assignments": [
         "C_5H_2-"
       ],
@@ -637,10 +649,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 63.02402367611907,
+      "mass": 63.02619,
       "assignments": [
         "C_5H_3-"
       ],
@@ -652,7 +664,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 63.99579,
@@ -700,7 +712,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 65.03967374025906,
+      "mass": 65.04077,
       "assignments": [
         "C_5H_5-"
       ],
@@ -712,10 +724,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 66.00556230611906,
+      "mass": 66.00841,
       "assignments": [
         "C_3H_3Al-"
       ],
@@ -727,10 +739,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 66.01111326360906,
+      "mass": 66.00841,
       "assignments": [
         "C_4H_2O-"
       ],
@@ -742,7 +754,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 66.97721,
@@ -760,7 +772,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 67.01893829567906,
+      "mass": 67.0204,
       "assignments": [
         "C_4H_3O-"
       ],
@@ -772,10 +784,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 68.02121237025906,
+      "mass": 68.02251,
       "assignments": [
         "C_3H_5Al-"
       ],
@@ -787,10 +799,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 68.02676332774907,
+      "mass": 68.02251,
       "assignments": [
         "C_4H_4O-"
       ],
@@ -802,7 +814,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 68.99883,
@@ -820,7 +832,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 69.03458835981905,
+      "mass": 69.03678,
       "assignments": [
         "C_4H_5O-"
       ],
@@ -832,10 +844,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 70.00047692567907,
+      "mass": 70.00448,
       "assignments": [
         "C_2H_3OAl-"
       ],
@@ -847,10 +859,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 70.00602788316905,
+      "mass": 70.00448,
       "assignments": [
         "C_3H_2O_2-"
       ],
@@ -862,10 +874,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 71.01385291523906,
+      "mass": 71.01549,
       "assignments": [
         "C_3H_3O_2-"
       ],
@@ -877,7 +889,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 72.00041,
@@ -925,7 +937,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 74.01619864404907,
+      "mass": 74.01388,
       "assignments": [
         "C_6H_2-"
       ],
@@ -937,10 +949,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 74.98208720990907,
+      "mass": 74.98645,
       "assignments": [
         "C_4Al-"
       ],
@@ -952,7 +964,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 75.02461,
@@ -985,7 +997,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 75.98991224197907,
+      "mass": 75.99408,
       "assignments": [
         "C_4HAl-"
       ],
@@ -997,10 +1009,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 75.99546319946907,
+      "mass": 75.99408,
       "assignments": [
         "C_5O-"
       ],
@@ -1012,10 +1024,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 76.03184870818906,
+      "mass": 76.03066,
       "assignments": [
         "C_6H_4-"
       ],
@@ -1027,7 +1039,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 76.98238,
@@ -1075,7 +1087,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 78.99561600774906,
+      "mass": 78.99862,
       "assignments": [
         "C_2H_4OCl-"
       ],
@@ -1087,7 +1099,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 78.99862,
@@ -1105,7 +1117,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 79.01893829567906,
+      "mass": 79.02046,
       "assignments": [
         "C_5H_3O-"
       ],
@@ -1117,7 +1129,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 82.00682,
@@ -1150,7 +1162,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 83.01385291523906,
+      "mass": 83.01542,
       "assignments": [
         "C_4H_3O_2-"
       ],
@@ -1162,10 +1174,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 83.99835565937906,
+      "mass": 83.99999,
       "assignments": [
         "CH_5O_2Cl-"
       ],
@@ -1177,7 +1189,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 83.99999,
@@ -1195,7 +1207,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 84.98505132404907,
+      "mass": 84.98746,
       "assignments": [
         "C_4H_2Cl-"
       ],
@@ -1207,7 +1219,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 84.98746,
@@ -1225,7 +1237,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 85.00618069144906,
+      "mass": 85.00771,
       "assignments": [
         "CH_6O_2Cl-"
       ],
@@ -1237,7 +1249,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 85.00771,
@@ -1315,7 +1327,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 89.00109531100905,
+      "mass": 89.00424,
       "assignments": [
         "ClO_3H_6-"
       ],
@@ -1327,7 +1339,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 89.00424,
@@ -1345,7 +1357,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 89.04554696633907,
+      "mass": 89.04152,
       "assignments": [
         "O_5H_9-"
       ],
@@ -1357,10 +1369,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 90.01111326360908,
+      "mass": 90.01008,
       "assignments": [
         "C_6H_2O-"
       ],
@@ -1372,7 +1384,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 90.97665,
@@ -1390,7 +1402,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 91.01893829567908,
+      "mass": 91.02053,
       "assignments": [
         "C_6H_3O-"
       ],
@@ -1402,7 +1414,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 92.02685,
@@ -1435,7 +1447,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 93.03458835981905,
+      "mass": 93.03704,
       "assignments": [
         "C_6H_5O-"
       ],
@@ -1447,22 +1459,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 94.99053062730906,
-      "assignments": [
-        "C_2H_4O_2Cl-"
-      ],
-      "formulas": [
-        "C2H4O2Cl"
-      ],
-      "families": [
-        "Organic_oxygen"
-      ],
-      "polarity": "negative",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 94.99308,
@@ -1480,7 +1477,22 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 95.01385291523906,
+      "mass": 94.99323,
+      "assignments": [
+        "C_2H_4O_2Cl-"
+      ],
+      "formulas": [
+        "C2H4O2Cl"
+      ],
+      "families": [
+        "Organic_oxygen"
+      ],
+      "polarity": "negative",
+      "confidence": "High",
+      "notes": "Excel fragment list - negative ions"
+    },
+    {
+      "mass": 95.01609,
       "assignments": [
         "C_5H_3O_2-"
       ],
@@ -1492,10 +1504,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 95.99835565937906,
+      "mass": 95.99979,
       "assignments": [
         "C_2H_5O_2Cl-"
       ],
@@ -1507,7 +1519,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 95.99979,
@@ -1525,7 +1537,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 96.00087084849906,
+      "mass": 95.99979,
       "assignments": [
         "AlO_4H_5-"
       ],
@@ -1537,7 +1549,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 97.00888,
@@ -1585,7 +1597,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 98.01619864404907,
+      "mass": 98.01334,
       "assignments": [
         "C_8H_2-"
       ],
@@ -1597,10 +1609,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 98.01652091263907,
+      "mass": 98.01334,
       "assignments": [
         "AlO_4H_7-"
       ],
@@ -1612,10 +1624,10 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 99.02183075558906,
+      "mass": 99.02373,
       "assignments": [
         "C_2H_8O_2Cl-"
       ],
@@ -1627,7 +1639,7 @@
       ],
       "polarity": "negative",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - negative ions"
     },
     {
       "mass": 99.02373,
@@ -1660,22 +1672,7 @@
       "notes": "Excel fragment list - negative ions"
     },
     {
-      "mass": 1.0072,
-      "assignments": [
-        "H+"
-      ],
-      "formulas": [
-        "H"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19"
-    },
-    {
-      "mass": 11.99945142009093,
+      "mass": 11.99812,
       "assignments": [
         "C+"
       ],
@@ -1687,10 +1684,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 13.00727645216093,
+      "mass": 13.0059,
       "assignments": [
         "CH+"
       ],
@@ -1702,10 +1699,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 14.01510148423093,
+      "mass": 14.014,
       "assignments": [
         "CH_2+"
       ],
@@ -1717,7 +1714,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 15.02271,
@@ -1750,7 +1747,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 26.015101484230932,
+      "mass": 26.01406,
       "assignments": [
         "C_2H_2+"
       ],
@@ -1762,7 +1759,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 26.98097,
@@ -1795,7 +1792,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 27.97637795259093,
+      "mass": 27.98413,
       "assignments": [
         "Si+"
       ],
@@ -1807,10 +1804,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 27.98881508216093,
+      "mass": 27.98713,
       "assignments": [
         "AlH+"
       ],
@@ -1822,7 +1819,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 28.03013,
@@ -1840,7 +1837,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 28.98420298466093,
+      "mass": 28.99134,
       "assignments": [
         "SiH+"
       ],
@@ -1852,7 +1849,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 29.00169,
@@ -1870,7 +1867,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 29.03857658044093,
+      "mass": 29.03971,
       "assignments": [
         "C_2H_5+"
       ],
@@ -1882,7 +1879,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 31.01816,
@@ -1900,7 +1897,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 37.00727645216093,
+      "mass": 37.00564,
       "assignments": [
         "C_3H+"
       ],
@@ -1912,10 +1909,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 38.015101484230925,
+      "mass": 38.01613,
       "assignments": [
         "C_3H_2+"
       ],
@@ -1927,10 +1924,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 41.038576580440925,
+      "mass": 41.04076,
       "assignments": [
         "C_3H_5+"
       ],
@@ -1942,10 +1939,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 42.010016103790925,
+      "mass": 42.01145,
       "assignments": [
         "C_2H_2O+"
       ],
@@ -1957,7 +1954,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 42.0472,
@@ -2005,7 +2002,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 43.983729701720925,
+      "mass": 43.98139,
       "assignments": [
         "AlOH+"
       ],
@@ -2017,10 +2014,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 44.02011521044093,
+      "mass": 44.0223,
       "assignments": [
         "CH_5Al+"
       ],
@@ -2032,10 +2029,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 44.979117604220924,
+      "mass": 44.98994,
       "assignments": [
         "SiHO+"
       ],
@@ -2047,10 +2044,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 44.99155473379092,
+      "mass": 44.9928,
       "assignments": [
         "AlOH_2+"
       ],
@@ -2062,10 +2059,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 45.03349120000093,
+      "mass": 45.03439,
       "assignments": [
         "C_2H_5O+"
       ],
@@ -2077,7 +2074,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 47.01204,
@@ -2095,7 +2092,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 50.015101484230925,
+      "mass": 50.01338,
       "assignments": [
         "C_4H_2+"
       ],
@@ -2107,7 +2104,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 51.02218,
@@ -2125,7 +2122,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 51.988815082160926,
+      "mass": 51.98652,
       "assignments": [
         "C_2HAl+"
       ],
@@ -2137,10 +2134,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 52.03075154837093,
+      "mass": 52.02909,
       "assignments": [
         "C_4H_4+"
       ],
@@ -2152,10 +2149,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 52.98420298466093,
+      "mass": 52.99128,
       "assignments": [
         "SiC_2H+"
       ],
@@ -2167,10 +2164,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 53.00219107172093,
+      "mass": 53.00044,
       "assignments": [
         "C_3HO+"
       ],
@@ -2182,7 +2179,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 53.03825,
@@ -2200,22 +2197,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 54.010016103790925,
-      "assignments": [
-        "C_3H_2O+"
-      ],
-      "formulas": [
-        "C3H2O"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
-    },
-    {
-      "mass": 54.04640161251093,
+      "mass": 54.0444,
       "assignments": [
         "C_4H_6+"
       ],
@@ -2227,7 +2209,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 55.01848,
@@ -2260,7 +2242,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 56.02566616793093,
+      "mass": 56.0234,
       "assignments": [
         "C_3H_4O+"
       ],
@@ -2272,10 +2254,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 56.06205167665093,
+      "mass": 56.06,
       "assignments": [
         "C_4H_8+"
       ],
@@ -2287,22 +2269,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 56.99155473379093,
-      "assignments": [
-        "CH_2OAl+"
-      ],
-      "formulas": [
-        "CH2OAl"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 57.03359,
@@ -2320,7 +2287,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 57.069876708720926,
+      "mass": 57.07072,
       "assignments": [
         "C_4H_9+"
       ],
@@ -2332,7 +2299,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 57.9986,
@@ -2350,36 +2317,6 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 58.03576527458093,
-      "assignments": [
-        "C_2H_7Al+"
-      ],
-      "formulas": [
-        "C2H7Al"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 58.041316232070926,
-      "assignments": [
-        "C_3H_6O+"
-      ],
-      "formulas": [
-        "C3H6O"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
-    },
-    {
       "mass": 59.00717,
       "assignments": [
         "CH_4OAl+"
@@ -2395,7 +2332,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 59.04914126414093,
+      "mass": 59.0496,
       "assignments": [
         "C_3H_7O+"
       ],
@@ -2407,7 +2344,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 59.99995,
@@ -2425,7 +2362,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 60.98646935335093,
+      "mass": 60.98419,
       "assignments": [
         "AlO_2H_2+"
       ],
@@ -2437,10 +2374,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 61.00727645216093,
+      "mass": 61.00355,
       "assignments": [
         "C_5H+"
       ],
@@ -2452,10 +2389,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 63.02292651630093,
+      "mass": 63.02106,
       "assignments": [
         "C_5H_3+"
       ],
@@ -2467,10 +2404,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 64.03075154837093,
+      "mass": 64.02923,
       "assignments": [
         "C_5H_4+"
       ],
@@ -2482,7 +2419,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 65.0393,
@@ -2500,7 +2437,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 66.01001610379093,
+      "mass": 66.00884,
       "assignments": [
         "C_4H_2O+"
       ],
@@ -2512,7 +2449,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 66.04553,
@@ -2528,21 +2465,6 @@
       "polarity": "positive",
       "confidence": "High",
       "notes": "Excel fragment list - positive ions"
-    },
-    {
-      "mass": 67.01229017837093,
-      "assignments": [
-        "C_3H_4Al+"
-      ],
-      "formulas": [
-        "C3H4Al"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
     },
     {
       "mass": 67.01727,
@@ -2590,7 +2512,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 68.06205167665094,
+      "mass": 68.05907,
       "assignments": [
         "C_5H_8+"
       ],
@@ -2602,10 +2524,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 68.99155473379093,
+      "mass": 68.99224,
       "assignments": [
         "C_2H_2OAl+"
       ],
@@ -2617,7 +2539,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 69.03408,
@@ -2635,7 +2557,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 69.06987670872094,
+      "mass": 69.07121,
       "assignments": [
         "C_5H_9+"
       ],
@@ -2647,10 +2569,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 69.95744329965093,
+      "mass": 69.95553,
       "assignments": [
         "Al_2O+"
       ],
@@ -2662,10 +2584,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 70.04131623207093,
+      "mass": 70.03906,
       "assignments": [
         "C_4H_6O+"
       ],
@@ -2677,25 +2599,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 70.06244559947093,
-      "assignments": [
-        "CH_10O_3+"
-      ],
-      "formulas": [
-        "CH10O3"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
-    },
-    {
-      "mass": 70.07770174079093,
+      "mass": 70.07514,
       "assignments": [
         "C_5H_10+"
       ],
@@ -2707,10 +2614,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 70.96526833172094,
+      "mass": 70.96475,
       "assignments": [
         "Al_2OH+"
       ],
@@ -2722,10 +2629,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 71.00720479793094,
+      "mass": 71.01165,
       "assignments": [
         "C_2H_4OAl+"
       ],
@@ -2737,10 +2644,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 71.01275575542093,
+      "mass": 71.01165,
       "assignments": [
         "C_3H_3O_2+"
       ],
@@ -2752,10 +2659,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 71.04914126414093,
+      "mass": 71.05185,
       "assignments": [
         "C_4H_7O+"
       ],
@@ -2767,25 +2674,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 71.08552677286093,
-      "assignments": [
-        "C_5H_11+"
-      ],
-      "formulas": [
-        "C5H11"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 73.98874342793093,
+      "mass": 73.99036,
       "assignments": [
         "Al_2OH_4+"
       ],
@@ -2797,7 +2689,22 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 74.01207,
+      "assignments": [
+        "C_6H_2+"
+      ],
+      "formulas": [
+        "C6H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 74.01229,
@@ -2815,22 +2722,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 74.01510148423094,
-      "assignments": [
-        "C_6H_2+"
-      ],
-      "formulas": [
-        "C6H2"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 75.02292651630094,
+      "mass": 75.02143,
       "assignments": [
         "C_6H_3+"
       ],
@@ -2842,10 +2734,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 76.03075154837093,
+      "mass": 76.02944,
       "assignments": [
         "C_6H_4+"
       ],
@@ -2857,25 +2749,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 76.99664011423093,
-      "assignments": [
-        "C_4H_2Al+"
-      ],
-      "formulas": [
-        "C4H2Al"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 77.00219107172094,
+      "mass": 77.00016,
       "assignments": [
         "C_5HO+"
       ],
@@ -2887,10 +2764,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 77.03857658044093,
+      "mass": 77.0383,
       "assignments": [
         "C_6H_5+"
       ],
@@ -2902,10 +2779,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 78.04640161251093,
+      "mass": 78.04481,
       "assignments": [
         "C_6H_6+"
       ],
@@ -2917,7 +2794,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 78.99614,
@@ -2935,7 +2812,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 79.01784113586093,
+      "mass": 79.01652,
       "assignments": [
         "C_5H_3O+"
       ],
@@ -2947,7 +2824,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 79.05372,
@@ -2965,7 +2842,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 80.06205167665094,
+      "mass": 80.05831,
       "assignments": [
         "C_6H_8+"
       ],
@@ -2977,10 +2854,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 81.03349120000092,
+      "mass": 81.03487,
       "assignments": [
         "C_5H_5O+"
       ],
@@ -2992,7 +2869,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 81.07062,
@@ -3055,7 +2932,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 83.01275575542093,
+      "mass": 83.00931,
       "assignments": [
         "C_4H_3O_2+"
       ],
@@ -3067,10 +2944,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 83.02833416533093,
+      "mass": 83.03172,
       "assignments": [
         "AlO_3H_8+"
       ],
@@ -3082,10 +2959,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 83.08552677286093,
+      "mass": 83.0881,
       "assignments": [
         "C_6H_11+"
       ],
@@ -3097,25 +2974,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 84.98091839586093,
-      "assignments": [
-        "CH_3OAl_2+"
-      ],
-      "formulas": [
-        "CH3OAl2"
-      ],
-      "families": [
-        "Al-based"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 84.98646935335094,
+      "mass": 84.98306,
       "assignments": [
         "C_2H_2O_2Al+"
       ],
@@ -3127,10 +2989,25 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 85.00727645216094,
+      "mass": 84.98306,
+      "assignments": [
+        "CH_3OAl_2+"
+      ],
+      "formulas": [
+        "CH3OAl2"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 85.00625,
       "assignments": [
         "C_7H+"
       ],
@@ -3142,52 +3019,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
-    },
-    {
-      "mass": 85.02285486207093,
-      "assignments": [
-        "C_3H_6OAl+"
-      ],
-      "formulas": [
-        "C3H6OAl"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 85.02840581956093,
-      "assignments": [
-        "C_4H_5O_2+"
-      ],
-      "formulas": [
-        "C4H5O2"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
-    },
-    {
-      "mass": 85.10117683700093,
-      "assignments": [
-        "C_6H_13+"
-      ],
-      "formulas": [
-        "C6H13"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 86.01176,
@@ -3205,7 +3037,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 86.01510148423094,
+      "mass": 86.01179,
       "assignments": [
         "C_7H_2+"
       ],
@@ -3217,10 +3049,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 86.96018295128093,
+      "mass": 86.95825,
       "assignments": [
         "Al_2O_2H+"
       ],
@@ -3232,22 +3064,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 86.99656846000093,
-      "assignments": [
-        "CH_5OAl_2+"
-      ],
-      "formulas": [
-        "CH5OAl2"
-      ],
-      "families": [
-        "Al-based"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 87.00119,
@@ -3256,6 +3073,21 @@
       ],
       "formulas": [
         "C2H4O2Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 87.00119,
+      "assignments": [
+        "CH_5OAl_2+"
+      ],
+      "formulas": [
+        "CH5OAl2"
       ],
       "families": [
         "Al-based"
@@ -3280,7 +3112,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 87.02292651630094,
+      "mass": 87.02037,
       "assignments": [
         "C_7H_3+"
       ],
@@ -3292,10 +3124,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 87.96800798335093,
+      "mass": 87.96721,
       "assignments": [
         "Al_2O_2H_2+"
       ],
@@ -3307,10 +3139,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 88.03075154837093,
+      "mass": 88.02685,
       "assignments": [
         "C_7H_4+"
       ],
@@ -3322,10 +3154,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 88.97583301542093,
+      "mass": 88.97782,
       "assignments": [
         "Al_2O_2H_3+"
       ],
@@ -3337,10 +3169,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 88.98138397291093,
+      "mass": 88.97782,
       "assignments": [
         "CH_2O_3Al+"
       ],
@@ -3352,10 +3184,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 89.03857658044093,
+      "mass": 89.03683,
       "assignments": [
         "C_7H_5+"
       ],
@@ -3367,10 +3199,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 90.04640161251093,
+      "mass": 90.04482,
       "assignments": [
         "C_7H_6+"
       ],
@@ -3382,37 +3214,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
-    },
-    {
-      "mass": 90.99148307956092,
-      "assignments": [
-        "Al_2O_2H_5+"
-      ],
-      "formulas": [
-        "Al2O2H5"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 90.99703403705094,
-      "assignments": [
-        "CH_4O_3Al+"
-      ],
-      "formulas": [
-        "CH4O3Al"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Auto-added from Excel file on 2025-11-19 (exact calculated mass)"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 91.05379,
@@ -3445,7 +3247,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 92.06205167665094,
+      "mass": 92.0585,
       "assignments": [
         "C_7H_8+"
       ],
@@ -3457,10 +3259,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 92.98600377630093,
+      "mass": 92.98937,
       "assignments": [
         "C_3H_3Al_2+"
       ],
@@ -3472,10 +3274,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 92.99155473379093,
+      "mass": 92.98937,
       "assignments": [
         "C_4H_2OAl+"
       ],
@@ -3487,7 +3289,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 93.03355,
@@ -3505,7 +3307,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 93.06987670872094,
+      "mass": 93.07014,
       "assignments": [
         "C_7H_9+"
       ],
@@ -3517,10 +3319,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 94.03576527458094,
+      "mass": 94.03999,
       "assignments": [
         "C_5H_7Al+"
       ],
@@ -3532,10 +3334,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 94.04131623207093,
+      "mass": 94.03999,
       "assignments": [
         "C_6H_6O+"
       ],
@@ -3547,10 +3349,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 94.96526833172092,
+      "mass": 94.96233,
       "assignments": [
         "C_2HOAl_2+"
       ],
@@ -3562,10 +3364,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 95.00720479793094,
+      "mass": 95.009,
       "assignments": [
         "C_4H_4OAl+"
       ],
@@ -3577,10 +3379,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 95.01275575542093,
+      "mass": 95.0104,
       "assignments": [
         "C_5H_3O_2+"
       ],
@@ -3592,10 +3394,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 95.04914126414093,
+      "mass": 95.04939,
       "assignments": [
         "C_6H_7O+"
       ],
@@ -3607,10 +3409,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 95.08552677286093,
+      "mass": 95.08702,
       "assignments": [
         "C_7H_11+"
       ],
@@ -3622,55 +3424,10 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Cleaned and recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 97.10117683700093,
-      "assignments": [
-        "C_7H_13+"
-      ],
-      "formulas": [
-        "C7H13"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 98.01269180708094,
-      "assignments": [
-        "SiC_3H_7Al+"
-      ],
-      "formulas": [
-        "SiC3H7Al"
-      ],
-      "families": [
-        "Al-based"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 98.01510148423094,
-      "assignments": [
-        "C_8H_2+"
-      ],
-      "formulas": [
-        "C8H2"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 98.01542375282094,
+      "mass": 98.0111,
       "assignments": [
         "AlO_4H_7+"
       ],
@@ -3682,10 +3439,40 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 98.99656846000093,
+      "mass": 98.01122,
+      "assignments": [
+        "C_8H_2+"
+      ],
+      "formulas": [
+        "C8H2"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 98.01143,
+      "assignments": [
+        "SiC_3H_7Al+"
+      ],
+      "formulas": [
+        "SiC3H7Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 99.00143,
       "assignments": [
         "C_2H_5OAl_2+"
       ],
@@ -3697,7 +3484,7 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
     },
     {
       "mass": 99.00143,
@@ -3715,37 +3502,7 @@
       "notes": "Excel fragment list - positive ions"
     },
     {
-      "mass": 99.02051683915094,
-      "assignments": [
-        "SiC_3H_8Al+"
-      ],
-      "formulas": [
-        "SiC3H8Al"
-      ],
-      "families": [
-        "Al-based"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 99.02292651630094,
-      "assignments": [
-        "C_8H_3+"
-      ],
-      "formulas": [
-        "C8H3"
-      ],
-      "families": [
-        "Unknown"
-      ],
-      "polarity": "positive",
-      "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
-    },
-    {
-      "mass": 99.02324878489094,
+      "mass": 99.01687,
       "assignments": [
         "AlO_4H_8+"
       ],
@@ -3757,7 +3514,523 @@
       ],
       "polarity": "positive",
       "confidence": "High",
-      "notes": "Mass recalculated on 2025-11-19"
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 99.01687,
+      "assignments": [
+        "SiC_3H_8Al+"
+      ],
+      "formulas": [
+        "SiC3H8Al"
+      ],
+      "families": [
+        "Al-based"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 99.02053,
+      "assignments": [
+        "C_8H_3+"
+      ],
+      "formulas": [
+        "C8H3"
+      ],
+      "families": [
+        "Unknown"
+      ],
+      "polarity": "positive",
+      "confidence": "High",
+      "notes": "Excel fragment list - positive ions"
+    },
+    {
+      "mass": 63.0211,
+      "assignment": "-0.244235",
+      "formula": "C_5H_3+ (C5H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 26.981,
+      "assignment": "+0.226668",
+      "formula": "Al+ (Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 74.0121,
+      "assignment": "-0.211537",
+      "formula": "C_6H_2+ (C6H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 98.0114,
+      "assignment": "-0.191927",
+      "formula": "C_8H_2+ (C8H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 87.02,
+      "assignment": "-0.191034",
+      "formula": "C_7H_3+ (C7H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 86.0118,
+      "assignment": "-0.186864",
+      "formula": "C_7H_2+ (C7H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 50.0134,
+      "assignment": "-0.171902",
+      "formula": "C_4H_2+ (C4H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 43.0548,
+      "assignment": "+0.170943",
+      "formula": "C_3H_7+ (C3H7)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 51.0222,
+      "assignment": "-0.153172",
+      "formula": "C_4H_3+ (C4H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 99.0205,
+      "assignment": "-0.134757",
+      "formula": "C_8H_3+ (C8H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 99.0169,
+      "assignment": "-0.128133",
+      "formula": "[3 MATCHES] Click to review",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 78.0448,
+      "assignment": "+0.122258",
+      "formula": "C_6H_6+ (C6H6)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 27.0228,
+      "assignment": "-0.115217",
+      "formula": "C_2H_3+ (C2H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 26.0141,
+      "assignment": "-0.111487",
+      "formula": "C_2H_2+ (C2H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 75.0214,
+      "assignment": "-0.109188",
+      "formula": "C_6H_3+ (C6H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 86.9583,
+      "assignment": "+0.106877",
+      "formula": "Al_2O_2H+ (Al2O2H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 55.0549,
+      "assignment": "+0.106231",
+      "formula": "C_4H_7+ (C4H7)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 37.0056,
+      "assignment": "-0.105320",
+      "formula": "C_3H+ (C3H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 29.0397,
+      "assignment": "+0.105119",
+      "formula": "C_2H_5+ (C2H5)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 38.0161,
+      "assignment": "-0.105091",
+      "formula": "C_3H_2+ (C3H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 57.0707,
+      "assignment": "+0.099257",
+      "formula": "C_4H_9+ (C4H9)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 41.0408,
+      "assignment": "+0.097854",
+      "formula": "C_3H_5+ (C3H5)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 85.0062,
+      "assignment": "-0.079887",
+      "formula": "C_7H+ (C7H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 64.0292,
+      "assignment": "-0.077687",
+      "formula": "C_5H_4+ (C5H4)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 17.0037,
+      "assignment": "+0.396871",
+      "formula": "OH- (OH)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 15.9959,
+      "assignment": "+0.350008",
+      "formula": "O- (O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 53.0044,
+      "assignment": "-0.171921",
+      "formula": "C_3HO- (C3HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 65.0039,
+      "assignment": "-0.158730",
+      "formula": "C_4HO- (C4HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 58.9728,
+      "assignment": "+0.150133",
+      "formula": "AlO_2- (AlO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 42.9774,
+      "assignment": "+0.119586",
+      "formula": "AlO- (AlO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 73.0085,
+      "assignment": "-0.103541",
+      "formula": "C_6H- (C6H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 14.0163,
+      "assignment": "+0.093662",
+      "formula": "CH_2- (CH2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 12.0007,
+      "assignment": "+0.093310",
+      "formula": "C- (C)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 74.9865,
+      "assignment": "-0.091863",
+      "formula": "C_4Al- (C4Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 42.0039,
+      "assignment": "+0.076509",
+      "formula": "CH_3Al- (CH3Al)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 25.0086,
+      "assignment": "+0.073271",
+      "formula": "C_2H- (C2H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 31.9903,
+      "assignment": "+0.069888",
+      "formula": "O_2- (O2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 44.9994,
+      "assignment": "+0.068877",
+      "formula": "CHO_2- (CHO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 89.0415,
+      "assignment": "-0.063322",
+      "formula": "O_5H_9- (O5H9)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 91.0205,
+      "assignment": "-0.060506",
+      "formula": "C_6H_3O- (C6H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 97.0089,
+      "assignment": "-0.055985",
+      "formula": "C_8H- (C8H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 39.9915,
+      "assignment": "+0.055628",
+      "formula": "CHAl- (CHAl)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 75.0246,
+      "assignment": "-0.055000",
+      "formula": "C_6H_3- (C6H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 89.0042,
+      "assignment": "-0.054515",
+      "formula": "C_6HO- (C6HO)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 82.0068,
+      "assignment": "-0.054403",
+      "formula": "C_4H_2O_2- (C4H2O2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 55.0207,
+      "assignment": "-0.053691",
+      "formula": "C_3H_3O- (C3H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 68.9988,
+      "assignment": "-0.119820",
+      "formula": "C_3HO_2- (C3HO2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 43.0198,
+      "assignment": "-0.106382",
+      "formula": "C_2H_3O- (C2H3O)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 61.0104,
+      "assignment": "-0.104024",
+      "formula": "C_5H- (C5H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 86.0166,
+      "assignment": "-0.102166",
+      "formula": "C_7H_2- (C7H2)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 63.0262,
+      "assignment": "-0.092914",
+      "formula": "C_5H_3- (C5H3)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 72.0004,
+      "assignment": "-0.089413",
+      "formula": "C_6- (C6)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 85.0077,
+      "assignment": "-0.084228",
+      "formula": "C_7H- (C7H)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
+    },
+    {
+      "mass": 48.0005,
+      "assignment": "-0.083940",
+      "formula": "C_4- (C4)",
+      "family": "User-defined",
+      "polarity": "unknown",
+      "confidence": "User-assigned",
+      "notes": "User assignment: "
     }
   ]
 }

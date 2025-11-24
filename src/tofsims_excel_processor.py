@@ -130,7 +130,7 @@ class ToFSIMSExcelProcessor:
         Returns:
             Number of new fragments added
         """
-        from fragment_mass_calculator import calculate_mass_from_assignment, extract_formula_from_assignment
+        from core.fragment_mass_calculator import calculate_mass_from_assignment, extract_formula_from_assignment
 
         print(f"\n🔍 Checking fragment database for new fragment formulas...")
 

@@ -20,7 +20,7 @@ import shutil
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-from fragment_mass_calculator import calculate_mass_from_assignment
+from core.fragment_mass_calculator import calculate_mass_from_assignment
 
 
 DEFAULT_DB_PATH = "data/FragmentDatabase/alucone_fragments_complete.json"

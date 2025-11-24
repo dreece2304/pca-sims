@@ -11,7 +11,7 @@ from matplotlib.figure import Figure
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 
-from fragment_classifier import (
+from core.fragment_classifier import (
     classify_fragment,
     FragmentProperties,
     get_fragment_groups
@@ -226,14 +226,14 @@ class FragmentGroupPlotCanvas(FigureCanvas):
             linefmt='gray', markerfmt='o', basefmt='k-'
         )
 
-        # Color stems by family
-        for i, (stem, color) in enumerate(zip(stemlines, colors)):
-            stem.set_color(color)
-            stem.set_linewidth(1.5)
+        # Color stems by family (matplotlib 3.1+ uses LineCollection)
+        # Set colors and linewidths for all stems at once
+        stemlines.set_colors(colors)
 
-            # Emphasize high loadings
-            if abs(loadings[i]) >= loading_threshold:
-                stem.set_linewidth(3)
+        # Set linewidths - emphasize high loadings
+        linewidths = [3 if abs(loadings[i]) >= loading_threshold else 1.5
+                      for i in range(len(loadings))]
+        stemlines.set_linewidths(linewidths)
 
         # Color markers
         markerline.set_markerfacecolor('none')
