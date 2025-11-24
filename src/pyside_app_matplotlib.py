@@ -37,9 +37,8 @@ import numpy as np
 # Add src to path for imports
 sys.path.append(str(Path(__file__).parent))
 from simple_tof_sims_pca import SimpleToFSIMSPCA
-from matplotlib_plotting import PCAPlotCanvas, InteractivePCAPlots
-from stick_spectrum_plotting import StickSpectrumCanvas
-from fragment_analysis_tab import FragmentAnalysisTab
+from widgets.plotting import PCAPlotCanvas, InteractivePCAPlots, StickSpectrumCanvas
+from widgets import FragmentAnalysisTab
 from tofsims_excel_processor import ToFSIMSExcelProcessor
 
 # ===== CUSTOM WIDGETS =====
@@ -577,7 +576,7 @@ class FragmentAssignmentDialog(QDialog):
         return self.selected_assignment
 
 
-from data_preview_dialog import DataPreviewDialog
+from widgets.dialogs import DataPreviewDialog
 
 
 class PCAWorker(QThread):

@@ -17,7 +17,7 @@ import pandas as pd
 from pathlib import Path
 import json
 
-from fragment_group_plotting import FragmentGroupPlotCanvas
+from widgets.plotting import FragmentGroupPlotCanvas
 from matplotlib.backends.backend_qtagg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
