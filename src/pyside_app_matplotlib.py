@@ -46,6 +46,7 @@ from widgets.dialogs import (
     ManualAssignmentDialog
 )
 from widgets.common import NumericTableWidgetItem
+from widgets.tabs import SummaryTab, MainResultsTab
 from tofsims_excel_processor import ToFSIMSExcelProcessor
 
 
@@ -480,26 +481,13 @@ class ToFSIMSPCAApp(QMainWindow):
         self.plot_tabs = QTabWidget()
         
         # Main results tab
-        self.main_results_widget = QWidget()
-        main_results_layout = QVBoxLayout(self.main_results_widget)
-        
-        # Create matplotlib canvas with DPI awareness
-        self.plot_canvas = PCAPlotCanvas(self.main_results_widget, width=12, height=8)
-        self.plot_toolbar = NavigationToolbar(self.plot_canvas, self.main_results_widget)
-        
-        main_results_layout.addWidget(self.plot_toolbar)
-        main_results_layout.addWidget(self.plot_canvas)
-        
+        self.main_results_widget = MainResultsTab()
+        self.plot_canvas = self.main_results_widget.get_canvas()
         self.plot_tabs.addTab(self.main_results_widget, "Main Results")
-        
-        # Text summary tab
-        self.summary_widget = QWidget()
-        summary_layout = QVBoxLayout(self.summary_widget)
-        
-        self.summary_text = QTextEdit()
-        self.summary_text.setReadOnly(True)
-        summary_layout.addWidget(self.summary_text)
-        
+
+        # Summary tab
+        self.summary_widget = SummaryTab()
+        self.summary_text = self.summary_widget.summary_text  # Keep reference for compatibility
         self.plot_tabs.addTab(self.summary_widget, "Summary")
 
         # Fragment Assignment tab

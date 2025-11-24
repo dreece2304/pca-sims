@@ -1,7 +1,7 @@
 # PCA-SIMS Refactoring Plan
 **Branch**: `refactor/codebase-optimization`
 **Started**: November 23, 2025
-**Status**: Phase 2 Complete
+**Status**: Phase 5 Complete - Ready for Phase 6
 
 ---
 
@@ -87,17 +87,104 @@ Transform monolithic 7000-line GUI application into modular, maintainable MVC ar
 
 ---
 
-## 🚧 REMAINING PHASES (To Continue Later)
+### Phase 3: Create MVC Foundation (COMPLETE)
+**Commits**:
+- `d2ebdb0` - Add comprehensive refactoring plan documentation
+- `5b8e1a3` - Phase 3.1: Create MVC foundation structure
+- `5f7c8d2` - Phase 3.2: Remove unused batch processing code
+- `8c9f3e4` - Phase 3.3: Implement model layer
 
-### Phase 3: Create MVC Foundation
-**Duration**: 5-7 days | **Risk**: MEDIUM
-**Status**: NOT STARTED
+**Duration**: ~6 hours
+
+**Accomplishments:**
+
+#### 3.1: MVC Foundation Structure ✅
+- Created directory structure:
+  - `src/models/` - Data models (no Qt dependencies)
+  - `src/services/` - Business logic layer
+  - `src/core/` - Domain logic
+  - `src/widgets/` - Reusable UI components
+  - `src/widgets/dialogs/` - Dialog windows
+  - `src/widgets/plotting/` - Plot canvases
+
+#### 3.2: Removed Unused Batch Processing ✅
+- Deleted `tofsims/` package (~2,000 lines)
+- Removed 13 batch processing scripts from `scripts/production/` (~3,000 lines)
+- Total reduction: ~5,000 lines of unused code
+
+#### 3.3: Model Layer Implementation ✅
+Created 4 model modules (~830 lines):
+- `models/pca_model.py` - PCA results container with DataFrame conversion
+- `models/sample_model.py` - Sample metadata with Polarity enum
+- `models/fragment_model.py` - Fragment ions and assignments
+- `models/spectrum_model.py` - Mass spectrum data structures
+
+**Key Design Decisions:**
+- Models are pure Python dataclasses (no Qt dependencies)
+- Used Enum for Polarity instead of strings
+- Validation in dataclass __post_init__ methods
+- Proper type hints throughout
+
+**Files Changed**: 12 files, +830/-5000 lines
+
+---
+
+### Phase 4: Widget Reorganization (COMPLETE)
+**Commit**: `e1f4a7b` - Phase 4: Widget reorganization and package structure
+
+**Duration**: ~2 hours
+
+**Accomplishments:**
+- Moved existing files into widget package structure:
+  - `matplotlib_plotting.py` → `widgets/plotting/`
+  - `stick_spectrum_plotting.py` → `widgets/plotting/`
+  - `fragment_group_plotting.py` → `widgets/plotting/`
+  - `fragment_analysis_tab.py` → `widgets/`
+- Created `NumericTableWidgetItem` in `widgets/common.py`
+- Updated all imports in main GUI and dependent files
+- Created proper `__init__.py` files with explicit exports
+
+**Files Changed**: 8 files, +45/-12 lines
+
+---
+
+### Phase 5: Extract Dialog Classes (COMPLETE)
+**Commit**: `a74a6e9` - Phase 5: Extract dialog classes from main GUI
+
+**Duration**: ~3 hours
+
+**Accomplishments:**
+- Extracted 3 large dialog classes from main GUI (1,095 lines):
+  - `FragmentAssignmentDialog` (500 lines) - Detailed fragment assignment with plotting
+  - `CustomDoseDialog` (201 lines) - Sample metadata configuration
+  - `ManualAssignmentDialog` (384 lines) - Element composition calculator
+- Created `src/widgets/dialogs/` package with proper exports
+- Removed duplicate Polarity class (now using `models.Polarity`)
+- Removed duplicate NumericTableWidgetItem (now using `widgets.common`)
+- Updated main GUI imports
+
+**Main GUI Reduction:**
+- Before: 7,093 lines
+- After: 5,998 lines
+- Reduction: 1,095 lines (15.4%)
+
+**Testing:** All dialogs tested and functional
+
+**Files Changed**: 7 files, +1095/-1095 lines (net reorganization)
+
+---
+
+## 🚧 REMAINING PHASES
+
+### Phase 6: Tab Extraction from Main GUI
+**Duration**: 7-10 days | **Risk**: MEDIUM-HIGH
+**Status**: READY TO START
 
 #### Goals
-Establish new architecture WITHOUT breaking existing GUI
+Extract tab implementations from main GUI into separate view modules
 
 #### Strategy
-Create new directory structure alongside existing code. Old GUI continues working.
+Extract one tab at a time, test after each extraction
 
 #### Directory Structure to Create
 ```
