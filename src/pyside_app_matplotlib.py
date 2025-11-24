@@ -48,6 +48,7 @@ from widgets.dialogs import (
 from widgets.common import NumericTableWidgetItem
 from widgets.tabs import SummaryTab, MainResultsTab
 from tofsims_excel_processor import ToFSIMSExcelProcessor
+from services import FragmentService
 
 
 class PCAWorker(QThread):
@@ -111,6 +112,11 @@ class ToFSIMSPCAApp(QMainWindow):
         self.pending_assignments = []
         self.user_confirmed_assignments = {}  # Store user-confirmed assignments by m/z
         self.initialize_database_protection()
+
+        # Initialize services
+        self.fragment_service = FragmentService()
+        self.fragment_database = None  # Legacy compatibility
+        self.fragment_mass_index = {}  # Legacy compatibility
 
         # Create UI
         self.init_ui()
@@ -3841,36 +3847,18 @@ Export: Use export buttons to save data and plots
         return validation_results
 
     def load_fragment_database(self):
-        """Load fragment assignment database from JSON file"""
-        try:
-            import json
-            database_path = "/home/dreece23/pca-sims/data/FragmentDatabase/alucone_fragments_complete.json"
+        """Load fragment assignment database from JSON file (uses FragmentService)"""
+        success = self.fragment_service.load_database()
 
-            with open(database_path, 'r') as f:
-                self.fragment_database = json.load(f)
+        # Update legacy attributes for backward compatibility
+        self.fragment_database = self.fragment_service.fragment_database
+        self.fragment_mass_index = self.fragment_service.fragment_mass_index
 
-            print(f"✅ Loaded fragment database with {len(self.fragment_database['fragments'])} fragments")
-
-            # Build mass index for fast lookups (group by integer mass)
-            self.fragment_mass_index = {}
-            for fragment in self.fragment_database['fragments']:
-                mass_key = int(fragment['mass'])  # Index by integer part
-                if mass_key not in self.fragment_mass_index:
-                    self.fragment_mass_index[mass_key] = []
-                self.fragment_mass_index[mass_key].append(fragment)
-
-            print(f"📇 Indexed {len(self.fragment_database['fragments'])} fragments into {len(self.fragment_mass_index)} mass buckets")
-
-            return True
-
-        except Exception as e:
-            print(f"Warning: Could not load fragment database: {e}")
-            self.fragment_database = None
-            return False
+        return success
 
     def save_manual_assignment_to_database(self, mz_value, assignment_data, polarity):
         """
-        Save a manual fragment assignment to the database
+        Save a manual fragment assignment to the database (uses FragmentService)
 
         Args:
             mz_value: Observed m/z value
@@ -3880,141 +3868,15 @@ Export: Use export buttons to save data and plots
         Returns:
             tuple: (success: bool, message: str)
         """
-        import json
-        import shutil
-        from datetime import datetime
-        from pathlib import Path
+        success, message = self.fragment_service.save_manual_assignment(
+            mz_value, assignment_data, polarity
+        )
 
-        database_path = Path("/home/dreece23/pca-sims/data/FragmentDatabase/alucone_fragments_complete.json")
+        # Update legacy attributes for backward compatibility
+        self.fragment_database = self.fragment_service.fragment_database
+        self.fragment_mass_index = self.fragment_service.fragment_mass_index
 
-        try:
-            # Step 1: Create timestamped backup
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            backup_dir = database_path.parent / "backups"
-            backup_dir.mkdir(exist_ok=True)
-
-            backup_path = backup_dir / f"before_manual_assignment_{timestamp}.json"
-            shutil.copy2(database_path, backup_path)
-            print(f"📦 Created backup: {backup_path.name}")
-
-            # Step 2: Load current database
-            with open(database_path, 'r') as f:
-                database = json.load(f)
-
-            # Step 3: Check if fragment exists at this mass (within 10 ppm tolerance)
-            tolerance_ppm = 10.0
-            existing_fragment = None
-            existing_index = None
-
-            for i, fragment in enumerate(database['fragments']):
-                if fragment['polarity'] != polarity:
-                    continue
-
-                # Calculate mass error in ppm
-                mass_error_ppm = abs((fragment['mass'] - mz_value) / mz_value * 1e6)
-
-                if mass_error_ppm <= tolerance_ppm:
-                    existing_fragment = fragment
-                    existing_index = i
-                    break
-
-            # Step 4: Create fragment entry
-            fragment_entry = {
-                "mass": assignment_data['calculated_mass'],
-                "assignments": [assignment_data['assignment']],
-                "formulas": [assignment_data['formula']],
-                "families": [assignment_data['chemical_family']],
-                "polarity": polarity,
-                "confidence": assignment_data['confidence'],
-                "notes": f"Manual assignment - {assignment_data.get('notes', 'User-assigned')}"
-            }
-
-            if existing_fragment:
-                # Update existing fragment
-                print(f"📝 Updating existing fragment at m/z {existing_fragment['mass']:.4f}")
-
-                # Preserve existing assignments if they're different
-                if assignment_data['assignment'] not in existing_fragment['assignments']:
-                    existing_fragment['assignments'].insert(0, assignment_data['assignment'])
-                    existing_fragment['formulas'].insert(0, assignment_data['formula'])
-                    existing_fragment['families'].insert(0, assignment_data['chemical_family'])
-                else:
-                    # Replace if it already exists
-                    idx = existing_fragment['assignments'].index(assignment_data['assignment'])
-                    existing_fragment['assignments'][idx] = assignment_data['assignment']
-                    existing_fragment['formulas'][idx] = assignment_data['formula']
-                    existing_fragment['families'][idx] = assignment_data['chemical_family']
-
-                # Update confidence and notes
-                existing_fragment['confidence'] = assignment_data['confidence']
-                existing_fragment['notes'] = fragment_entry['notes']
-
-                # Update mass to calculated value
-                existing_fragment['mass'] = assignment_data['calculated_mass']
-
-            else:
-                # Add new fragment
-                print(f"➕ Adding new fragment at m/z {mz_value:.4f}")
-                database['fragments'].append(fragment_entry)
-
-                # Keep fragments sorted by mass
-                database['fragments'].sort(key=lambda x: x['mass'])
-
-            # Step 5: Update metadata
-            total_fragments = len(database['fragments'])
-            negative_count = sum(1 for f in database['fragments'] if f['polarity'] == 'negative')
-            positive_count = sum(1 for f in database['fragments'] if f['polarity'] == 'positive')
-
-            database['metadata']['total_fragments'] = total_fragments
-            database['metadata']['negative_fragments'] = negative_count
-            database['metadata']['positive_fragments'] = positive_count
-            database['metadata']['last_modified'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-            # Step 6: Write updated database
-            with open(database_path, 'w') as f:
-                json.dump(database, f, indent=2)
-
-            print(f"✅ Database updated successfully")
-            print(f"   Total fragments: {total_fragments} ({negative_count} negative, {positive_count} positive)")
-
-            # Step 7: Reload database and rebuild index
-            self.load_fragment_database()
-
-            success_msg = (
-                f"Assignment saved to database:\n\n"
-                f"m/z {mz_value:.4f} → {assignment_data['assignment']}\n"
-                f"Formula: {assignment_data['formula']}\n"
-                f"Error: {assignment_data['error_ppm']:.1f} ppm\n\n"
-                f"Backup created: {backup_path.name}"
-            )
-
-            return True, success_msg
-
-        except PermissionError as e:
-            error_msg = (
-                f"Permission denied when writing to database:\n{database_path}\n\n"
-                f"Please check file permissions."
-            )
-            print(f"❌ Permission error: {e}")
-            return False, error_msg
-
-        except json.JSONDecodeError as e:
-            error_msg = (
-                f"JSON format error in database file:\n{database_path}\n\n"
-                f"The database may be corrupted. Please restore from backup."
-            )
-            print(f"❌ JSON error: {e}")
-            return False, error_msg
-
-        except Exception as e:
-            error_msg = (
-                f"Unexpected error saving assignment:\n{str(e)}\n\n"
-                f"Assignment was not saved. Database backup is safe."
-            )
-            print(f"❌ Error: {e}")
-            import traceback
-            traceback.print_exc()
-            return False, error_msg
+        return success, message
 
     def find_multiple_fragment_assignments(self, target_mass: float, tolerance_ppm: float = 55.0, polarity: str = None, max_matches: int = 4):
         """
