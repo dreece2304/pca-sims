@@ -10,7 +10,9 @@ import shutil
 from pathlib import Path
 
 import sys
-sys.path.append('src')
+# Get project root (tests/integration -> tests -> project root)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+sys.path.append(str(PROJECT_ROOT / 'src'))
 
 from services import FragmentService
 from models import Fragment, Polarity
@@ -22,7 +24,7 @@ class TestFragmentWorkflow:
     @pytest.fixture
     def real_database(self):
         """Use the actual fragment database for integration testing"""
-        db_path = Path("/home/dreece23/pca-sims/data/FragmentDatabase/alucone_fragments_complete.json")
+        db_path = PROJECT_ROOT / "data" / "FragmentDatabase" / "alucone_fragments_complete.json"
         if not db_path.exists():
             pytest.skip("Fragment database not found")
         return db_path

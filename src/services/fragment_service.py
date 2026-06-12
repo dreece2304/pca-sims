@@ -14,11 +14,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
+from paths import FRAGMENT_DATABASE_PATH
+
 
 class FragmentService:
     """Service for fragment database operations"""
 
-    DEFAULT_DATABASE_PATH = Path("/home/dreece23/pca-sims/data/FragmentDatabase/alucone_fragments_complete.json")
+    DEFAULT_DATABASE_PATH = FRAGMENT_DATABASE_PATH
     DEFAULT_PPM_TOLERANCE = 50.0
     MANUAL_ASSIGNMENT_TOLERANCE = 10.0
 

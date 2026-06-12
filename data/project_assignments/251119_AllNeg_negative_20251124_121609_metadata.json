@@ -1,0 +1,160 @@
+{
+  "metadata": {
+    "P1_SQ1": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 500.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P1_SQ1"
+    },
+    "P1_SQ2": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 2500.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P1_SQ2"
+    },
+    "P1_SQ3": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 5000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P1_SQ3"
+    },
+    "P1_SQ4": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 10000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P1_SQ4"
+    },
+    "P1_SQ5": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 15000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P1_SQ5"
+    },
+    "P2_SQ1": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 500.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P2_SQ1"
+    },
+    "P2_SQ2": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 2500.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P2_SQ2"
+    },
+    "P2_SQ3": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 5000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P2_SQ3"
+    },
+    "P2_SQ4": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 10000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P2_SQ4"
+    },
+    "P2_SQ5": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 15000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P2_SQ5"
+    },
+    "P3_SQ1": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 500.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P3_SQ1"
+    },
+    "P3_SQ2": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 2500.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P3_SQ2"
+    },
+    "P3_SQ3": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 5000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P3_SQ3"
+    },
+    "P3_SQ4": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 10000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P3_SQ4"
+    },
+    "P3_SQ5": {
+      "sample_type": "E-Beam Exposed",
+      "dose": 15000.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P3_SQ5"
+    },
+    "P1_SQ0": {
+      "sample_type": "As-Deposited",
+      "dose": 0.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P1_SQ0"
+    },
+    "P2_SQ0": {
+      "sample_type": "As-Deposited",
+      "dose": 0.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P2_SQ0"
+    },
+    "P2_SQ0.1": {
+      "sample_type": "As-Deposited",
+      "dose": 0.0,
+      "dose_units": "\u03bcC/cm\u00b2",
+      "include": true,
+      "notes": "",
+      "square_id": "P2_SQ0.1"
+    }
+  },
+  "created": "2025-11-24T12:16:30.822220",
+  "last_modified": "2025-11-24T12:16:30.822227",
+  "data_file": "/home/dreece23/pca-sims/data/temp/251119_AllNeg_negative_20251124_121609.txt",
+  "data_checksum": "a40e8f14ae20dbee11603ed289aa2a2d",
+  "custom_dose_values": {
+    "0": 0.0,
+    "1": 500.0,
+    "2": 2500.0,
+    "3": 5000.0,
+    "4": 10000.0,
+    "5": 15000.0
+  }
+}

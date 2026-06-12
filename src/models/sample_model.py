@@ -14,6 +14,28 @@ class Polarity(Enum):
     POSITIVE = "positive"
     NEGATIVE = "negative"
 
+    @property
+    def display_name(self) -> str:
+        """Get display-friendly name for polarity."""
+        return self.value.capitalize()
+
+    @classmethod
+    def from_string(cls, polarity_str: str) -> 'Polarity':
+        """
+        Convert string to Polarity enum.
+
+        Args:
+            polarity_str: String representation ('positive', 'negative', etc.)
+
+        Returns:
+            Polarity enum value
+        """
+        polarity_lower = polarity_str.lower()
+        for polarity in cls:
+            if polarity.value == polarity_lower:
+                return polarity
+        raise ValueError(f"Invalid polarity: {polarity_str}")
+
 
 @dataclass
 class Sample:

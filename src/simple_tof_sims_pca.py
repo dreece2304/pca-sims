@@ -1034,8 +1034,11 @@ class SimpleToFSIMSPCA:
 
 
 if __name__ == "__main__":
-    # Test with your data
-    pca = SimpleToFSIMSPCA("/home/dreece23/pca-sims/data/NegativeIon/NegIonTIC.txt")
+    # Test with your data (use relative path from project root)
+    from pathlib import Path
+    project_root = Path(__file__).parent.parent
+    test_data = project_root / "data" / "NegativeIon" / "NegIonTIC.txt"
+    pca = SimpleToFSIMSPCA(str(test_data))
     pca.load_data()
     pca.select_doses([1, 2, 3, 4, 5])  # Exclude SQ0 for now
     pca.preprocess_data(sqrt_transform=True, mean_center=False, pareto_scale=True)

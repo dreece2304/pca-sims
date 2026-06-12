@@ -49,6 +49,8 @@ from widgets.common import NumericTableWidgetItem
 from widgets.tabs import SummaryTab, MainResultsTab
 from tofsims_excel_processor import ToFSIMSExcelProcessor
 from services import FragmentService
+from models.sample_model import Polarity
+import paths
 
 
 class PCAWorker(QThread):
@@ -636,7 +638,7 @@ class ToFSIMSPCAApp(QMainWindow):
         """Browse for data file"""
         file_path, _ = QFileDialog.getOpenFileName(
             self, "Select ToF-SIMS Data File",
-            "/home/dreece23/pca-sims/data",
+            str(paths.DATA_DIR),
             "Text files (*.txt *.tsv *.csv)"
         )
 
@@ -651,7 +653,7 @@ class ToFSIMSPCAApp(QMainWindow):
         # Browse for Excel file
         excel_path, _ = QFileDialog.getOpenFileName(
             self, "Select ToF-SIMS Excel File",
-            "/home/dreece23/pca-sims/data",
+            str(paths.DATA_DIR),
             "Excel files (*.xlsx *.xls)"
         )
 
@@ -685,7 +687,7 @@ class ToFSIMSPCAApp(QMainWindow):
 
             # Create temporary output file
             excel_filename = Path(excel_path).stem
-            temp_output_dir = Path("/home/dreece23/pca-sims/data") / "temp"
+            temp_output_dir = paths.DATA_DIR / "temp"
             temp_output_dir.mkdir(exist_ok=True)
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -840,14 +842,19 @@ Click OK to load the processed data."""
                         self.polarity_combo.setCurrentIndex(1)
                         self.polarity_combo.setToolTip("Single-ion mode: Positive ion data loaded\n(Negative companion file not found)")
                         print(f"📊 Single-ion mode: Positive ion data loaded")
-
-                    # Debug: verify combo state
+                        print(f"   ✅ Set active_polarity='positive'")
+                        print(f"   ✅ Set polarity_combo index=1")
 
                 # Get the active analyzer
                 self.pca_analyzer = self.multi_ion_manager.get_active_analyzer()
 
                 # Final verification: ensure UI matches active polarity
                 actual_polarity = self.multi_ion_manager.active_polarity
+                print(f"🔍 Polarity verification after loading:")
+                print(f"   active_polarity = '{actual_polarity}'")
+                print(f"   polarity_combo index = {self.polarity_combo.currentIndex()}")
+                print(f"   polarity_combo text = '{self.polarity_combo.currentText()}'")
+
                 if (actual_polarity == "negative" and self.polarity_combo.currentIndex() != 0) or \
                    (actual_polarity == "positive" and self.polarity_combo.currentIndex() != 1):
                     print(f"⚠️  WARNING: Combo box mismatch! Correcting...")
@@ -859,6 +866,46 @@ Click OK to load the processed data."""
                 self.pca_analyzer.load_data()
                 self.dual_ion_mode = False
                 self.polarity_combo.setEnabled(False)
+
+                # CRITICAL: Detect and set polarity from filename since multi-ion loading failed
+                filename = Path(file_path).name.lower()
+
+                # Detect polarity from filename patterns
+                if 'pos' in filename or 'positive' in filename:
+                    detected_polarity = 'positive'
+                elif 'neg' in filename or 'negative' in filename:
+                    detected_polarity = 'negative'
+                else:
+                    # Unable to detect - ask user
+                    detected_polarity = None
+
+                if detected_polarity:
+                    print(f"🔍 Detected polarity from filename: '{detected_polarity}'")
+                    self.multi_ion_manager.set_active_polarity(detected_polarity)
+                    self.polarity_combo.setCurrentIndex(0 if detected_polarity == 'negative' else 1)
+                    print(f"   ✅ Set active_polarity='{detected_polarity}'")
+                    print(f"   ✅ Set polarity_combo index={self.polarity_combo.currentIndex()}")
+                else:
+                    # Ask user to specify polarity
+                    print(f"❓ Unable to detect polarity from filename: {filename}")
+                    polarity_dialog = QMessageBox(self)
+                    polarity_dialog.setWindowTitle("Specify Ion Mode")
+                    polarity_dialog.setText(f"Unable to detect ion mode from filename.\n\n"
+                                           "Please specify the ion mode for this data:")
+                    polarity_dialog.setInformativeText("This affects fragment assignment and analysis.")
+                    polarity_dialog.setIcon(QMessageBox.Question)
+
+                    negative_btn = polarity_dialog.addButton("Negative Ion", QMessageBox.ActionRole)
+                    positive_btn = polarity_dialog.addButton("Positive Ion", QMessageBox.ActionRole)
+                    polarity_dialog.setDefaultButton(negative_btn)
+
+                    polarity_dialog.exec()
+                    clicked_button = polarity_dialog.clickedButton()
+
+                    user_polarity = "negative" if clicked_button == negative_btn else "positive"
+                    self.multi_ion_manager.set_active_polarity(user_polarity)
+                    self.polarity_combo.setCurrentIndex(0 if user_polarity == 'negative' else 1)
+                    print(f"✅ User specified polarity: '{user_polarity}'")
 
             # Prompt for custom dose values if doses are detected
             if 'dose_id' in self.pca_analyzer.sample_metadata.columns:
@@ -1194,10 +1241,10 @@ Export: Use export buttons to save data and plots
         """Export PCA results to CSV files"""
         if not self.pca_completed:
             return
-        
+
         output_dir = QFileDialog.getExistingDirectory(
             self, "Select Output Directory",
-            "/home/dreece23/pca-sims/outputs"
+            str(paths.OUTPUTS_DIR)
         )
         
         if output_dir:
@@ -1228,7 +1275,7 @@ Export: Use export buttons to save data and plots
         # Get output file path
         file_path, _ = QFileDialog.getSaveFileName(
             self, "Export to Excel",
-            "/home/dreece23/pca-sims/outputs/pca_analysis.xlsx",
+            str(paths.OUTPUTS_DIR / "pca_analysis.xlsx"),
             "Excel files (*.xlsx)"
         )
         
@@ -1364,10 +1411,10 @@ Export: Use export buttons to save data and plots
         """Export plots to image files"""
         if not self.pca_completed:
             return
-        
+
         output_dir = QFileDialog.getExistingDirectory(
             self, "Select Output Directory",
-            "/home/dreece23/pca-sims/outputs"
+            str(paths.OUTPUTS_DIR)
         )
         
         if output_dir:
@@ -2655,7 +2702,13 @@ Export: Use export buttons to save data and plots
                 mz_values = raw_data.index.values
 
             # Get polarity for title
-            polarity_display = Polarity.display_name(self.multi_ion_manager.active_polarity)
+            polarity_str = self.multi_ion_manager.active_polarity
+            if isinstance(polarity_str, Polarity):
+                polarity_display = polarity_str.display_name
+            elif isinstance(polarity_str, str):
+                polarity_display = Polarity.from_string(polarity_str).display_name
+            else:
+                polarity_display = str(polarity_str).capitalize()
 
             # Create simplified title: extract description from dose_text
             # dose_text format: "SQ0 (As-deposited, 0 µC/cm²)" -> "As-deposited"
@@ -2694,8 +2747,8 @@ Export: Use export buttons to save data and plots
                     'mean_intensity': mean_intensities[i],
                     'std_dev': std_devs[i],
                     'cv_percent': (std_devs[i] / mean_intensities[i] * 100) if mean_intensities[i] > 0 else 0,
-                    'assignment': matches[0]['assignments'][0] if matches else "Unassigned",
-                    'formula': matches[0]['formulas'][0] if matches else "",
+                    'assignment': matches[0]['assignment'] if matches else "Unassigned",
+                    'formula': matches[0]['formula'] if matches else "",
                     'confidence': matches[0].get('confidence', '') if matches else "",
                     'show_label': False  # Default: don't show label
                 }
@@ -3327,7 +3380,7 @@ Export: Use export buttons to save data and plots
             return
 
         # Get save location
-        default_path = f"/home/dreece23/pca-sims/outputs/fragment_table_{self.multi_ion_manager.active_polarity}.csv"
+        default_path = str(paths.OUTPUTS_DIR / f"fragment_table_{self.multi_ion_manager.active_polarity}.csv")
         file_path, _ = QFileDialog.getSaveFileName(
             parent_dialog,
             "Export Fragment Table",
@@ -3376,7 +3429,7 @@ Export: Use export buttons to save data and plots
         polarity = Polarity.display_name(self.current_stick_data['polarity']).replace(' ', '_')
         dose_label = self.current_stick_data['dose_label']
         default_filename = f"stick_spectrum_{polarity}_{dose_label}.xlsx"
-        default_path = f"/home/dreece23/pca-sims/outputs/{default_filename}"
+        default_path = str(paths.OUTPUTS_DIR / default_filename)
 
         file_path, _ = QFileDialog.getSaveFileName(
             self,
@@ -3892,11 +3945,15 @@ Export: Use export buttons to save data and plots
             List of fragment dictionaries sorted by mass error
         """
         if not hasattr(self, 'fragment_database') or not self.fragment_database:
+            print(f"⚠️  Fragment database not loaded for m/z {target_mass:.4f}")
             return []
 
         # Get polarity from single source of truth if not specified
         if polarity is None:
             polarity = self.multi_ion_manager.active_polarity
+            print(f"🔍 find_multiple_fragment_assignments: m/z {target_mass:.4f}, using active_polarity='{polarity}', tolerance={tolerance_ppm:.1f} ppm")
+        else:
+            print(f"🔍 find_multiple_fragment_assignments: m/z {target_mass:.4f}, polarity='{polarity}', tolerance={tolerance_ppm:.1f} ppm")
 
         matches = []
 
@@ -3946,6 +4003,15 @@ Export: Use export buttons to save data and plots
 
         # Sort by priority score first (higher is better), then by mass error, then by assignment name for deterministic ordering
         matches.sort(key=lambda x: (-x['priority_score'], x['mass_error'], x.get('assignments', [''])[0]))
+
+        # Log results
+        if matches:
+            print(f"   ✅ Found {len(matches)} match(es) for m/z {target_mass:.4f}:")
+            for i, m in enumerate(matches[:3]):  # Show first 3
+                print(f"      #{i+1}: {m['assignment']} at {m['mass']:.4f} ({m['mass_error_ppm']:.1f} ppm)")
+        else:
+            print(f"   ❌ No matches found for m/z {target_mass:.4f} (tolerance: ±{tolerance_da:.4f} Da)")
+
         return matches[:max_matches]
 
     def calculate_assignment_priority(self, fragment, target_mass):
@@ -4078,7 +4144,14 @@ Export: Use export buttons to save data and plots
                     assign_btn.setStyleSheet("background-color: #90EE90; font-weight: bold;")  # Light green
                 else:
                     # Look up ALL possible assignments in database with 55 ppm tolerance
-                    fragment_matches = self.find_multiple_fragment_assignments(mass, tolerance_ppm=55.0, max_matches=10)
+                    # Use current polarity to ensure correct matches
+                    current_polarity = self.multi_ion_manager.active_polarity
+                    fragment_matches = self.find_multiple_fragment_assignments(
+                        mass,
+                        tolerance_ppm=55.0,
+                        polarity=current_polarity,
+                        max_matches=10
+                    )
 
                     if fragment_matches:
                         num_matches = len(fragment_matches)
@@ -4263,7 +4336,7 @@ Export: Use export buttons to save data and plots
             if new_assignments > 0:
                 # Save updated database
                 import json
-                database_path = "/home/dreece23/pca-sims/data/FragmentDatabase/alucone_fragments_complete.json"
+                database_path = paths.FRAGMENT_DATABASE_PATH
 
                 with open(database_path, 'w') as f:
                     json.dump(self.fragment_database, f, indent=2)
@@ -5007,9 +5080,9 @@ Export: Use export buttons to save data and plots
             from datetime import datetime
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            backup_path = f"/home/dreece23/pca-sims/data/FragmentDatabase/backup_alucone_fragments_{timestamp}.json"
+            backup_path = paths.get_backup_path(f"backup_alucone_fragments_{timestamp}.json")
 
-            original_path = "/home/dreece23/pca-sims/data/FragmentDatabase/alucone_fragments_complete.json"
+            original_path = paths.FRAGMENT_DATABASE_PATH
             shutil.copy2(original_path, backup_path)
 
             QMessageBox.information(
@@ -5024,7 +5097,7 @@ Export: Use export buttons to save data and plots
         """Restore database from a backup file"""
         backup_file, _ = QFileDialog.getOpenFileName(
             self, "Select Backup File",
-            "/home/dreece23/pca-sims/data/FragmentDatabase/",
+            str(paths.FRAGMENT_DATABASE_DIR),
             "JSON files (*.json);;All files (*)"
         )
 
@@ -5039,7 +5112,7 @@ Export: Use export buttons to save data and plots
             if reply == QMessageBox.Yes:
                 try:
                     import shutil
-                    target_path = "/home/dreece23/pca-sims/data/FragmentDatabase/alucone_fragments_complete.json"
+                    target_path = paths.FRAGMENT_DATABASE_PATH
                     shutil.copy2(backup_file, target_path)
 
                     # Reload database
@@ -5644,6 +5717,16 @@ Export: Use export buttons to save data and plots
                 print("⚠️  PCA not completed - skipping Fragment Analysis population")
                 return
 
+            # Load fragment database if not already loaded
+            if not hasattr(self, 'fragment_database') or not self.fragment_database:
+                print("📚 Loading fragment database for Fragment Analysis...")
+                self.load_fragment_database()
+
+            # Get current polarity for fragment assignment
+            polarity = self.multi_ion_manager.active_polarity
+            print(f"📊 Fragment Analysis using polarity: '{polarity}'")
+            print(f"   Database loaded: {len(self.fragment_database.get('fragments', [])) if self.fragment_database else 0} fragments")
+
             # Get fragment data from PCA
             masses = getattr(self.pca_analyzer, 'current_mass_values', self.pca_analyzer.mass_values)
 
@@ -5666,25 +5749,113 @@ Export: Use export buttons to save data and plots
             # Get current polarity
             polarity = self.multi_ion_manager.active_polarity
 
-            # Get formulas - try to match from database or use manual assignments
+            # Get formulas and families - reuse assignments from Fragment Assignment tab
+            # The Fragment Assignment tab has already matched all fragments correctly
             formulas = []
+            assignments = []
+            families = []  # Extract curated chemical families from database
+
             for mass in masses:
-                formula = self._get_fragment_formula(mass, polarity)
-                formulas.append(formula if formula else f"Unknown_{mass:.4f}")
+                # Check if we have a stored assignment for this mass (from Fragment Assignment tab)
+                mass_key = f"{mass:.4f}"
+                assignment_found = False
 
-            # Get intensities for all samples (preprocessed data)
-            intensities = []
-            for i in range(len(sample_names)):
-                sample_intensities = self.pca_analyzer.preprocessed_data.iloc[i, :].values
-                intensities.append(sample_intensities)
+                # First check user-confirmed assignments
+                if hasattr(self, 'user_confirmed_assignments'):
+                    for confirmed_mass_str, assignment_data in self.user_confirmed_assignments.items():
+                        try:
+                            confirmed_mass = float(confirmed_mass_str)
+                            if abs(confirmed_mass - mass) < 0.0001:  # Match within 0.1 mDa
+                                formulas.append(assignment_data['formula'].replace('_', ''))
+                                assignments.append(assignment_data['assignment'])
+                                # Extract family from assignment data if available
+                                families.append(assignment_data.get('family', 'Unknown'))
+                                assignment_found = True
+                                break
+                        except (ValueError, KeyError):
+                            continue
 
-            # Build fragment data dict
-            fragment_data = {
-                'masses': masses,
-                'formulas': formulas,
-                'intensities': intensities,
-                'sample_names': sample_names
-            }
+                if not assignment_found:
+                    # Try database lookup
+                    formula = self._get_fragment_formula(mass, polarity)
+                    if formula:
+                        formulas.append(formula)
+                        # Get assignment and family from database
+                        matches = self.find_multiple_fragment_assignments(mass, tolerance_ppm=100.0, polarity=polarity, max_matches=1)
+                        if matches:
+                            assignments.append(matches[0]['assignment'])
+                            # Extract family from database (families is a list)
+                            db_families = matches[0].get('families', [])
+                            families.append(db_families[0] if db_families else 'Unknown')
+                        else:
+                            assignments.append(f"Unknown_{mass:.4f}")
+                            families.append('Unknown')
+                    else:
+                        formulas.append(f"Unknown_{mass:.4f}")
+                        assignments.append(f"Unknown_{mass:.4f}")
+                        families.append('Unknown')
+
+            # Get intensities averaged by dose (replicates averaged)
+            # Group samples by dose_id and calculate mean/std
+            working_metadata = self.pca_analyzer.working_metadata
+
+            # Check if dose_id exists
+            if 'dose_id' in working_metadata.columns:
+                dose_ids = sorted(working_metadata['dose_id'].unique())
+                dose_means = []
+                dose_stds = []
+                dose_labels = []
+                dose_values = []
+
+                for dose_id in dose_ids:
+                    # Get sample indices for this dose
+                    dose_mask = working_metadata['dose_id'] == dose_id
+                    dose_indices = working_metadata[dose_mask].index.tolist()
+
+                    # Get intensities for these samples
+                    dose_intensities = self.pca_analyzer.preprocessed_data.iloc[dose_indices, :].values
+
+                    # Calculate mean and std across replicates
+                    dose_mean = np.mean(dose_intensities, axis=0)
+                    dose_std = np.std(dose_intensities, axis=0, ddof=1) if len(dose_indices) > 1 else np.zeros_like(dose_mean)
+
+                    dose_means.append(dose_mean)
+                    dose_stds.append(dose_std)
+                    dose_labels.append(f"Dose {dose_id}")
+
+                    # Get actual dose value
+                    actual_dose = working_metadata[dose_mask]['actual_dose'].iloc[0]
+                    dose_values.append(actual_dose)
+
+                print(f"📊 Averaged {len(working_metadata)} samples into {len(dose_means)} dose groups")
+                print(f"   Doses: {dose_values}")
+
+                # Build fragment data dict with dose-averaged intensities
+                fragment_data = {
+                    'masses': masses,
+                    'formulas': formulas,
+                    'families': families,  # Curated chemical families from database
+                    'intensities': dose_means,  # Mean intensities per dose
+                    'intensities_std': dose_stds,  # Std deviations per dose
+                    'sample_names': dose_labels,  # Dose labels
+                    'dose_values': dose_values,  # Actual dose values for x-axis
+                    'n_replicates': len(working_metadata) // len(dose_means) if dose_means else 0
+                }
+            else:
+                # Fallback: no dose grouping, use individual samples
+                print("⚠️  No dose_id found, using individual sample intensities")
+                intensities = []
+                for i in range(len(sample_names)):
+                    sample_intensities = self.pca_analyzer.preprocessed_data.iloc[i, :].values
+                    intensities.append(sample_intensities)
+
+                fragment_data = {
+                    'masses': masses,
+                    'formulas': formulas,
+                    'families': families,  # Curated chemical families from database
+                    'intensities': intensities,
+                    'sample_names': sample_names
+                }
 
             # Get PCA results
             loadings_df = self.pca_analyzer.get_loadings_dataframe()
@@ -5695,15 +5866,18 @@ Export: Use export buttons to save data and plots
                 'variance_explained': variance_explained
             }
 
+            # Use the actual data sample names (dose labels if grouped, original if not)
+            data_sample_names = fragment_data.get('sample_names', sample_names)
+
             # Populate the tab
             self.fragment_analysis_widget.set_data(
                 fragment_data,
                 pca_results,
-                sample_names,
+                data_sample_names,
                 polarity
             )
 
-            print(f"✅ Fragment Analysis tab populated: {len(masses)} fragments, {len(sample_names)} samples")
+            print(f"✅ Fragment Analysis tab populated: {len(masses)} fragments, {len(data_sample_names)} samples")
 
         except Exception as e:
             print(f"⚠️  Error populating Fragment Analysis: {e}")
@@ -5735,13 +5909,13 @@ Export: Use export buttons to save data and plots
             return formula
 
         # Check fragment database
-        if hasattr(self, 'fragment_db') and self.fragment_db:
-            matches = self.find_fragment_matches(mass, polarity, tolerance_da=0.01)
+        if hasattr(self, 'fragment_database') and self.fragment_database:
+            matches = self.find_multiple_fragment_assignments(mass, tolerance_ppm=100.0, polarity=polarity, max_matches=1)
             if matches:
-                # Use first (best) match
+                # Use first (best) match - note: returns singular 'formula' not 'formulas'
                 best_match = matches[0]
-                if 'formulas' in best_match and best_match['formulas']:
-                    return best_match['formulas'][0].replace('_', '')
+                if 'formula' in best_match and best_match['formula']:
+                    return best_match['formula'].replace('_', '')
 
         return None
 

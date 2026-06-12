@@ -431,8 +431,15 @@ class FragmentAssignmentDialog(QDialog):
             # Get candidate assignments using ppm tolerance
             # Convert mDa to ppm for this mass
             tolerance_ppm = (tolerance_da * 1e6) / self.mass
+
+            # Get current polarity from parent app to ensure correct matches
+            current_polarity = self.parent_app.multi_ion_manager.active_polarity
+
             candidates = self.parent_app.find_multiple_fragment_assignments(
-                self.mass, tolerance_ppm=tolerance_ppm, max_matches=10
+                self.mass,
+                tolerance_ppm=tolerance_ppm,
+                polarity=current_polarity,
+                max_matches=10
             )
 
             # Populate candidates table

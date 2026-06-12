@@ -9,9 +9,12 @@ import sys
 import os
 from pathlib import Path
 
+# Get home directory dynamically
+HOME_DIR = Path.home()
+
 def detect_qt6_installation():
     """Detect Qt6 installation and return best version"""
-    qt_base = Path("/home/dreece23/Qt")
+    qt_base = HOME_DIR / "Qt"
 
     # Prefer newer stable versions
     qt_versions = ["6.10.0", "6.9.2", "6.9.1", "6.8.3"]
@@ -70,7 +73,7 @@ def test_environment():
         # Test basic Qt import
         result = subprocess.run([
             "bash", "-c",
-            "source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python -c \"from PySide6.QtCore import QCoreApplication; print('✅ PySide6 Core OK')\""
+            "source ~/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python -c \"from PySide6.QtCore import QCoreApplication; print('✅ PySide6 Core OK')\""
         ], capture_output=True, text=True, timeout=10)
 
         if result.returncode != 0:
@@ -82,7 +85,7 @@ def test_environment():
         # Test WebEngine import
         result = subprocess.run([
             "bash", "-c",
-            "source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python -c \"from PySide6.QtWebEngineWidgets import QWebEngineView; print('✅ WebEngine OK')\""
+            "source ~/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python -c \"from PySide6.QtWebEngineWidgets import QWebEngineView; print('✅ WebEngine OK')\""
         ], capture_output=True, text=True, timeout=10)
 
         if result.returncode == 0:
@@ -133,7 +136,7 @@ def main():
 
     cmd = [
         "bash", "-c",
-        f"source /home/dreece23/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python {app_path}"
+        f"source ~/miniforge3/etc/profile.d/conda.sh && conda activate pca-sims && python {app_path}"
     ]
 
     try:

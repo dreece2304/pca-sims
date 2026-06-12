@@ -139,3 +139,5 @@ data/**/processed*.txt
 # Conda environment files (if present)
 environment.yml
 requirements.txt
+*Zone.Identifier
+*:Zone.Identifier
